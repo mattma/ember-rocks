@@ -1,0 +1,74 @@
+#!/usr/bin/env node
+/*
+ * commander
+ * https://github.com/mattma/ember-rocks
+ *
+ * Copyright (c) 2014 Matt Ma
+ * Licensed under the MIT license.
+ */
+
+'use strict';
+
+var program = require('commander'),
+    create = require('../src/commands/new'),
+    pkg = require('../package.json');
+
+var output, outputStdout;
+
+outputStdout = function(data) {
+	console.log(data.toString('utf8').trim());
+};
+
+output = function(proc) {
+	proc.stdout.on('data', function(data) {
+		return outputStdout(data);
+	});
+	proc.stderr.on('data', function(data) {
+		return outputStdout(data);
+	});
+};
+
+program
+	.version('em-cli ' + pkg.version)
+  .usage("[command] [options]\n\n  Command-Specific Help\n\n    em [command] --help");
+
+program
+  .command('new')
+  .description('creates a new ember application at [dirName]')
+  .usage('[dirName] \n  Ex:    em new my-app')
+  .action(create);
+
+// must be before .parse() since node's emit() is immediate
+program.on('--help', function(){
+	console.log('  Examples:');
+	console.log('');
+	console.log('    $ em new [dirName]  # create a brand new Ember Application');
+	console.log('');
+});
+
+program.parse(process.argv);
+
+
+// resolve('rocks', {
+//   basedir: process.cwd()
+// }, function(error, projectLocalCli) {
+//   var cli;
+//   if (error) {
+//     // If there is an error, resolve could not find the ember-cli
+//     // library from a package.json. Instead, include it from a relative
+//     // path to this script file (which is likely a globally installed
+//     // npm package). Most common cause for hitting this is `ember new`
+//     cli = require('../lib/cli');
+//   } else {
+//     // No error implies a projectLocalCli, which will load whatever
+//     // version of ember-cli you have installed in a local package.json
+//     cli = require(projectLocalCli);
+//   }
+
+//   cli({
+//     cliArgs: process.argv.slice(2),
+//     inputStream: process.stdin,
+//     outputStream: process.stdout
+//   }).then(process.exit);
+// });
+
