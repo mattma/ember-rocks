@@ -1,0 +1,28 @@
+#!/usr/bin/env node
+
+//Purpose: Ensures that all commits are associated with the ticket being worked on. The format is:
+//[ref: 123]
+
+
+var fs = require('fs');
+
+function readCommitMsg(callback) {
+	fs.readFile(process.argv[2], 'utf8', function(err, content) {
+		if (err) return callback(err);
+
+		callback(content);
+	});
+}
+
+function isTicketPresent(content) {
+	var isGood = /\[ref: (\d+)\]/.test(content);
+	if (!isGood) console.warn("Ticket WAS NOT present");
+
+	return isGood;
+}
+
+readCommitMsg(function(content) {
+	if (!isTicketPresent(content)) process.exit(1);
+
+	process.exit(0);
+})

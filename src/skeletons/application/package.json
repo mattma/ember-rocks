@@ -1,0 +1,92 @@
+{
+	"name": "application_name",
+	"description": "My Test project",
+	"author": {
+		"name": "Matt Ma",
+		"email": "matt@mattmadesign.com"
+	},
+
+	"version": "0.0.1",
+	"private": true,
+	"repository": "",
+
+	"main": "Gruntfile.js",
+	"scripts": {
+		"start": "./server/"
+	},
+
+	"dependencies": {
+		"coffee-script": "~1.6.*",
+		"express": "*",
+		"bower": "*",
+		"which": "*",
+		"request": "*",
+		"express-hbs": "*",
+		"mongodb": "*"
+	},
+
+	"devDependencies": {
+		"grunt": "~0.4.1",
+		"grunt-contrib-coffee": "*",
+		"grunt-contrib-compass": "*",
+		"grunt-contrib-sass": "*",
+		"grunt-contrib-watch": "*",
+		"grunt-open": "*",
+		"grunt-contrib-clean": "*",
+		"grunt-contrib-copy": "*",
+		"grunt-contrib-concat": "*",
+		"grunt-contrib-htmlmin": "*",
+		"grunt-contrib-cssmin": "*",
+		"grunt-contrib-imagemin": "*",
+		"grunt-usemin": "*",
+		"grunt-contrib-jshint": "*",
+		"grunt-requirejs": "*",
+		"grunt-contrib-uglify": "*",
+		"grunt-bower-hooks": "*",
+		"grunt-contrib-connect": "*",
+		"grunt-concurrent": "*",
+		"grunt-rev": "*",
+		"grunt-svgmin": "*",
+		"load-grunt-tasks": "*",
+		"grunt-mocha": "*",
+		"grunt-simple-mocha": "*",
+		"chai": "*",
+		"groc": "https://github.com/gilt/groc/archive/v0.5.5.tar.gz",
+		"grunt-karma": "*",
+		"karma-mocha": "*",
+		"selenium-webdriver": "*"
+	},
+
+	"engines": {
+		"node": ">= 0.8.0"
+	},
+
+	"jshintConfig": {
+		"boss": true,
+		"white": true,
+		"maxlen": 100,
+		"onecase": true,
+		"node": true,
+		"browser": true,
+		"es5": true,
+		"esnext": true,
+		"bitwise": true,
+		"camelcase": true,
+		"curly": true,
+		"eqeqeq": true,
+		"immed": true,
+		"indent": 2,
+		"latedef": true,
+		"newcap": true,
+		"noarg": true,
+		"quotmark": "single",
+		"regexp": true,
+		"undef": true,
+		"unused": true,
+		"strict": true,
+		"trailing": true,
+		"smarttabs": true
+	},
+
+	"license": ""
+}

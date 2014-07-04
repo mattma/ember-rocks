@@ -1,0 +1,318 @@
+@charset "UTF-8";
+/*  --------------------------------------------
+* @package Matt Ma Design
+* @author Matt Ma. ( matt@mattmadesign.com )
+* @copyright 2014 Matt Ma Design
+* @Author Site http://www.mattmadesign.com
+    --------------------------------------------  */
+
+/* ====================================================== */
+/* = GLOBAL CSS RESET #Based on Eric Meyer Reset v1.6.1 = */
+/* ====================================================== */
+
+body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var,
+b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, dialog, details, figcaption, figure, footer, header, hgroup, nav, section, summary, time, mark, audio, video
+       { margin: 0; padding: 0; border: 0; outline: 0; font-weight:inherit; font-style:inherit; font-family:inherit; font-size: 100%; vertical-align: baseline; background: transparent; }
+body   { line-height: 1; }
+ol, ul { list-style: none; }
+blockquote, q { quotes: none; }
+blockquote:before, blockquote:after, q:before, q:after { content: ""; content: none; }
+a img  { border:none;}
+/* remember to define focus styles! */
+:focus { outline:0;}
+/* remember to highlight inserts somehow! */
+ins    { background-color: rgb(255,255,153); color: rgb(0,0,0); text-decoration:none; }
+mark   { background-color: rgb(255,255,153); color: rgb(0,0,0); font-style: italic; font-weight: bold; }
+del    { text-decoration:line-through; }
+abbr[title], dfn[title] { border-bottom: 1px dotted; cursor: help; }
+/* tables still need 'cellspacing="0"' in the markup */
+table  { border-collapse:collapse; border-spacing:0;}
+caption, th, td { text-align:left;font-weight:normal;float:none !important; }
+table, th, td { vertical-align:middle; }
+input, select { vertical-align: middle; }
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section, summary, dialog { display: block; }
+audio, canvas, video { display: inline-block; *display: inline; *zoom: 1; }
+audio:not([controls]) { display: none; height: 0; }
+[hidden] { display: none; }
+
+
+/* ===================== */
+/* = TYPOGRAPHY LAYOUT = */
+/* ===================== */
+
+html   { margin:0;padding:0;border:0; font-size:100%; overflow-y: scroll; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; } /* Always force a scrollbar in non-IE */
+body   { *font-size:small; font-size:62.5%; margin:0; padding:0; background:rgb(255,255,255); -webkit-font-smoothing: antialiased;}
+body, button, input, select, textarea { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; color:rgb(34,34,34); }
+html, body  { height: 100%; }
+/*Opera Fix for Footer Position Stick */
+body:before { content:""; float:left; height:100%; margin-top:-32767px; width:0;}
+
+/* According to Many website study Best Ratio:
+ line height (px) / body copy font size (px) = 1.48
+ line length (px) / line height (px) = 27.8
+ space between paragraphs (px) / line height (px) = 0.754
+ general ranges characters per line is between 75 and 85 characters
+ headings is a range between 18 and 29 pixels.
+*/
+
+/* =================== */
+/* = HEADER ELEMENTS = */
+/* =================== */
+
+/* Best Ratio: Heading font size / Body copy font size = 1.96 */
+h1     { font-size:2.6em;}
+h2     { font-size:2.4em;}
+h3     { font-size:2.1em;}
+h4     { font-size:1.9em;}
+h5     { font-size:1.7em;}
+h6     { font-size:1.5em;}
+h1, h2 { font-weight:700; line-height:1; color:rgb(35, 35, 35); text-rendering: optimizelegibility;}
+h3, h4, h5, h6 { font-weight:300; line-height:1; color:rgb(102,102,102); text-rendering: optimizelegibility; }
+h1 img, h2 img, h3 img, h4 img, h5 img, h6 img {margin:0;}
+
+
+/* ==================== */
+/* = GENERIC ELEMENTS = */
+/* ==================== */
+
+nav ul, nav ol { margin: 0; list-style:none; list-style-image: none; }
+img         {display:block; height: auto; vertical-align: middle; -ms-interpolation-mode: bicubic; border: 0;}
+em, dfn     {font-style:italic;}
+strong, th, dfn, b {font-weight:bold;}
+small       { font-size: 80%; }
+td          { vertical-align: top; }
+sup, sub    { font-size:75%; line-height:0; position:relative; vertical-align: baseline;}
+sup         { top: -0.5em; }
+sub         { bottom: -0.25em; }
+svg:not(:root) { overflow: hidden; }
+figure      { margin: 0; }
+ol li, ul li{list-style:none;}
+/*ol        { list-style: decimal; }
+  ul        { list-style: disc; }*/
+
+
+/* ================= */
+/* = LINK ELEMENTS = */
+/* ================= */
+
+a, a:active { text-decoration:none; outline:none; display: block;} /* ==CHANGE FOR PROJECT NEED== */
+a:hover     { outline: none; text-decoration: none; -webkit-transition: color 0.5s linear; -moz-transition-property: color; -moz-transition-duration: 0.5s; -moz-transition-timing: linear; -o-transition-property: color; -o-transition-duration: 0.5s; -o-transition-timing: linear; }
+
+
+/* ====================== */
+/* = HIGHLIGHT ELEMENTS = */
+/* ====================== */
+
+/* Selection declarations have to be separate. Current Color : hot pink! */
+::-moz-selection { background: rgb(255,94,153); color: rgb(255,255,255); text-shadow: none; }
+::selection { background: rgb(255,94,153); color: rgb(255,255,255); text-shadow: none; }
+
+
+/* ================= */
+/* = MAIN ELEMENTS = */
+/* ================= */
+
+/* Most popular fontsize for body is 13px by Smashing Mag */
+p         { margin: 0 0 20px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; }
+p
+,fieldset
+,th, td
+,li, li a
+,dt, dd   { line-height:1.7em; font-size:1.4em; color:rgb(102,102,102); font-weight:300; } /* ==CHANGE FOR PROJECT NEED== */
+
+h1 a, h2 a, h3 a, h4 a, h5 a, h6 a,
+p a, p span, p label, p input,
+ul li, ol li, li a, li p {font-size: 1em;}
+
+pre       { display: block; white-space: pre; white-space: pre-wrap; word-wrap: break-word; padding: 15px; }
+code      { color: rgb(11,140,143); padding: 2px 4px; background-color: #f7f7f9; border: 1px solid #e1e1e8; }
+pre, code, tt, kbd, samp { font-family: monospace, serif; _font-family: 'courier new', monospace; font-size: 1em; line-height:1.5em; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+address   { font-style:italic; display: block; }
+blockquote{ margin: 0 0 20px; padding: 0 0 0 15px; border-left: 5px solid #eeeeee; color:rgb(102,102,102); font-style:italic;}
+q:before, q:after { content: '';  content: none; }
+
+
+/* ================== */
+/* = TABLE ELEMENTS = */
+/* ================== */
+
+table { border-collapse: collapse; border-spacing: 0; }
+
+
+/* ================= */
+/* = FORM ELEMENTS = */
+/* ================= */
+
+::-webkit-input-placeholder { color: #999999; }
+form      { margin: 0; }
+fieldset  { border: 0; margin: 0; padding: 0; }
+legend    { display: block; font-weight:700; font-size:1.4em; border: 0; *margin-left: -7px; padding: 0; white-space: normal; }
+
+select
+,input
+,textarea
+,button   { font-size: 100%; margin: 0; vertical-align: middle; *vertical-align: middle; display: block; min-height: 20px; padding: 3px 0 3px 5px; margin-bottom: 10px; border: 1px solid #cccccc; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }
+
+select    { background-color:rgb(255,255,255); border-width:1px; border-style:solid;}
+textarea  { overflow: auto; vertical-align: top; resize: none; } /* IE-remove-textarea-scrollbars */
+
+input, button     { width: auto; line-height: normal; *overflow: visible; } /* Make buttons play nice in IE: */
+table input, table button { *overflow: auto; }
+button::-moz-focus-inner, input::-moz-focus-inner { border: 0; padding: 0; }
+button, html input[type="button"], input[type="reset"], input[type="submit"] { cursor: pointer; -webkit-appearance: button; *overflow: visible; }
+
+ input[type=text]
+,input[type=password]
+,textarea { background-color:rgb(255,255,255);}
+
+ input[type=text]:focus
+,input[type=password]:focus
+,textarea:focus { border-color:rgb(204,204,204);}
+
+input[type="image"]
+,input[type="checkbox"]
+,input[type="radio"] { width: auto; height: auto; padding: 0; margin: 3px 0; *margin-top: 0; cursor: pointer; -webkit-border-radius: 0; -moz-border-radius: 0; border-radius: 0; border: 0 \9; /* IE9 and down */ }
+
+/* Align checkboxes, radios, text inputs with their label */
+input[type="radio"]    { vertical-align: text-bottom; }
+input[type="checkbox"] { vertical-align: bottom; }
+input[type="checkbox"], input[type="radio"] { box-sizing: border-box; padding: 0; *height: 13px;  *width: 13px; }
+
+input[type="file"]:focus
+,input[type="radio"]:focus
+,input[type="checkbox"]:focus
+,select:focus { -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; outline: thin dotted #333; outline: 5px auto -webkit-focus-ring-color; outline-offset: -2px; }
+
+input[type="file"], input[type="image"] { -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none; }
+select, input[type="file"] { *margin-top: 4px; /* IE7, Select element cannot be changed by height, only font-size. For IE7, add top margin to align select with labels */ }
+
+input[type="search"] { -webkit-appearance: textfield; -moz-box-sizing: content-box; -webkit-box-sizing: content-box; box-sizing: content-box; }
+input[type="search"]::-webkit-search-decoration, input[type="search"]::-webkit-search-cancel-button { -webkit-appearance: none; }
+
+input[type="image"] { border: 0; }
+input[type="hidden"] { display: none; }
+
+input[disabled]
+,select[disabled]
+,textarea[disabled]
+,input[readonly]
+,select[readonly]
+,textarea[readonly] { background-color: #eeeeee; border-color: #ddd; cursor: not-allowed; }
+
+input
+,textarea {
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+	-webkit-transition: border linear 0.2s, box-shadow linear 0.2s;
+	-moz-transition: border linear 0.2s, box-shadow linear 0.2s;
+	-ms-transition: border linear 0.2s, box-shadow linear 0.2s;
+	-o-transition: border linear 0.2s, box-shadow linear 0.2s;
+	transition: border linear 0.2s, box-shadow linear 0.2s;
+}
+input:focus
+,textarea:focus {
+	border-color: rgba(82, 168, 236, 0.8);
+	-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+	-moz-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+	box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075), 0 0 8px rgba(82, 168, 236, 0.6);
+	outline: 0;
+	outline: thin dotted \9; /* IE6-9 */
+}
+
+/* Colors for form validity */
+input:valid, textarea:valid   {  }
+input:invalid,
+textarea:invalid {  border-radius: 1px; -moz-box-shadow: 0px 0px 5px red; -webkit-box-shadow: 0px 0px 5px red; box-shadow: 0px 0px 5px red; background-color: rgb(240,221,221); }
+.no-boxshadow input:invalid, .no-boxshadow textarea:invalid { background-color: rgb(240,221,221); }
+
+.Safari input { outline: none; }
+.Safari textarea,
+.Chrome textarea { resize: none; } /* remove textarea scrollbar */
+
+
+/* =================== */
+/* = UNIVERSAL CLASS = */
+/* =================== */
+
+.container  { margin:0 auto;width:960px;_text-align:left;*zoom: 1; }
+.container:before, .container:after { display: table; content: ""; }
+.container:after { clear: both; }
+
+.left       { float:left;_margin-right:-3px;}
+.right     { float:right;_margin-left:-3px;}
+
+/* Clear Floated Elements /* http://sonspring.com/journal/clearing-floats */
+.clear   { clear: both; display: block; overflow: hidden; visibility: hidden; width: 0; height: 0; }
+
+.clearfix:before, .clearfix:after { content: " "; display: table; }
+.clearfix:after { clear: both; }
+.clearfix { *zoom: 1; }
+
+
+/* Use this to create a horizontal ruler across a column. */
+hr       { background: rgb(221,221,221); clear: both; float: none; width: 100%; height: 1px; margin: 20px 0; border: 0 none; border-top: 1px solid rgb(204,204,204); padding: 0; display: block; }
+hr.space { background: rgb(255,255,255); visibility: hidden; }
+
+
+.indent  { display: block; text-indent: -9999px; overflow: hidden; background-repeat: no-repeat; text-align: left; direction: ltr; }
+.indentElement{ position:absolute; top:-10000em; left:-10000em;}
+.small   { font-size: .8em; line-height: 1.875em;}
+.large   { font-size: 1.2em; line-height: 2.5em; }
+
+/* Surround uppercase words and abbreviations with this class. Based on [http://twistedintellect.com/] */
+.caps    { font-variant:small-caps; letter-spacing:1px; text-transform: lowercase; line-height:1%; font-weight:bold; padding:0 2px; }
+
+.hide     { display: none;  }
+.show   { display: block;}
+.hidden    { display: none !important; visibility: hidden; } /* Hide for both screenreaders and browsers */
+.invisible { visibility: hidden; } /* Hide visually and from screenreaders, but maintain layout */
+.visuallyhidden { border: 0; clip: rect(0 0 0 0); height: 1px; margin: -1px; overflow: hidden; padding: 0; position: absolute; width: 1px; } /* Hide only visually, vailable for screenreaders */
+.visuallyhidden.focusable:active, .visuallyhidden.focusable:focus { clip: auto; height: auto; margin: 0; overflow: visible; position: static; width: auto; } /* Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard */
+
+.chromeframe { margin: 0.2em 0; background: #ccc; color: black; padding: 0.2em 0; } /* Chrome Frame Prompt */
+
+
+.fade     { -webkit-transition: opacity 0.15s linear; -moz-transition: opacity 0.15s linear; -ms-transition: opacity 0.15s linear; -o-transition: opacity 0.15s linear; transition: opacity 0.15s linear; opacity: 0; }
+.fade.in  { opacity: 1; }
+.collapse { -webkit-transition: height 0.35s ease; -moz-transition: height 0.35s ease; -ms-transition: height 0.35s ease; -o-transition: height 0.35s ease; transition: height 0.35s ease; position: relative; overflow: hidden; height: 0; }
+.collapse.in { height: auto; }
+
+
+/* ========= */
+/* = FONTS = */
+/* ========= */
+
+/*
+@font-face {
+	font-family: "fontname";
+	src: url("../_fonts/fontname.otf");
+} */
+
+
+/* ================= */
+/* = PRINT STYLES  = */
+/* ================= */
+
+/*Auto pickup by browser, no media attr needed */
+/* Inlined to avoid required HTTP connection: www.phpied.com/delay-loading-your-print-css/ */
+
+/*
+@media print {
+  * { background: transparent !important; color: black !important; box-shadow:none !important; text-shadow: none !important; filter:none !important; -ms-filter: none !important; }
+  a, a:visited { text-decoration: underline; }
+  a[href]:after { content: " (" attr(href) ")"; }
+  abbr[title]:after { content: " (" attr(title) ")"; }
+  .ir a:after, a[href^="javascript:"]:after, a[href^="#"]:after { content: ""; }
+  pre, blockquote { border: 1px solid #999; page-break-inside: avoid; }
+  thead { display: table-header-group; }
+  tr, img { page-break-inside: avoid; }
+  img { max-width: 100% !important; }
+  @page { margin: 0.5cm; }
+  p, h2, h3 { orphans: 3; widows: 3; }
+  h2, h3 { page-break-after: avoid; }
+}
+*/

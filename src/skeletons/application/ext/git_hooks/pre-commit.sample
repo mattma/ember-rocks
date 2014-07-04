@@ -1,0 +1,27 @@
+#!/usr/bin/env node
+
+var npm = require("npm");
+
+npm.load(function(err) {
+	if (err) {
+		throw err;
+	}
+
+	npm.commands.test(function(err) {
+		// this will throw error if npm test fails
+		if (err) {
+			process.exit(1);
+		}
+
+		// if you have any npm lint test]
+		//     "scripts": {
+	    //     "test": "mocha",
+	    //     "lint": "jshint ./lib --show-non-errors"
+	    // }
+		npm.commands["run-script"](["lint"], function(err) {
+			if (err) {
+				process.exit(1);
+			}
+		});
+	});
+});

@@ -1,0 +1,5 @@
+{
+	"directory" : "client/assets/vendor",
+	"json"      : "bower.json",
+	"endpoint"  : "https://bower.herokuapp.com"
+}
