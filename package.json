@@ -33,6 +33,7 @@
     "test": "n"
   },
   "dependencies": {
+    "gulp-util": "^2.2.19",
     "minimist": "^0.2.0"
   },
   "devDependencies": {

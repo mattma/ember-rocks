@@ -8,7 +8,7 @@ gulp.task('lint', function() {
   log('Linting Files');
   return gulp.src(lintFiles)
     .pipe(jshint('.jshintrc'))
-    .pipe(jshint.reporter());
+    .pipe(jshint.reporter('default'));
 });
 
 gulp.task('watch', function() {
