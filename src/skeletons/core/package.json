@@ -15,46 +15,8 @@
 		"start": "./server/"
 	},
 
-	"dependencies": {
-		"coffee-script": "~1.6.*",
-		"express": "*",
-		"bower": "*",
-		"which": "*",
-		"request": "*",
-		"express-hbs": "*",
-		"mongodb": "*"
-	},
-
 	"devDependencies": {
-		"grunt": "~0.4.1",
-		"grunt-contrib-coffee": "*",
-		"grunt-contrib-compass": "*",
-		"grunt-contrib-sass": "*",
-		"grunt-contrib-watch": "*",
-		"grunt-open": "*",
-		"grunt-contrib-clean": "*",
-		"grunt-contrib-copy": "*",
-		"grunt-contrib-concat": "*",
-		"grunt-contrib-htmlmin": "*",
-		"grunt-contrib-cssmin": "*",
-		"grunt-contrib-imagemin": "*",
-		"grunt-usemin": "*",
-		"grunt-contrib-jshint": "*",
-		"grunt-requirejs": "*",
-		"grunt-contrib-uglify": "*",
-		"grunt-bower-hooks": "*",
-		"grunt-contrib-connect": "*",
-		"grunt-concurrent": "*",
-		"grunt-rev": "*",
-		"grunt-svgmin": "*",
-		"load-grunt-tasks": "*",
-		"grunt-mocha": "*",
-		"grunt-simple-mocha": "*",
-		"chai": "*",
-		"groc": "https://github.com/gilt/groc/archive/v0.5.5.tar.gz",
-		"grunt-karma": "*",
-		"karma-mocha": "*",
-		"selenium-webdriver": "*"
+    "express": "*"
 	},
 
 	"engines": {

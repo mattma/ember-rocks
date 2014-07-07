@@ -28,7 +28,7 @@ var create = function(generatorPath, options) {
 
   var currentAppPath = path.resolve(generatorPath);
   // Setup gulp task, copy the source files into the newly create folder
-  setupTask (skeletonsCorePath, currentAppPath);
+  setupTask (skeletonsCorePath, skeletonsAppPath, currentAppPath);
   // Trigger the generator task
   gulp.start('generator');
 };
@@ -46,15 +46,23 @@ create.getPaths = function(appPath, env) {
   };
 };
 
-function setupTask (srcPath, dest) {
+function setupTask (coreSrcPath, appSrcPath, dest) {
   gutil.log('[-log]', 'Starting to generate application at ', dest );
-  var src = [ srcPath + '/**', srcPath + '/**/.*' ];
+  var coreSrc = [ coreSrcPath + '/**', coreSrcPath + '/**/.*' ],
+      appSrc = [ appSrcPath + '/**' ];
+
   return gulp.task('generator', function() {
-      return gulp.src(src)
+      gulp.src(coreSrc)
           .on('end', function() {
-              gutil.log('[-log]', 'You new application is ready');
+              gutil.log('[-log]', 'You new application Server is ready');
           })
           .pipe(gulp.dest(dest));
+
+      return gulp.src(appSrc)
+          .on('end', function() {
+              gutil.log('[-log]', 'New Ember application is ready');
+          })
+          .pipe(gulp.dest(dest+'/client/app'));
   });
 }
 
