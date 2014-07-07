@@ -10,7 +10,7 @@
 'use strict';
 
 var program = require('commander'),
-    create = require('../src/commands/new'),
+    create = require('../src/commands/create'),
     pkg = require('../package.json');
 
 var output, outputStdout;
@@ -34,6 +34,7 @@ program
 
 program
   .command('new')
+  .option('-p, --path [path]', 'the generator url on web (ex: github.com/mattma/ember-generator)')
   .description('creates a new ember application at [dirName]')
   .usage('[dirName] \n  Ex:    em new my-app')
   .action(create);
