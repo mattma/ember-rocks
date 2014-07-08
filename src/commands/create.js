@@ -7,7 +7,8 @@ var path = require('path'),
 
 var create = function(generatorPath, options) {
   if (argv._.length < 2) {
-    gutil.log("Error: See 'em new --help'.");
+    gutil.log(gutil.colors.red("[-Error:] Missing directory name."), "ex: em new my-app");
+    gutil.log(gutil.colors.red("[-Error:]"), "See 'em new --help'");
     process.exit(0);
   }
   // checking the url prefix
@@ -23,7 +24,7 @@ var create = function(generatorPath, options) {
       skeletonsAppPath = getSkeletonsAppPath();
 
   if (fs.existsSync(generatorPath)) {
-    gutil.log('[-log]', 'Folder (', generatorPath, ') has existed in this directory!' );
+    gutil.log(gutil.colors.red('[-Error:]'), 'The folder name', gutil.colors.red(generatorPath), 'has existed in this directory tree!' );
     process.exit(0);
   } else {
     // Create a new directory name what user passed in
@@ -40,20 +41,21 @@ var create = function(generatorPath, options) {
 module.exports = create;
 
 function setupTask (coreSrcPath, appSrcPath, dest) {
-  gutil.log('[-log]', 'Starting to generate application at ', dest );
+  gutil.log(gutil.colors.gray("[-log:]"), "Starting to generate an application at", gutil.colors.cyan(dest));
+
   var coreSrc = [ coreSrcPath + '/**', coreSrcPath + '/**/.*' ],
       appSrc = [ appSrcPath + '/**' ];
 
   return gulp.task('generator', function (callback) {
       gulp.src(coreSrc)
           .on('end', function() {
-              gutil.log('[-log]', 'You new application Server is ready');
+              gutil.log(gutil.colors.green('[-done:] A new'),  gutil.colors.cyan('Node.js'),  gutil.colors.green('web server have been successfully created!') );
           })
           .pipe(gulp.dest(dest));
 
       gulp.src(appSrc)
           .on('end', function() {
-              gutil.log('[-log]', 'New Ember application is ready');
+              gutil.log(gutil.colors.green('[-done:] A new'),  gutil.colors.cyan('Ember.js'),  gutil.colors.green('mvc application have been successfully created!') );
               installNpm( dest, callback );
           })
           .pipe(gulp.dest(dest+'/client/app'));
@@ -69,7 +71,7 @@ function installBower (rootPath, callback) {
 }
 
 function gitInit(rootPath, callback) {
-    gutil.log('[-log]', 'Be Patient, em-cli is doing REALLY hard to initialize your repo ...' );
+    gutil.log(gutil.colors.gray("[-log:]"), gutil.colors.cyan('em-cli'), 'is doing REALLY hard to initialize your repo ...');
 
     rootPath = rootPath || process.cwd();
     process.chdir(rootPath);
@@ -80,13 +82,12 @@ function gitInit(rootPath, callback) {
         todayYear = today.getFullYear(),
         command = 'git init && git add . && git commit -m "Initial Commit @ ' + todayMonth + ' ' + todayDate + ', ' + todayYear + '"';
     return exec(command, function(error, stdout, stderr) {
-        var log;
         if (error !== null) {
-          log = stderr.toString();
-          gutil.log('[-log]', log);
+          var log = stderr.toString();
+          gutil.log( gutil.colors.red('[-Error:] ' + log) );
           return callback(log);
         }
-        gutil.log('[-log]', 'Initialized a new git repo & did first commit' );
+        gutil.log(gutil.colors.green("[-done:] Initialized a new git repo and did a first commit") );
         callback();
     });
 }
@@ -94,14 +95,13 @@ function gitInit(rootPath, callback) {
 // installer plugins to handle the npm and bower packages installation
 function installer ( rootPath, command, description, nextStepFn, callback ) {
   rootPath = rootPath || process.cwd();
-  gutil.log('[-log]', description );
+  gutil.log(gutil.colors.gray("[-log:]"), description);
   process.chdir(rootPath);
   return exec(command, function(error, stdout, stderr) {
-    var log;
     //process.chdir(rootPath);
     if (error !== null) {
-      log = stderr.toString();
-      gutil.log('[-log]', log);
+      var log = stderr.toString();
+      gutil.log( gutil.colors.red('[-Error:] ' + log) );
       return callback(log);
     }
     nextStepFn(rootPath, callback);

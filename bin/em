@@ -34,9 +34,9 @@ program
 
 program
   .command('new')
-  .option('-p, --path [path]', 'the generator url on web (ex: github.com/mattma/ember-generator)')
+  .option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
   .description('creates a new ember application at [dirName]')
-  .usage('[dirName] \n  Ex:    em new my-app')
+  .usage('[dirName]  # Make a new directory and Scaffold a new web application \n  Ex:    em new my-app')
   .action(create);
 
 // must be before .parse() since node's emit() is immediate
