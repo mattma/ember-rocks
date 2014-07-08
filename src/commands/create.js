@@ -88,6 +88,7 @@ function gitInit(rootPath, callback) {
           return callback(log);
         }
         gutil.log(gutil.colors.green("[-done:] Initialized a new git repo and did a first commit") );
+        gutil.log(gutil.colors.bold("[-copy:] =>"), gutil.colors.cyan('cd ' + argv._[1]), gutil.colors.gray('# navigate to the newly created application') );
         callback();
     });
 }
