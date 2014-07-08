@@ -23,8 +23,13 @@ var create = function(generatorPath, options) {
       // skeletonsAppPath = ( userInputPath ) ? remoteUrl : getSkeletonsAppPath();
       skeletonsAppPath = getSkeletonsAppPath();
 
-  // Create a new directory name what user passed in
-  fs.mkdirSync(generatorPath);
+  if (fs.existsSync(generatorPath)) {
+    gutil.log('[-log]', 'Folder (', generatorPath, ') has existed in this directory!' );
+    process.exit(0);
+  } else {
+    // Create a new directory name what user passed in
+    fs.mkdirSync(generatorPath);
+  }
 
   var currentAppPath = path.resolve(generatorPath);
   // Setup gulp task, copy the source files into the newly create folder
