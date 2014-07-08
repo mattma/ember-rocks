@@ -39,7 +39,6 @@
   "devDependencies": {
     "cli-color": "^0.3.2",
     "commander": "^2.2.0",
-    "fs-extra": "^0.10.0",
     "glob": "^4.0.3",
     "gulp": "^3.8.5",
     "gulp-jshint": "^1.6.4"

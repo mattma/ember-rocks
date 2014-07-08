@@ -1,10 +1,12 @@
 var path = require('path');
 var glob = require('glob');
 var fs = require('fs');
+var exec = require('child_process').exec;
 var argv = require('minimist')(process.argv.slice(2));
 
 var gulp = require('gulp'),
-    gutil = require('gulp-util');
+    gutil = require('gulp-util'),
+    install = require('gulp-install');
 
 var create = function(generatorPath, options) {
   if (argv._.length < 2) {
@@ -51,18 +53,59 @@ function setupTask (coreSrcPath, appSrcPath, dest) {
   var coreSrc = [ coreSrcPath + '/**', coreSrcPath + '/**/.*' ],
       appSrc = [ appSrcPath + '/**' ];
 
-  return gulp.task('generator', function() {
+  return gulp.task('generator', function (callback) {
       gulp.src(coreSrc)
           .on('end', function() {
               gutil.log('[-log]', 'You new application Server is ready');
           })
           .pipe(gulp.dest(dest));
 
-      return gulp.src(appSrc)
+      gulp.src(appSrc)
           .on('end', function() {
               gutil.log('[-log]', 'New Ember application is ready');
+              installNpm( dest, callback );
           })
           .pipe(gulp.dest(dest+'/client/app'));
+  });
+}
+
+function installNpm (rootPath, callback) {
+    var prevDir;
+    if (callback === null) {
+      callback = (function() {});
+    }
+    prevDir = process.cwd();
+    gutil.log('[-log]', 'It is installing packages...');
+    process.chdir(rootPath);
+    return exec('npm install', function(error, stdout, stderr) {
+      var log;
+      process.chdir(prevDir);
+      if (error !== null) {
+        log = stderr.toString();
+
+        return callback(log);
+      }
+      installBower(rootPath, callback);
+    });
+}
+
+function installBower (rootPath, callback) {
+  var prevDir;
+  if (callback === null) {
+    callback = (function() {});
+  }
+  prevDir = process.cwd();
+  gutil.log('[-log]', 'It is installing javascript packages...');
+  process.chdir(rootPath);
+  return exec('bower install', function(error, stdout, stderr) {
+    var log;
+    if (error !== null) {
+      log = stderr.toString();
+      gutil.log('[-log]', log);
+      return callback;
+    }
+    //exports.gitNew(applicationName);
+    return callback(null, stdout);
   });
 }
 
