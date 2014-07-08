@@ -11,6 +11,7 @@
 
 var program = require('commander'),
     create = require('../src/commands/create'),
+    generate = require('../src/commands/generate'),
     pkg = require('../package.json');
 
 var output, outputStdout;
@@ -35,9 +36,16 @@ program
 program
   .command('new')
   .option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
-  .description('creates a new ember application at [dirName]')
+  .description('Creates a new ember application at [dirName]')
   .usage('[dirName]  # Make a new directory and Scaffold a new web application \n  Ex:    em new my-app')
   .action(create);
+
+program
+  .command('gen')
+  //.option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
+  .description('Generate a new file with ES6 support in the ember app')
+  .usage('[type:name]  # Generate a new file located app/routes/post.js \n  Ex:    em gen route:post')
+  .action(generate);
 
 // must be before .parse() since node's emit() is immediate
 program.on('--help', function(){
