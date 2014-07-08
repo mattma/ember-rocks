@@ -70,19 +70,15 @@ function setupTask (coreSrcPath, appSrcPath, dest) {
 }
 
 function installNpm (rootPath, callback) {
-    var prevDir;
-    if (callback === null) {
-      callback = (function() {});
-    }
-    prevDir = process.cwd();
-    gutil.log('[-log]', 'It is installing packages...');
+    rootPath = rootPath || process.cwd();
+    gutil.log('[-log]', 'NPM is installing packages...');
     process.chdir(rootPath);
     return exec('npm install', function(error, stdout, stderr) {
       var log;
-      process.chdir(prevDir);
+      //process.chdir(rootPath);
       if (error !== null) {
         log = stderr.toString();
-
+        gutil.log('[-log]', log);
         return callback(log);
       }
       installBower(rootPath, callback);
@@ -90,23 +86,42 @@ function installNpm (rootPath, callback) {
 }
 
 function installBower (rootPath, callback) {
-  var prevDir;
-  if (callback === null) {
-    callback = (function() {});
-  }
-  prevDir = process.cwd();
-  gutil.log('[-log]', 'It is installing javascript packages...');
+  rootPath = rootPath || process.cwd();
+  gutil.log('[-log]', 'Bower is installing javascript packages...');
   process.chdir(rootPath);
   return exec('bower install', function(error, stdout, stderr) {
     var log;
+    //process.chdir(rootPath);
     if (error !== null) {
       log = stderr.toString();
       gutil.log('[-log]', log);
-      return callback;
+      return callback(log);
     }
-    //exports.gitNew(applicationName);
-    return callback(null, stdout);
+    gitInit(rootPath, callback);
   });
+}
+
+function gitInit(rootPath, callback) {
+    gutil.log('[-log]', 'Be Patient, em-cli is doing REALLY hard to initialize your repo ...' );
+
+    rootPath = rootPath || process.cwd();
+    process.chdir(rootPath);
+    var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+        today = new Date(),
+        todayDate = today.getDate(),
+        todayMonth = month[today.getMonth()],
+        todayYear = today.getFullYear(),
+        init = 'git init && git add . && git commit -m "Initial Commit @ ' + todayMonth + ' ' + todayDate + ', ' + todayYear + '"';
+    return exec(init, function(error, stdout, stderr) {
+        var log;
+        if (error !== null) {
+          log = stderr.toString();
+          gutil.log('[-log]', log);
+          return callback(log);
+        }
+        gutil.log('[-log]', 'Initialized a new git repo & did first commit' );
+        callback();
+    });
 }
 
 function getSkeletonsCorePath () {
