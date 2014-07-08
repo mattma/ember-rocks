@@ -1,12 +1,10 @@
 var path = require('path');
-var glob = require('glob');
 var fs = require('fs');
 var exec = require('child_process').exec;
 var argv = require('minimist')(process.argv.slice(2));
 
 var gulp = require('gulp'),
-    gutil = require('gulp-util'),
-    install = require('gulp-install');
+    gutil = require('gulp-util');
 
 var create = function(generatorPath, options) {
   if (argv._.length < 2) {
