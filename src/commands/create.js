@@ -1,9 +1,8 @@
-var path = require('path');
-var fs = require('fs');
-var exec = require('child_process').exec;
-var argv = require('minimist')(process.argv.slice(2));
-
-var gulp = require('gulp'),
+var path = require('path'),
+    fs = require('fs'),
+    exec = require('child_process').exec,
+    argv = require('minimist')(process.argv.slice(2)),
+    gulp = require('gulp'),
     gutil = require('gulp-util');
 
 var create = function(generatorPath, options) {
@@ -39,17 +38,6 @@ var create = function(generatorPath, options) {
 };
 
 module.exports = create;
-
-create.getPaths = function(appPath, env) {
-  if (arguments.length > 2) return false;
-  if (arguments.length == 1) {
-    env = appPath;
-    appPath = '.';
-  }
-  return {
-    app: appPath
-  };
-};
 
 function setupTask (coreSrcPath, appSrcPath, dest) {
   gutil.log('[-log]', 'Starting to generate application at ', dest );
