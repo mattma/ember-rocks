@@ -61,35 +61,11 @@ function setupTask (coreSrcPath, appSrcPath, dest) {
 }
 
 function installNpm (rootPath, callback) {
-    rootPath = rootPath || process.cwd();
-    gutil.log('[-log]', 'NPM is installing packages...');
-    process.chdir(rootPath);
-    return exec('npm install', function(error, stdout, stderr) {
-      var log;
-      //process.chdir(rootPath);
-      if (error !== null) {
-        log = stderr.toString();
-        gutil.log('[-log]', log);
-        return callback(log);
-      }
-      installBower(rootPath, callback);
-    });
+  installer ( rootPath, 'npm install', 'NPM is installing node packages...', installBower, callback );
 }
 
 function installBower (rootPath, callback) {
-  rootPath = rootPath || process.cwd();
-  gutil.log('[-log]', 'Bower is installing javascript packages...');
-  process.chdir(rootPath);
-  return exec('bower install', function(error, stdout, stderr) {
-    var log;
-    //process.chdir(rootPath);
-    if (error !== null) {
-      log = stderr.toString();
-      gutil.log('[-log]', log);
-      return callback(log);
-    }
-    gitInit(rootPath, callback);
-  });
+  installer ( rootPath, 'bower install', 'Bower is installing javascript packages...', gitInit, callback );
 }
 
 function gitInit(rootPath, callback) {
@@ -102,8 +78,8 @@ function gitInit(rootPath, callback) {
         todayDate = today.getDate(),
         todayMonth = month[today.getMonth()],
         todayYear = today.getFullYear(),
-        init = 'git init && git add . && git commit -m "Initial Commit @ ' + todayMonth + ' ' + todayDate + ', ' + todayYear + '"';
-    return exec(init, function(error, stdout, stderr) {
+        command = 'git init && git add . && git commit -m "Initial Commit @ ' + todayMonth + ' ' + todayDate + ', ' + todayYear + '"';
+    return exec(command, function(error, stdout, stderr) {
         var log;
         if (error !== null) {
           log = stderr.toString();
@@ -113,6 +89,23 @@ function gitInit(rootPath, callback) {
         gutil.log('[-log]', 'Initialized a new git repo & did first commit' );
         callback();
     });
+}
+
+// installer plugins to handle the npm and bower packages installation
+function installer ( rootPath, command, description, nextStepFn, callback ) {
+  rootPath = rootPath || process.cwd();
+  gutil.log('[-log]', description );
+  process.chdir(rootPath);
+  return exec(command, function(error, stdout, stderr) {
+    var log;
+    //process.chdir(rootPath);
+    if (error !== null) {
+      log = stderr.toString();
+      gutil.log('[-log]', log);
+      return callback(log);
+    }
+    nextStepFn(rootPath, callback);
+  });
 }
 
 function getSkeletonsCorePath () {
