@@ -5,7 +5,7 @@ var path = require('path'),
     gulp = require('gulp'),
     gutil = require('gulp-util');
 
-var create = function(generatorPath, options) {
+var generate = function(generatorPath, options) {
   // Error out when user did not provide any arugments
   if (argv._.length < 2) {
     gutil.log(gutil.colors.red("[-Error:] Missing type:name argument."), "ex: em new route:post");
@@ -48,4 +48,4 @@ var create = function(generatorPath, options) {
   console.log('gen: ', gen);
 };
 
-module.exports = create;
+module.exports = generate;
