@@ -36,12 +36,16 @@
     "gulp-rename": "^1.2.0",
     "gulp-replace": "^0.4.0",
     "gulp-util": "^2.2.19",
-    "minimist": "^0.2.0"
-  },
-  "devDependencies": {
+    "minimist": "^0.2.0",
     "commander": "^2.2.0",
     "gulp": "^3.8.5",
     "gulp-jshint": "^1.6.4"
+  },
+  "devDependencies": {
+    "mocha": "*",
+    "should": "*",
+    "rimraf": "*",
+    "testem": "*"
   },
   "keywords": []
 }
