@@ -31,7 +31,16 @@ describe("Command `em gen`", function() {
       rm("./client", done);
     });
 
-    it("should generate a js file at app/routes/ folder", function(done){
+    // handle the case of type is singular or plural, ex: route:post or routes:post
+    it("should generate a js file at app/routes/ folder when type is 'route'", function(done){
+      exec("./bin/em gen route:post", function(error, stdout, stderr) {
+        stdout.should.include('[-done:]');
+        helpers.assertPathExist('client/app/routes/post.js', done);
+      });
+    });
+
+    // handle the case of type is singular or plural, ex: route:post or routes:post
+    it("should generate a js file at app/routes/ folder when type is 'routes'", function(done){
       exec("./bin/em gen routes:post", function(error, stdout, stderr) {
         stdout.should.include('[-done:]');
         helpers.assertPathExist('client/app/routes/post.js', done);
