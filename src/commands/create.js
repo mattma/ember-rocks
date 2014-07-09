@@ -14,6 +14,8 @@ var create = function(generatorPath, options) {
   // checking the url prefix
   var re = /^http(?:s)?:\/\//,
       userInputPath = options.path,
+      // check for the mode, is running test or not
+      isRunningTest = options.test || false,
       // check for remote URL path
       remoteUrl = ( userInputPath ) ? ( re.test(userInputPath) ) ? userInputPath : ('http://' + userInputPath) : undefined;
 
@@ -33,14 +35,14 @@ var create = function(generatorPath, options) {
 
   var currentAppPath = path.resolve(generatorPath);
   // Setup gulp task, copy the source files into the newly create folder
-  setupTask (skeletonsCorePath, skeletonsAppPath, currentAppPath);
+  setupTask (skeletonsCorePath, skeletonsAppPath, currentAppPath, isRunningTest);
   // Trigger the generator task
   gulp.start('generator');
 };
 
 module.exports = create;
 
-function setupTask (coreSrcPath, appSrcPath, dest) {
+function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
   gutil.log(gutil.colors.gray("[-log:]"), "Starting to generate an application at", gutil.colors.cyan(dest));
 
   var coreSrc = [ coreSrcPath + '/**', coreSrcPath + '/**/.*' ],
@@ -56,7 +58,11 @@ function setupTask (coreSrcPath, appSrcPath, dest) {
       gulp.src(appSrc)
           .on('end', function() {
               gutil.log(gutil.colors.green('[-done:] A new'),  gutil.colors.cyan('Ember.js'),  gutil.colors.green('mvc application have been successfully created!') );
-              installNpm( dest, callback );
+              if( !isRunningTest ) {
+                installNpm( dest, callback );
+              } else {
+                callback();
+              }
           })
           .pipe(gulp.dest(dest+'/client/app'));
   });

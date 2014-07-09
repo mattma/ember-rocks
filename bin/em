@@ -36,6 +36,7 @@ program
 program
   .command('new')
   .option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
+  .option('-T, --test', '# running the test for new command')
   .description('Creates a new ember application at [dirName]')
   .usage('[ dirName ]  # Make a new directory and Scaffold a new web application \n  Ex:    em new my-app')
   .action(create);
