@@ -12,7 +12,13 @@ describe("Created directory", function() {
   it("should scaffold a bunch of files and directories", function(done) {
     exec("./bin/em new test-app --test", function() {
       helpers.assertPathsExist([
+        "test-app/.gitignore",
+        "test-app/.jshintrc",
+        "test-app/.bowerrc",
+        "test-app/config.rb",
         "test-app/package.json",
+        "test-app/bower.json",
+        //"test-app/gulpfile.js",
         "test-app/server/app.coffee",
         "test-app/client/views/index.hbs"
       ], done);
