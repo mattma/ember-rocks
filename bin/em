@@ -37,15 +37,16 @@ program
   .command('new')
   .option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
   .description('Creates a new ember application at [dirName]')
-  .usage('[dirName]  # Make a new directory and Scaffold a new web application \n  Ex:    em new my-app')
+  .usage('[ dirName ]  # Make a new directory and Scaffold a new web application \n  Ex:    em new my-app')
   .action(create);
 
 program
   .command('gen')
   //.option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
   .description('Generate a new file with ES6 support in the ember app')
-  .usage('[type:name]             # Generate a new file located app/routes/post.js' +
-         "\n  @arg   type:  'component', 'controller', 'helper', 'model', 'route', 'template', 'view', 'mixin'" +
+  .usage('[ type:name(/nested/folder/fileName) ]      # Generate a new file located app/routes/post.js' +
+         "\n " +
+         "\n  @arg   type:  'component', 'controller', 'helper', 'model', 'route', 'template', 'view', 'mixin', 'adapter'" +
          "\n  @arg   name:  any string, or use '/' separated string to create a nested folder structure" +
          "\n " +
          '\n  Ex:    em gen route(s):post           # Generate a path  app/routes/post.js' +
