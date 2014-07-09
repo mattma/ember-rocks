@@ -90,15 +90,18 @@ function setupTask( generator ) {
       moduleName += capitaliseFirstLetter(type);
 
       var srcPath = path.join(__dirname, '..', 'skeletons/generators', type),
-        dirName = (type === 'template' || type === 'store') ? type : type+'s',
+        dirName = (type === 'store') ? type : type +'s',
         finalPath = pathNested ? dirName + pathName : dirName,
         destPath =  path.resolve('client/app') + '/' + finalPath;
 
       return gulp.src( srcPath + '.js' )
           .pipe(replace(/\*NAMESPACE\*/g, moduleName))
-          .pipe(rename({ basename : fileName }))
+          .pipe(rename({
+            basename : fileName,
+            extname: (type === 'template') ? '.hbs' : '.js'
+          }))
           .on('end', function() {
-            gutil.log(gutil.colors.green('[-done:] Generate a new file at'),  gutil.colors.cyan('client/app/' + finalPath + '/' + fileName + '.js' ) );
+            gutil.log(gutil.colors.green('[-done:] Generate a new file at'),  gutil.colors.cyan('client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js') ) );
           })
           .pipe(gulp.dest(destPath));
       });
