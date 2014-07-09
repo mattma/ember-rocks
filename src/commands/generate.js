@@ -3,7 +3,9 @@ var path = require('path'),
     exec = require('child_process').exec,
     argv = require('minimist')(process.argv.slice(2)),
     gulp = require('gulp'),
-    gutil = require('gulp-util');
+    gutil = require('gulp-util'),
+    replace = require('gulp-replace'),
+    rename = require('gulp-rename');
 
 var generate = function(generatorPath, options) {
   // Error out when user did not provide any arugments
@@ -45,7 +47,34 @@ var generate = function(generatorPath, options) {
     process.exit(0);
   }
 
-  console.log('gen: ', gen);
+  setupTask(gen);
+  // Trigger the generator task
+  gulp.start('gen');
 };
 
 module.exports = generate;
+
+function setupTask( generator ) {
+  // task: gen
+  // @describe	generate an model,view,store,controller from base template
+  return gulp.task('gen', function(callback) {
+      var type = generator.type,
+        name = generator.name,
+        moduleName = capitaliseFirstLetter(name) + capitaliseFirstLetter(type),
+        srcPath = path.join(__dirname, '..', 'skeletons/generators', type),
+        dirName = (type === 'template' || type === 'store') ? type : type+'s',
+        destPath = path.resolve('client/app') + '/' + dirName;
+
+      return gulp.src( srcPath + '.js' )
+          .pipe(replace(/\*NAMESPACE\*/g, moduleName))
+          .pipe(rename({ basename : name }))
+          .on('end', function() {
+            gutil.log(gutil.colors.green('[-done:] Generate a new file at'),  gutil.colors.cyan('client/app/' + dirName + '/' + name + '.js' ) );
+          })
+          .pipe(gulp.dest(destPath));
+  });
+}
+
+function capitaliseFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+}
