@@ -24,6 +24,10 @@ var generate = function(generatorPath, options) {
   if( generatorAndTasks && generatorAndTasks.length > 1 ) {
     var type = generatorAndTasks[0],
         name = generatorAndTasks[1];
+
+    // type could be either route or routes
+    type = ( type.slice(-1) === 's' ) ? type.substring(0, type.length - 1) : type;
+
     // Type must be in the `validTypes` array
     if (validTypes.indexOf(type) > -1) {
       // Name must be a valid string
@@ -77,6 +81,10 @@ function setupTask( generator ) {
       if ( isArray(name) ) {
         // build up the nested path
         for( ; i < name.length; i++) {
+          // 'component' and 'components' resolve as a 'app/templates/components/'
+          if ( type === 'template' && name[0] === 'component') {
+            name[i] = 'components';
+          }
           pathName += '/' + name[i];
           moduleName += capitaliseFirstLetter(name[i]);
         }
@@ -90,9 +98,9 @@ function setupTask( generator ) {
       moduleName += capitaliseFirstLetter(type);
 
       var srcPath = path.join(__dirname, '..', 'skeletons/generators', type),
-        dirName = (type === 'store') ? type : type +'s',
-        finalPath = pathNested ? dirName + pathName : dirName,
-        destPath =  path.resolve('client/app') + '/' + finalPath;
+          dirName = (type === 'store') ? type : ( type.slice(-1) === 's' ) ? type : type +'s',
+          finalPath = pathNested ? dirName + pathName : dirName,
+          destPath =  path.resolve('client/app') + '/' + finalPath;
 
       return gulp.src( srcPath + '.js' )
           .pipe(replace(/\*NAMESPACE\*/g, moduleName))
@@ -104,7 +112,7 @@ function setupTask( generator ) {
             gutil.log(gutil.colors.green('[-done:] Generate a new file at'),  gutil.colors.cyan('client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js') ) );
           })
           .pipe(gulp.dest(destPath));
-      });
+  });
 }
 
 function capitaliseFirstLetter(string) {
