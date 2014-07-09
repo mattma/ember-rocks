@@ -3,13 +3,13 @@ var fs = require("fs");
 var rm = require("rimraf");
 var helpers = require("../helpers/utils");
 
-describe("create directory", function() {
+describe("Created directory", function() {
 
   afterEach(function(done) {
     rm("./test-app", done);
   });
 
-  it("should add a bunch of files and directories", function(done) {
+  it("should scaffold a bunch of files and directories", function(done) {
     exec("./bin/em new test-app --test", function() {
       helpers.assertPathsExist([
         "test-app/package.json",
