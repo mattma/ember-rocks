@@ -3,7 +3,7 @@ var rm = require("rimraf");
 var helpers = require("../helpers/utils");
 var should = require('chai').should();
 
-describe("Command ./bin/em new", function() {
+describe("Command `em new`", function() {
   it("should require a dirName argument", function(done){
     exec("./bin/em new", function(error, stdout, stderr) {
       // need to test the program should successfully shut down

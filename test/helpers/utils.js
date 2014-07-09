@@ -24,3 +24,12 @@ exports.assertPathsExist = function(paths, done) {
     });
   });
 };
+
+// check a file path is existed or not
+exports.assertPathExist = function(path, done) {
+  fs.exists(path, function(exists) {
+    ("" + path + ":" + exists).should.equal("" + path + ":true");
+    exists.should.equal(true);
+    done();
+  });
+};
