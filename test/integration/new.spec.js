@@ -3,16 +3,19 @@ var rm = require("rimraf");
 var helpers = require("../helpers/utils");
 var should = require('chai').should();
 
-// describe("Command ./bin/em new", function() {
-//   it("should require a dirName argument", function(done){
-//     exec("./bin/em new", function() {
-//       // need to test the program should successfully shut down
-//       done();
-//   });
-// });
+describe("Command ./bin/em new", function() {
+  it("should require a dirName argument", function(done){
+    exec("./bin/em new", function(error, stdout, stderr) {
+      // need to test the program should successfully shut down
+      stdout.should.include('[-Error:]');
+      stdout.should.include('Missing directory name.');
+      stdout.should.include('See \'em new --help\'');
+      done();
+    });
+  });
+});
 
 describe("Created directory", function() {
-
   afterEach(function(done) {
     rm("./test-app", done);
   });
