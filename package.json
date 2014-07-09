@@ -30,7 +30,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "n"
+    "test": "node_modules/.bin/mocha --require chai --reporter spec --ui bdd --growl $(find test -name \"*.spec.js\")"
   },
   "dependencies": {
     "gulp-rename": "^1.2.0",
