@@ -10,7 +10,7 @@ describe("create directory", function() {
   });
 
   it("should add a bunch of files and directories", function(done) {
-    exec("./bin/em new test-app", function() {
+    exec("./bin/em new test-app --test", function() {
       helpers.assertPathsExist([
         "test-app/package.json",
         "test-app/server/app.coffee",
