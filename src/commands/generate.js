@@ -55,26 +55,59 @@ var generate = function(generatorPath, options) {
 module.exports = generate;
 
 function setupTask( generator ) {
-  // task: gen
-  // @describe	generate an model,view,store,controller from base template
+  //   task: gen
+  //   @describe	generate an model,view,store,controller from base template
   return gulp.task('gen', function(callback) {
       var type = generator.type,
         name = generator.name,
-        moduleName = capitaliseFirstLetter(name) + capitaliseFirstLetter(type),
-        srcPath = path.join(__dirname, '..', 'skeletons/generators', type),
+        pathName = '',
+        moduleName = '',
+        i = 0;
+
+      if ( name.indexOf('/') > -1 ) {
+        name = name.split('/');
+        pathNested = true;
+      } else {
+        pathNested = false;
+      }
+
+      // setup the fileName which used for rename module
+      var fileName = pathNested ? name.pop() : name;
+
+      if ( isArray(name) ) {
+        // build up the nested path
+        for( ; i < name.length; i++) {
+          pathName += '/' + name[i];
+          moduleName += capitaliseFirstLetter(name[i]);
+        }
+        // append fileName to the moduleName string
+        moduleName += capitaliseFirstLetter(fileName);
+      } else {
+        pathName += name;
+        moduleName += capitaliseFirstLetter(name);
+      }
+
+      moduleName += capitaliseFirstLetter(type);
+
+      var srcPath = path.join(__dirname, '..', 'skeletons/generators', type),
         dirName = (type === 'template' || type === 'store') ? type : type+'s',
-        destPath = path.resolve('client/app') + '/' + dirName;
+        finalPath = pathNested ? dirName + pathName : dirName,
+        destPath =  path.resolve('client/app') + '/' + finalPath;
 
       return gulp.src( srcPath + '.js' )
           .pipe(replace(/\*NAMESPACE\*/g, moduleName))
-          .pipe(rename({ basename : name }))
+          .pipe(rename({ basename : fileName }))
           .on('end', function() {
-            gutil.log(gutil.colors.green('[-done:] Generate a new file at'),  gutil.colors.cyan('client/app/' + dirName + '/' + name + '.js' ) );
+            gutil.log(gutil.colors.green('[-done:] Generate a new file at'),  gutil.colors.cyan('client/app/' + finalPath + '/' + fileName + '.js' ) );
           })
           .pipe(gulp.dest(destPath));
-  });
+      });
 }
 
 function capitaliseFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
+function isArray ( obj ) {
+  return Object.prototype.toString.call(obj) == "[object Array]";
 }

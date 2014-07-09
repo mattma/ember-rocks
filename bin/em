@@ -44,7 +44,9 @@ program
   .command('gen')
   //.option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
   .description('Generate a new file with ES6 support in the ember app')
-  .usage('[type:name]  # Generate a new file located app/routes/post.js \n  Ex:    em gen route:post')
+  .usage('[type:name]             # Generate a new file located app/routes/post.js' +
+         '\n  Ex:    em gen route:post           # Generate a path  app/routes/post.js' +
+         '\n  Ex:    em gen route:posts/awesome  # Generate a path  app/routes/posts/awesome.js')
   .action(generate);
 
 // must be before .parse() since node's emit() is immediate
