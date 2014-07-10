@@ -15,22 +15,33 @@ describe("Command `em gen` - Wrong Argument(s)", function() {
     });
   });
 
-  it("should have an argument (type:name), name must be a valid string", function(done){
-    exec("./bin/em gen route:", function(error, stdout, stderr) {
-      // need to test the program should successfully shut down
-      stdout.should.include('[-Error:]');
-      stdout.should.include('  must be a valid string');
-      stdout.should.include('See \'em gen --help\'');
-      done();
-    });
-  });
-
   it("should have an argument which contain a ':'", function(done){
     exec("./bin/em gen route", function(error, stdout, stderr) {
       // need to test the program should successfully shut down
       stdout.should.include('[-Error:]');
       stdout.should.include('Provide the wrong argument.');
       stdout.should.include('type:name');
+      stdout.should.include('See \'em gen --help\'');
+      done();
+    });
+  });
+
+  it("should have an argument (type:name), type must be a valid string", function(done){
+    exec("./bin/em gen :post", function(error, stdout, stderr) {
+      // need to test the program should successfully shut down
+      stdout.should.include('[-Error:]');
+      stdout.should.include('  is not a valid type.');
+      stdout.should.include('[-note:]');
+      stdout.should.include('valid types are component, controller, helper, model, route, template, view, mixin, adapter');
+      done();
+    });
+  });
+
+  it("should have an argument (type:name), name must be a valid string", function(done){
+    exec("./bin/em gen route:", function(error, stdout, stderr) {
+      // need to test the program should successfully shut down
+      stdout.should.include('[-Error:]');
+      stdout.should.include('  must be a valid string');
       stdout.should.include('See \'em gen --help\'');
       done();
     });
