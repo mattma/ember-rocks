@@ -78,4 +78,12 @@ describe("Command `em gen` - Generated and Done", function() {
         helpers.assertPathExist('client/app/routes/post.js', done);
       });
     });
+
+    // handle the case of type is singular or plural, ex: template:post or templates:post
+    it("should generate a .hbs file at app/templates/ folder when type is 'template'", function(done){
+      exec("./bin/em gen template:post", function(error, stdout, stderr) {
+        stdout.should.include('[-done:]');
+        helpers.assertPathExist('client/app/templates/post.hbs', done);
+      });
+    });
 });
