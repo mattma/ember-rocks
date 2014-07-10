@@ -38,6 +38,7 @@ var generate = function(generatorPath, options) {
         };
       } else {
         gutil.log(gutil.colors.red('[-Error:] '), gutil.colors.cyan( name ), gutil.colors.red(' must be a valid string.') );
+        gutil.log(gutil.colors.red("[-Error:]"), "See 'em gen --help'");
         process.exit(0);
       }
     } else {

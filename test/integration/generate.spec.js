@@ -15,6 +15,16 @@ describe("Command `em gen` - Wrong Argument(s)", function() {
     });
   });
 
+  it("should have an argument (type:name), name must be a valid string", function(done){
+    exec("./bin/em gen route:", function(error, stdout, stderr) {
+      // need to test the program should successfully shut down
+      stdout.should.include('[-Error:]');
+      stdout.should.include('  must be a valid string');
+      stdout.should.include('See \'em gen --help\'');
+      done();
+    });
+  });
+
   it("should have an argument which contain a ':'", function(done){
     exec("./bin/em gen route", function(error, stdout, stderr) {
       // need to test the program should successfully shut down
