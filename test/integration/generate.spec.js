@@ -32,7 +32,7 @@ describe("Command `em gen` - Wrong Argument(s)", function() {
       stdout.should.include('[-Error:]');
       stdout.should.include('  is not a valid type.');
       stdout.should.include('[-note:]');
-      stdout.should.include('valid types are component, controller, helper, model, route, template, view, mixin, adapter');
+      stdout.should.include('valid types are component, controller, helper, model, route, template, view, adapter');
       done();
     });
   });
@@ -52,7 +52,7 @@ describe("Command `em gen` - Wrong Argument(s)", function() {
       stdout.should.include('[-Error:]');
       stdout.should.include('temp  is not a valid type.');
       stdout.should.include('[-note:]');
-      stdout.should.include('valid types are component, controller, helper, model, route, template, view, mixin, adapter');
+      stdout.should.include('valid types are component, controller, helper, model, route, template, view, adapter');
       done();
     });
   });
