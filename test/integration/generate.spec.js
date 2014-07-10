@@ -3,7 +3,18 @@ var rm = require("rimraf");
 var helpers = require("../helpers/utils");
 var should = require('chai').should();
 
-describe("Command `em gen`", function() {
+describe("Command `em gen` - Wrong Argument(s)", function() {
+  it("should provide at least one argument", function(done){
+    exec("./bin/em gen", function(error, stdout, stderr) {
+      // need to test the program should successfully shut down
+      stdout.should.include('[-Error:]');
+      stdout.should.include('Missing type:name argument');
+      stdout.should.include('ex: em new route:post');
+      stdout.should.include('See \'em gen --help\'');
+      done();
+    });
+  });
+
   it("should have an argument which contain a ':'", function(done){
     exec("./bin/em gen route", function(error, stdout, stderr) {
       // need to test the program should successfully shut down
@@ -26,7 +37,7 @@ describe("Command `em gen`", function() {
   });
 });
 
-describe("Command `em gen`", function() {
+describe("Command `em gen` - Generated and Done", function() {
     afterEach(function(done) {
       rm("./client", done);
     });
