@@ -39,6 +39,6 @@ exports.assertPathExist = assertPathExist;
 exports.genCommandTester = function(command, pathExist, done) {
   exec(command, function(error, stdout, stderr) {
     stdout.should.include('[-done:]');
-    helpers.assertPathExist(pathExist, done);
+    assertPathExist(pathExist, done);
   });
 };
