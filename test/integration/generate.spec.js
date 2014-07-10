@@ -102,4 +102,28 @@ describe("Command `em gen` - Generated and Done", function() {
     it("should generate a .hbs file at app/templates/components folder when type is 'template:component'", function(done){
       helpers.genCommandTester('./bin/em gen templates:components/post', 'templates/components/post.hbs', done);
     });
+
+    it("should generate a js file at app/controllers/ folder when type is 'controller(s)'", function(done){
+      helpers.genCommandTester('./bin/em gen controller:post', 'controllers/post.js', done);
+    });
+
+    it("should generate a js file at app/models/ folder when type is 'model(s)'", function(done){
+      helpers.genCommandTester('./bin/em gen model:post', 'models/post.js', done);
+    });
+
+    it("should generate a js file at app/views/ folder when type is 'view(s)'", function(done){
+      helpers.genCommandTester('./bin/em gen view:post', 'views/post.js', done);
+    });
+
+    it("should generate a js file at app/components/ folder when type is 'component(s)'", function(done){
+      helpers.genCommandTester('./bin/em gen component:post', 'components/post.js', done);
+    });
+
+    it("should generate a js file at app/helpers/ folder when type is 'helper(s)'", function(done){
+      helpers.genCommandTester('./bin/em gen helper:x-post', 'helpers/x-post.js', done);
+    });
+
+    it("should generate a js file at app/adapters/ folder when type is 'adapter(s)'", function(done){
+      helpers.genCommandTester('./bin/em gen adapter:application', 'adapters/application.js', done);
+    });
 });

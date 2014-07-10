@@ -17,7 +17,7 @@ var generate = function(generatorPath, options) {
 
   var typeAndName = argv._.slice()[1],
     generatorAndTasks = typeAndName.length ? typeAndName.split(':') : undefined,
-    validTypes = [ 'component', 'controller', 'helper', 'model', 'route', 'template', 'view', 'mixin', 'adapter' ],
+    validTypes = [ 'component', 'controller', 'helper', 'model', 'route', 'template', 'view', 'adapter' ],
     gen;
 
   // Arugments must be in this format: type:name
