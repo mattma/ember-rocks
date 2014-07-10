@@ -65,25 +65,41 @@ describe("Command `em gen` - Generated and Done", function() {
 
     // handle the case of type is singular or plural, ex: route:post or routes:post
     it("should generate a js file at app/routes/ folder when type is 'route'", function(done){
-      exec("./bin/em gen route:post", function(error, stdout, stderr) {
-        stdout.should.include('[-done:]');
-        helpers.assertPathExist('client/app/routes/post.js', done);
-      });
+      helpers.genCommandTester('./bin/em gen route:post', 'routes/post.js', done);
     });
 
     // handle the case of type is singular or plural, ex: route:post or routes:post
     it("should generate a js file at app/routes/ folder when type is 'routes'", function(done){
-      exec("./bin/em gen routes:post", function(error, stdout, stderr) {
-        stdout.should.include('[-done:]');
-        helpers.assertPathExist('client/app/routes/post.js', done);
-      });
+      helpers.genCommandTester('./bin/em gen routes:post', 'routes/post.js', done);
     });
 
     // handle the case of type is singular or plural, ex: template:post or templates:post
     it("should generate a .hbs file at app/templates/ folder when type is 'template'", function(done){
-      exec("./bin/em gen template:post", function(error, stdout, stderr) {
-        stdout.should.include('[-done:]');
-        helpers.assertPathExist('client/app/templates/post.hbs', done);
-      });
+      helpers.genCommandTester('./bin/em gen template:post', 'templates/post.hbs', done);
+    });
+
+    // handle the case of type is singular or plural, ex: template:post or templates:post
+    it("should generate a .hbs file at app/templates/ folder when type is 'templates'", function(done){
+      helpers.genCommandTester('./bin/em gen templates:post', 'templates/post.hbs', done);
+    });
+
+    // handle the case of template(s) or component(s) is singular or plural, ex: template(s):component(s)/post
+    it("should generate a .hbs file at app/templates/components folder when type is 'template:component'", function(done){
+      helpers.genCommandTester('./bin/em gen template:component/post', 'templates/components/post.hbs', done);
+    });
+
+    // handle the case of template(s) or component(s) is singular or plural, ex: template(s):component(s)/post
+    it("should generate a .hbs file at app/templates/components folder when type is 'template:component'", function(done){
+      helpers.genCommandTester('./bin/em gen templates:component/post', 'templates/components/post.hbs', done);
+    });
+
+    // handle the case of template(s) or component(s) is singular or plural, ex: template(s):component(s)/post
+    it("should generate a .hbs file at app/templates/components folder when type is 'template:component'", function(done){
+      helpers.genCommandTester('./bin/em gen template:components/post', 'templates/components/post.hbs', done);
+    });
+
+    // handle the case of template(s) or component(s) is singular or plural, ex: template(s):component(s)/post
+    it("should generate a .hbs file at app/templates/components folder when type is 'template:component'", function(done){
+      helpers.genCommandTester('./bin/em gen templates:components/post', 'templates/components/post.hbs', done);
     });
 });

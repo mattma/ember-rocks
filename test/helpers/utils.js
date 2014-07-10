@@ -38,7 +38,8 @@ exports.assertPathExist = assertPathExist;
 
 exports.genCommandTester = function(command, pathExist, done) {
   exec(command, function(error, stdout, stderr) {
+    var fullPath = 'client/app/' + pathExist;
     stdout.should.include('[-done:]');
-    assertPathExist(pathExist, done);
+    assertPathExist(fullPath, done);
   });
 };
