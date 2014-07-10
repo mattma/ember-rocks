@@ -26,10 +26,19 @@ exports.assertPathsExist = function(paths, done) {
 };
 
 // check a file path is existed or not
-exports.assertPathExist = function(path, done) {
+var assertPathExist = function(path, done) {
   fs.exists(path, function(exists) {
     ("" + path + ":" + exists).should.equal("" + path + ":true");
     exists.should.equal(true);
     done();
+  });
+};
+
+exports.assertPathExist = assertPathExist;
+
+exports.genCommandTester = function(command, pathExist, done) {
+  exec(command, function(error, stdout, stderr) {
+    stdout.should.include('[-done:]');
+    helpers.assertPathExist(pathExist, done);
   });
 };
