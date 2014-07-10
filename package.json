@@ -44,8 +44,7 @@
   "devDependencies": {
     "mocha": "*",
     "chai": "*",
-    "rimraf": "*",
-    "testem": "*"
+    "rimraf": "*"
   },
   "keywords": []
 }
