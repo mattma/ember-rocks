@@ -60,33 +60,10 @@ program
 program.on('--help', function(){
 	console.log('  Examples:');
 	console.log('');
-	console.log('    $ em new [dirName]  # create a brand new Ember Application');
+	console.log('    $ em new [dirName]  # Scaffold a node.js server-side app and an Ember.js client-side app (ex: em gen my-app && cd my-app)');
+	console.log('');
+  console.log('    $ em gen [type:name(nested/path/to/name)]  # Generate a new file ember app folder (ex: em gen route:post => client/app/routes/post.js)');
 	console.log('');
 });
 
 program.parse(process.argv);
-
-
-// resolve('rocks', {
-//   basedir: process.cwd()
-// }, function(error, projectLocalCli) {
-//   var cli;
-//   if (error) {
-//     // If there is an error, resolve could not find the ember-cli
-//     // library from a package.json. Instead, include it from a relative
-//     // path to this script file (which is likely a globally installed
-//     // npm package). Most common cause for hitting this is `ember new`
-//     cli = require('../lib/cli');
-//   } else {
-//     // No error implies a projectLocalCli, which will load whatever
-//     // version of ember-cli you have installed in a local package.json
-//     cli = require(projectLocalCli);
-//   }
-
-//   cli({
-//     cliArgs: process.argv.slice(2),
-//     inputStream: process.stdin,
-//     outputStream: process.stdout
-//   }).then(process.exit);
-// });
-

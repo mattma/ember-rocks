@@ -1,7 +1,7 @@
 {
   "name": "EmberRocks",
-  "description": "An Ember CLI tool to build an ambitious web application",
-  "version": "0.0.1",
+  "description": "An Em(ber) command line utility to help you build an ambitious web application",
+  "version": "0.1.0",
   "homepage": "http://mattmadesign.com",
   "author": {
     "name": "Matt Ma",
@@ -18,7 +18,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/mma/ember-rocks/blob/master/LICENSE-MIT"
+      "url": "https://github.com/mattma/ember-rocks/blob/master/LICENSE-MIT"
     }
   ],
   "main": "bin/em",
