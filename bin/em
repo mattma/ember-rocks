@@ -12,6 +12,7 @@
 var program = require('commander'),
     create = require('../src/commands/create'),
     generate = require('../src/commands/generate'),
+    serve = require('../src/commands/serve'),
     pkg = require('../package.json');
 
 var output, outputStdout;
@@ -55,6 +56,12 @@ program
          '\n  Ex:    em gen template(s):posts/post  # Generate a path  app/templates/posts/post.hbs' +
          '\n  Ex:    em gen template(s):component(s)/x-foo  # Generate a path  app/templates/components/x-foo.hbs')
   .action(generate);
+
+program
+  .command('serve')
+  .description('Builds and serves your app, rebuilding on file changes.')
+  //.usage('[ dirName ]  # Make a new directory and Scaffold a new web application \n  Ex:    em new my-app')
+  .action(serve);
 
 // must be before .parse() since node's emit() is immediate
 program.on('--help', function(){
