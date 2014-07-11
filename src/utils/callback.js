@@ -7,8 +7,8 @@ var tildify = require('tildify'),
 function callback (env) {
   if (!env.modulePath && !env.configPath) {
     gutil.log(
-      gutil.colors.red('This project may not be created by \'Ember-Rocks\''),
-      gutil.colors.red('`em new [dirName]` does not install the NPM packages dependencies correctly')
+      gutil.colors.red('[-Error:] This project may not be created by \'Ember-Rocks\'\n'),
+      gutil.colors.red('[-Error:] `em new [dirName]` does not install the NPM packages dependencies correctly')
     );
     process.exit(1);
   }
@@ -29,7 +29,7 @@ function callback (env) {
   gutil.log('Using gulpfile', gutil.colors.magenta( tildify(env.configPath) ));
 
   process.nextTick(function () {
-    gulpInst.start.apply(gulpInst, ['lint']);
+    gulpInst.start.apply(gulpInst, [callback.command]);
   });
 }
 

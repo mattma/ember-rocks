@@ -4,7 +4,7 @@ var argv = require('minimist')(process.argv.slice(2)),
     Liftoff = require('liftoff'),
     gutil = require('gulp-util');
 
-var runner = function(cb) {
+var runner = function(cb, command) {
   var G = new Liftoff({
     name: 'gulp'
   });
@@ -14,6 +14,10 @@ var runner = function(cb) {
   }).on('requireFail', function (name, err) {
     gutil.log(gutil.colors.red('[-Error:] Unable to load:'), gutil.colors.red(name), gutil.colors.red(err));
   });
+
+  // attach the gulp task name into the cb namespace
+  // it will be resolved during the run time
+  cb.command = command;
 
   G.launch({
     cwd: argv.cwd,
