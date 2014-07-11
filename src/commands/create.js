@@ -2,6 +2,7 @@ var path = require('path'),
     fs = require('fs'),
     exec = require('child_process').exec,
     argv = require('minimist')(process.argv.slice(2)),
+    tildify = require('tildify'),
     gulp = require('gulp'),
     gutil = require('gulp-util');
 
@@ -43,7 +44,7 @@ var create = function(generatorPath, options) {
 module.exports = create;
 
 function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
-  gutil.log(gutil.colors.gray("[-log:]"), "Starting to generate an application at", gutil.colors.cyan(dest));
+  gutil.log(gutil.colors.gray("[-log:]"), "Starting to generate an application at", gutil.colors.cyan( tildify(dest) ));
 
   var coreSrc = [ coreSrcPath + '/**', coreSrcPath + '/**/.*' ],
       appSrc = [ appSrcPath + '/**' ];
