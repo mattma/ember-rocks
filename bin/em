@@ -15,21 +15,6 @@ var program = require('commander'),
     serve = require('../src/commands/serve'),
     pkg = require('../package.json');
 
-var output, outputStdout;
-
-outputStdout = function(data) {
-	console.log(data.toString('utf8').trim());
-};
-
-output = function(proc) {
-	proc.stdout.on('data', function(data) {
-		return outputStdout(data);
-	});
-	proc.stderr.on('data', function(data) {
-		return outputStdout(data);
-	});
-};
-
 program
 	.version('em-cli ' + pkg.version)
   .usage("[command] [options]\n\n  Command-Specific Help\n\n    em [command] --help");
