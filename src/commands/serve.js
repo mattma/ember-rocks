@@ -4,7 +4,7 @@ var runner = require('../utils/runner'),
     cb = require('../utils/callback');
 
 var serve = function() {
-  runner(cb, 'lint');
+  runner(cb, 'default');
 };
 
 module.exports = serve;
