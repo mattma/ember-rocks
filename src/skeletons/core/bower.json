@@ -1,9 +1,9 @@
 {
-	"name": "myProject",
+	"name": "Ember_Rocks",
 	"version": "0.0.1",
 	"main": [
 		"client/assets/styles/base.css",
-		"client/assets/images/",
+		"client/assets/",
 		"client/app/"
 	],
 	"ignore": [
@@ -11,7 +11,11 @@
 		"node_modules"
 	],
 	"dependencies": {
-		"jquery": "~1.8.3"
+		"handlebars": "~1.1.2",
+		"jquery": "~1.10.2",
+		"ember": "~1.5.1",
+		"ember-data": "~1.0.0-beta.8",
+		"ember-resolver": "git://github.com/stefanpenner/ember-jj-abrams-resolver.git#master"
 	},
 	"devDependencies": {
 

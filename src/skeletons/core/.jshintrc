@@ -2,9 +2,7 @@
 	"browser": true,
 	"camelcase": true,
 	"undef": true,
-
 	"node": true,
-
 	"esnext": true,
 	"bitwise": true,
 	"curly": true,
@@ -39,13 +37,10 @@
 		"__dirname": true,
 		"module": true,
 		"exports":true,
-		"Backbone": true,
 		"window": true,
 		"alert": true,
 		"$": true,
 		"jQuery": true,
-		"define": true,
-		"requirejs": true,
-		"JsSHA": true
+    "Ember": true
 	}
 }

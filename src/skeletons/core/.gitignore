@@ -1,12 +1,6 @@
 # Include your project-specific ignores in this file
 # Read about how to use .gitignore: https://help.github.com/articles/ignoring-files
 
-# Only watch .sass file change and reset.css change
-# Whenever pulled the latest, need to do compass compile task
-client/assets/styles/modules/
-client/assets/styles/ie/
-client/assets/styles/base.css
-
 # Numerous always-ignore extensions
 *.sass-cache
 .nodemonignore
@@ -20,7 +14,9 @@ client/assets/styles/base.css
 *.vi
 *~
 .tern-port
+*.css
 *.css.map
+!client/assets/styles/reset.css
 
 # OS or Editor folders
 .DS_Store
@@ -51,3 +47,9 @@ compass_app_log.txt
 # Sublime Specific Settings
 *.sublime-project
 *.sublime-workspace
+
+
+client/assets/vendors/*
+!client/assets/vendors/almond.js
+
+client/assets/styles/sass/framework

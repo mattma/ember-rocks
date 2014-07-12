@@ -1,54 +1,47 @@
 {
-	"name": "application_name",
-	"description": "My Test project",
-	"author": {
-		"name": "Matt Ma",
-		"email": "matt@mattmadesign.com"
-	},
-
-	"version": "0.0.1",
-	"private": true,
-	"repository": "",
-
-	"main": "Gruntfile.js",
-	"scripts": {
-		"start": "./server/"
-	},
-
-	"devDependencies": {
-    "express": "*"
-	},
-
-	"engines": {
-		"node": ">= 0.8.0"
-	},
-
-	"jshintConfig": {
-		"boss": true,
-		"white": true,
-		"maxlen": 100,
-		"onecase": true,
-		"node": true,
-		"browser": true,
-		"es5": true,
-		"esnext": true,
-		"bitwise": true,
-		"camelcase": true,
-		"curly": true,
-		"eqeqeq": true,
-		"immed": true,
-		"indent": 2,
-		"latedef": true,
-		"newcap": true,
-		"noarg": true,
-		"quotmark": "single",
-		"regexp": true,
-		"undef": true,
-		"unused": true,
-		"strict": true,
-		"trailing": true,
-		"smarttabs": true
-	},
-
-	"license": ""
+  "name": "Ember_Rocks",
+  "description": "Ember Application Boilerplate",
+  "author": {
+    "name": "Matt Ma",
+    "email": "matt@mattmadesign.com"
+  },
+  "version": "0.0.1",
+  "private": true,
+  "repository": "https://github.com/mattma/ember-rocks",
+  "main": "gulpfile.js",
+  "scripts": {
+    "start": "./server/"
+  },
+  "dependencies": {
+    "express": "*",
+    "static-favicon": "~1.0.0",
+    "morgan": "~1.0.0",
+    "cookie-parser": "~1.0.1",
+    "body-parser": "~1.0.0",
+    "debug": "~0.7.4",
+    "jade": "*"
+  },
+  "devDependencies": {
+    "gulp": "^3.6.0",
+    "gulp-autoprefixer": "^0.0.6",
+    "gulp-changed": "^0.2.1",
+    "gulp-clean": "^0.2.4",
+    "gulp-concat": "^2.2.0",
+    "gulp-ember-handlebars": "^0.6.0",
+    "gulp-es6-module-transpiler": "^0.1.1",
+    "gulp-imagemin": "^0.1.5",
+    "gulp-jshint": "^1.4.2",
+    "gulp-load-plugins": "^0.4.0",
+    "gulp-notify": "^1.0.0-beta",
+    "gulp-open": "^0.2.8",
+    "gulp-rename": "^1.1.0",
+    "gulp-replace": "^0.2.0",
+    "gulp-ruby-sass": "^0.4.0",
+    "gulp-util": "^2.2.14",
+    "tiny-lr": "^0.0.5"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "license": ""
 }

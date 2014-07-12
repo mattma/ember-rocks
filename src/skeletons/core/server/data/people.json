@@ -1,0 +1,45 @@
+
+{
+	"people": [
+		{
+			"id": 1,
+			"firstName": "matt",
+			"lastName": "ma",
+			"occupation": "dev",
+			"others": ["1", "2"]
+		},
+		{
+			"id": 2,
+			"firstName": "kelly",
+			"lastName": "gao",
+			"occupation": "account",
+			"others": ["3"]
+		},
+		{
+			"id": 3,
+			"firstName": "aaron",
+			"lastName": "ma",
+			"occupation": "student",
+			"others": ["4"]
+		}
+	],
+
+	"others": [
+		{
+			"id": 1,
+			"other": "something 1"
+		},
+		{
+			"id": 2,
+			"other": "something 2"
+		},
+		{
+			"id": 3,
+			"other": "something 3"
+		},
+		{
+			"id": 4,
+			"other": "something 4"
+		}
+	]
+}
