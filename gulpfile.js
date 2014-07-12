@@ -2,7 +2,7 @@ var gulp = require('gulp'),
   log = require('gulp-util').log,
   jshint = require('gulp-jshint');
 
-var lintFiles = ['src/commands/create.js', '!node_modules/**'];
+var lintFiles = ['src/commands/generate.js', '!node_modules/**'];
 
 gulp.task('lint', function() {
   log('Linting Files');
