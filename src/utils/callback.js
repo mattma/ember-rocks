@@ -1,3 +1,5 @@
+'use strict';
+
 var tildify = require('tildify'),
     gutil = require('gulp-util'),
     semver = require('semver'),

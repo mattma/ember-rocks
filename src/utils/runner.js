@@ -1,5 +1,8 @@
 // Highly inspired by [gulpjs](https://github.com/gulpjs/gulp/blob/master/bin/gulp.js)
 // Credit to [Eric Schoffstall](https://github.com/contra)
+
+'use strict';
+
 var argv = require('minimist')(process.argv.slice(2)),
     Liftoff = require('liftoff'),
     gutil = require('gulp-util');

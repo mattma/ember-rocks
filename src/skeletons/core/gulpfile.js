@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'),
 	gutil = require('gulp-util'),
 	plugins = require('gulp-load-plugins')();
@@ -92,15 +94,15 @@ gulp.task('sass', function() {
 	var destPath = clientFolder + '/assets/styles' + ( ( nestedFolder ) ? nestedFolder : '' );
 
 	return gulp.src( compileFiles )
-			.pipe(plugins.rubySass({
-				compass: false,
-				sourcemap: true,
-				debugInfo: false,
-				lineNumbers: false
-			}))
-			.pipe(plugins.autoprefixer.apply( this, AutoPrefixerConfig ))
-			.pipe(gulp.dest( destPath ))
-			.pipe(plugins.notify({ message: 'Compiled <%= file.relative %>' }));
+    .pipe(plugins.rubySass({
+      compass: false,
+      sourcemap: true,
+      debugInfo: false,
+      lineNumbers: false
+    }))
+    .pipe(plugins.autoprefixer.apply( this, AutoPrefixerConfig ))
+    .pipe(gulp.dest( destPath ))
+    .pipe(plugins.notify({ message: 'Compiled <%= file.relative %>' }));
 });
 
 // https://github.com/sindresorhus/gulp-imagemin
@@ -117,25 +119,25 @@ gulp.task('imagemin', function() {
 
 gulp.task('buildjs', function () {
 	return gulp.src(clientFolder + '/app/**/*.js')
-			.pipe(plugins.es6ModuleTranspiler({
-				type: 'amd',
-				moduleName: function(path) {
-					return modulePrefix + '/' + path;
-				}
-			}))
-			//.pipe(gulp.dest('./client/build/js/'))
-			.pipe(plugins.concat('application.js'))
-			.pipe(gulp.dest(clientFolder + '/assets/build/'));
+    .pipe(plugins.es6ModuleTranspiler({
+      type: 'amd',
+      moduleName: function(path) {
+        return modulePrefix + '/' + path;
+      }
+    }))
+    //.pipe(gulp.dest('./client/build/js/'))
+    .pipe(plugins.concat('application.js'))
+    .pipe(gulp.dest(clientFolder + '/assets/build/'));
 });
 
 gulp.task('buildhbs', function () {
 	return gulp.src(clientFolder + '/app/templates/**/*.hbs')
-			.pipe(plugins.emberHandlebars({
-				outputType: 'amd',
-				templateRoot: modulePrefix + '/templates'
-			}))
-			.pipe(plugins.concat('templates.js'))
-			.pipe(gulp.dest(clientFolder + '/assets/build/'));
+    .pipe(plugins.emberHandlebars({
+      outputType: 'amd',
+      templateRoot: modulePrefix + '/templates'
+    }))
+    .pipe(plugins.concat('templates.js'))
+    .pipe(gulp.dest(clientFolder + '/assets/build/'));
 });
 
 gulp.task('build', ['buildjs', 'buildhbs'], function(){

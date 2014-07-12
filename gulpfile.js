@@ -7,9 +7,9 @@ var gulp = require('gulp'),
 var lintFiles = [
   'src/commands/*.js',
   'src/utils/*.js',
-//   'src/skeletons/core/*.js',
+  'src/skeletons/core/*.js',
 //   'src/skeletons/app/*.js',
-//   '!node_modules/**'
+  '!node_modules/**'
 ];
 
 gulp.task('lint', function() {

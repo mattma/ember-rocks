@@ -1,3 +1,5 @@
+'use strict';
+
 var prettyTime = require('pretty-hrtime'),
     gutil = require('gulp-util');
 
