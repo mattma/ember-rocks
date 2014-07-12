@@ -1,3 +1,5 @@
+'use strict';
+
 /**
  * Bound Conditional if/else Block
  *
@@ -11,7 +13,7 @@ export default function() {
 	var context = (options.contexts && options.contexts[0]) || this;
 
 	if (!options.conditional) {
-		throw new Error("A conditional callback must be specified when using the if-condition helper");
+		throw new Error('A conditional callback must be specified when using the if-condition helper');
 	}
 
 	// Gather all bound property names to pass in order to observe them
@@ -28,7 +30,12 @@ export default function() {
 	};
 
 	// This effectively makes the helper a bound helper
-	// NOTE: 'content' path is used so that multiple properties can be bound to using the `childProperties` argument,
-	// however this means that it can only be used with a controller that proxies values to the 'content' property
-	return Ember.Handlebars.bind.call(context, 'content', options, true, options.conditional, normalizer, properties);
+	// NOTE: 'content' path is used so that multiple properties can be bound to
+  //using the `childProperties` argument, however this means that it can only be used
+  // with a controller that proxies values to the 'content' property
+	return Ember.Handlebars.bind.call(
+    context, 'content', options,
+    true, options.conditional,
+    normalizer, properties
+  );
 }

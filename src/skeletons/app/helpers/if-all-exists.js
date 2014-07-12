@@ -1,4 +1,10 @@
+'use strict';
+
 import ifConditionHelper from './if-condition';
+
+function exists(value) {
+  return value !== undefined;
+}
 
 /**
  * Logical AND Existence Conditional Block
@@ -15,8 +21,4 @@ export default function() {
   };
 
   return ifConditionHelper.apply(this, arguments);
-}
-
-function exists(value) {
-  return value !== undefined;
 }

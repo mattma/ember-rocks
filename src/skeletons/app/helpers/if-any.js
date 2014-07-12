@@ -1,4 +1,10 @@
+'use strict';
+
 import ifConditionHelper from './if-condition';
+
+function identity(value) {
+  return value;
+}
 
 /**
  * Logical OR Conditional Block
@@ -15,8 +21,4 @@ export default function() {
   };
 
   return ifConditionHelper.apply(this, arguments);
-}
-
-function identity(value) {
-  return value;
 }
