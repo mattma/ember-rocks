@@ -56,6 +56,36 @@ describe('Command `em gen` - Wrong Argument(s)', function() {
       done();
     });
   });
+
+  // when type is component, name has to be dashized string
+  it('should have a dash separated name when type is component(s)', function(done){
+    exec('./bin/em gen component:post', function(error, stdout) {
+      stdout.should.include('[-Error:]');
+      stdout.should.include('post  must be a dashize string. ex: my-component');
+      stdout.should.include('Generate task has been canceled');
+      done();
+    });
+  });
+
+  // when type is component, name of nest path has to be dashized string
+  it('should have a dash separated name of nest path when type is component(s)', function(done){
+    exec('./bin/em gen component:awesome/post', function(error, stdout) {
+      stdout.should.include('[-Error:]');
+      stdout.should.include('post  must be a dashize string. ex: my-component');
+      stdout.should.include('Generate task has been canceled');
+      done();
+    });
+  });
+
+  // when type is template, name[0] is component, name of nest path has to be dashized string
+  it('should have a dash separated name when type is template(s) and name[0] is component(s)', function(done){
+    exec('./bin/em gen template:component/post', function(error, stdout) {
+      stdout.should.include('[-Error:]');
+      stdout.should.include('post  must be a dashize string. ex: my-component');
+      stdout.should.include('Generate task has been canceled');
+      done();
+    });
+  });
 });
 
 describe('Command `em gen` - Generated and Done', function() {

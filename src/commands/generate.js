@@ -15,6 +15,20 @@ function isArray ( obj ) {
   return Object.prototype.toString.call(obj) === '[object Array]';
 }
 
+function dashizeNameError ( filename ) {
+  if ( filename.indexOf('-') === -1 ) {
+    gutil.log(
+      gutil.colors.red('[-Error:] '),
+      gutil.colors.cyan( filename ),
+      gutil.colors.red(' must be a dashize string. ex: my-component')
+    );
+    gutil.log(
+      gutil.colors.red('[-Error:]  Generate task has been canceled')
+    );
+    process.exit(0);
+  }
+}
+
 function setupTask( generator ) {
   //   task: gen
   //   @describe	generate an model,view,store,controller from base template
@@ -36,7 +50,19 @@ function setupTask( generator ) {
       // setup the fileName which used for rename module
       var fileName = pathNested ? name.pop() : name;
 
+      // handle the error case when arg is  component:foo
+      // component name has to be dashized string
+      // here does not handle the nested path case
+      if ( type === 'component' && !pathNested ) {
+        dashizeNameError(fileName);
+      }
+
       if ( isArray(name) ) {
+        // when type is component, name of nest path has to be dashized string
+        // when type is template, name[0] is component, name of nest path has to be dashized string
+        if ( type === 'template' && name[0] === 'component' || type === 'component') {
+          dashizeNameError(fileName);
+        }
         // build up the nested path
         for( ; i < name.length; i++) {
           // 'component' and 'components' resolve as a 'app/templates/components/'
@@ -61,20 +87,20 @@ function setupTask( generator ) {
           destPath =  path.resolve('client/app') + '/' + finalPath;
 
       return gulp.src( srcPath + '.js' )
-      .pipe(replace(/\*NAMESPACE\*/g, moduleName))
-      .pipe(rename({
-        basename : fileName,
-        extname: (type === 'template') ? '.hbs' : '.js'
-      }))
-      .on('end', function() {
-        gutil.log(
-          gutil.colors.green('[-done:] Generate a new file at'),
-          gutil.colors.cyan(
-            'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
-          )
-        );
-      })
-      .pipe(gulp.dest(destPath));
+        .pipe(replace(/\*NAMESPACE\*/g, moduleName))
+        .pipe(rename({
+          basename : fileName,
+          extname: (type === 'template') ? '.hbs' : '.js'
+        }))
+        .on('end', function() {
+          gutil.log(
+            gutil.colors.green('[-done:] Generate a new file at'),
+            gutil.colors.cyan(
+              'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
+            )
+          );
+        })
+        .pipe(gulp.dest(destPath));
     });
 }
 
