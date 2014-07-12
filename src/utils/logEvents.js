@@ -1,13 +1,26 @@
 var prettyTime = require('pretty-hrtime'),
     gutil = require('gulp-util');
 
+// format orchestrator errors
+function formatError(e) {
+  if (!e.err) {
+    return e.message;
+  }
+
+  if (typeof e.err === 'string') {
+    return new Error(e.err).stack;
+  }
+
+  // PluginError
+  if (typeof e.err.showStack === 'boolean') {
+    return e.err.toString();
+  } else {
+    return e.err.stack;
+  }
+}
+
 // wire up logging events
 var logEvents = function logEvents(gulpInst) {
-
-  // total hack due to fucked up error management in orchestrator
-  gulpInst.on('err', function () {
-    failed = true;
-  });
 
   gulpInst.on('task_start', function (e) {
     // TODO: batch these

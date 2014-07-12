@@ -9,10 +9,14 @@ var runner = function(cb, command) {
     name: 'gulp'
   });
 
-  G.on('require', function (name, module) {
+  G.on('require', function (name) {
     gutil.log(gutil.colors.cyan('[-Loading:] ' + name));
   }).on('requireFail', function (name, err) {
-    gutil.log(gutil.colors.red('[-Error:] Unable to load:'), gutil.colors.red(name), gutil.colors.red(err));
+    gutil.log(
+      gutil.colors.red('[-Error:] Unable to load:'),
+      gutil.colors.red(name),
+      gutil.colors.red(err)
+    );
   });
 
   // attach the gulp task name into the cb namespace
