@@ -1,3 +1,5 @@
+'use strict';
+
 var path = require('path'),
     fs = require('fs'),
     exec = require('child_process').exec,
@@ -23,42 +25,42 @@ function installer ( rootPath, command, description, nextStepFn, callback ) {
 }
 
 function gitInit(rootPath, callback) {
-    gutil.log(
-      gutil.colors.gray('[-log:]'),
-      gutil.colors.cyan('em-cli'),
-      'is doing REALLY hard to initialize your repo ...'
-    );
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    gutil.colors.cyan('em-cli'),
+    'is doing REALLY hard to initialize your repo ...'
+  );
 
-    rootPath = rootPath || process.cwd();
-    process.chdir(rootPath);
-    var month = [
-          'Jan', 'Feb', 'Mar',
-          'Apr', 'May', 'Jun',
-          'Jul', 'Aug', 'Sep',
-          'Oct', 'Nov', 'Dec'
-        ],
-        today = new Date(),
-        todayDate = today.getDate(),
-        todayMonth = month[today.getMonth()],
-        todayYear = today.getFullYear(),
-        command = 'git init && git add . && git commit -m \'Initial Commit @ ' +
-                  todayMonth + ' ' + todayDate + ', ' + todayYear + '\'';
+  rootPath = rootPath || process.cwd();
+  process.chdir(rootPath);
+  var month = [
+    'Jan', 'Feb', 'Mar',
+    'Apr', 'May', 'Jun',
+    'Jul', 'Aug', 'Sep',
+    'Oct', 'Nov', 'Dec'
+  ],
+    today = new Date(),
+    todayDate = today.getDate(),
+    todayMonth = month[today.getMonth()],
+    todayYear = today.getFullYear(),
+    command = 'git init && git add . && git commit -m \'Initial Commit @ ' +
+              todayMonth + ' ' + todayDate + ', ' + todayYear + '\'';
 
-    return exec(command, function(error, stdout, stderr) {
-        if (error !== null) {
-          var log = stderr.toString();
-          gutil.log( gutil.colors.red('[-Error:] ' + log) );
-          return callback(log);
-        }
-        gutil.log(
-           gutil.colors.green('[-done:] Initialized a new git repo and did a first commit')
-        );
-        gutil.log(
-          gutil.colors.bold('[-copy:] =>'),
-          gutil.colors.cyan('cd ' + argv._[1]),
-          gutil.colors.gray('# navigate to the newly created application')
-        );
-        callback();
+  return exec(command, function(error, stdout, stderr) {
+      if (error !== null) {
+        var log = stderr.toString();
+        gutil.log( gutil.colors.red('[-Error:] ' + log) );
+        return callback(log);
+      }
+      gutil.log(
+         gutil.colors.green('[-done:] Initialized a new git repo and did a first commit')
+      );
+      gutil.log(
+        gutil.colors.bold('[-copy:] =>'),
+        gutil.colors.cyan('cd ' + argv._[1]),
+        gutil.colors.gray('# navigate to the newly created application')
+      );
+      callback();
     });
 }
 
@@ -94,29 +96,29 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
 
   return gulp.task('generator', function (callback) {
       gulp.src(coreSrc)
-          .on('end', function() {
-              gutil.log(
-                gutil.colors.green('[-done:] A new'),
-                gutil.colors.cyan('Node.js'),
-                gutil.colors.green('web server have been successfully created!') );
-          })
-          .pipe(gulp.dest(dest));
+        .on('end', function() {
+          gutil.log(
+            gutil.colors.green('[-done:] A new'),
+            gutil.colors.cyan('Node.js'),
+            gutil.colors.green('web server have been successfully created!') );
+        })
+        .pipe(gulp.dest(dest));
 
       gulp.src(appSrc)
-          .on('end', function() {
-              gutil.log(
-                gutil.colors.green('[-done:] A new'),
-                gutil.colors.cyan('Ember.js'),
-                gutil.colors.green('mvc application have been successfully created!')
-              );
-              if( !isRunningTest ) {
-                installNpm( dest, callback );
-              } else {
-                callback();
-              }
-          })
-          .pipe(gulp.dest(dest+'/client/app'));
-  });
+        .on('end', function() {
+          gutil.log(
+            gutil.colors.green('[-done:] A new'),
+            gutil.colors.cyan('Ember.js'),
+            gutil.colors.green('mvc application have been successfully created!')
+          );
+          if( !isRunningTest ) {
+            installNpm( dest, callback );
+          } else {
+            callback();
+          }
+        })
+        .pipe(gulp.dest(dest+'/client/app'));
+    });
 }
 
 function pathResolver (relativePath) {

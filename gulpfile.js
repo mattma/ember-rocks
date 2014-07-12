@@ -1,3 +1,5 @@
+'use strict';
+
 var gulp = require('gulp'),
   log = require('gulp-util').log,
   jshint = require('gulp-jshint');
@@ -5,9 +7,9 @@ var gulp = require('gulp'),
 var lintFiles = [
   'src/commands/*.js',
   'src/utils/*.js',
-  'src/skeletons/core/*.js',
-  'src/skeletons/app/*.js',
-  '!node_modules/**'
+//   'src/skeletons/core/*.js',
+//   'src/skeletons/app/*.js',
+//   '!node_modules/**'
 ];
 
 gulp.task('lint', function() {

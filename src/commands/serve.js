@@ -1,3 +1,5 @@
+'use strict';
+
 // This is a very simple interface
 // Used to fire up gulp task in your local project
 var runner = require('../utils/runner'),

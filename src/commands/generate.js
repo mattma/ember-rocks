@@ -1,3 +1,5 @@
+'use strict';
+
 var path = require('path'),
     argv = require('minimist')(process.argv.slice(2)),
     gulp = require('gulp'),
@@ -6,7 +8,7 @@ var path = require('path'),
     rename = require('gulp-rename');
 
 function capitaliseFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  return string.charAt(0).toUpperCase() + string.slice(1);
 }
 
 function isArray ( obj ) {
@@ -59,21 +61,21 @@ function setupTask( generator ) {
           destPath =  path.resolve('client/app') + '/' + finalPath;
 
       return gulp.src( srcPath + '.js' )
-          .pipe(replace(/\*NAMESPACE\*/g, moduleName))
-          .pipe(rename({
-            basename : fileName,
-            extname: (type === 'template') ? '.hbs' : '.js'
-          }))
-          .on('end', function() {
-            gutil.log(
-              gutil.colors.green('[-done:] Generate a new file at'),
-              gutil.colors.cyan(
-                'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
-              )
-            );
-          })
-          .pipe(gulp.dest(destPath));
-  });
+      .pipe(replace(/\*NAMESPACE\*/g, moduleName))
+      .pipe(rename({
+        basename : fileName,
+        extname: (type === 'template') ? '.hbs' : '.js'
+      }))
+      .on('end', function() {
+        gutil.log(
+          gutil.colors.green('[-done:] Generate a new file at'),
+          gutil.colors.cyan(
+            'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
+          )
+        );
+      })
+      .pipe(gulp.dest(destPath));
+    });
 }
 
 var generate = function() {
