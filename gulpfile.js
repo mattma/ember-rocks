@@ -6,6 +6,7 @@ var lintFiles = [
   'src/commands/*.js',
   'src/utils/*.js',
   'src/skeletons/core/*.js',
+  'src/skeletons/app/*.js',
   '!node_modules/**'
 ];
 

@@ -3,7 +3,7 @@ var Router = Ember.Router.extend();
 
 Router.map(function() {
 	this.resource('index', { path: '/'});
-	this.resource('other', { path: '/other/:other_id'})
+	this.resource('other', { path: '/other/:other_id'});
 });
 
 // Create a clean URL, without the #/

@@ -14,7 +14,7 @@ var App = Ember.Application.extend({
 
 App.initializer({
 	name: 'Register Components',
-	initialize: function(container, application) {
+	initialize: function(container) {
 		registerComponents(container);
 	}
 });
