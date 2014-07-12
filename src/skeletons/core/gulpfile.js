@@ -35,7 +35,12 @@ gulp.task('lint', function() {
 // @describe	Strip out the LiveReload Script tag in HTML
 gulp.task('stripLRScript', function() {
 	return gulp.src(path.join(__dirname, clientFolder, 'index.html'))
-		.pipe(plugins.replace(/<script *src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g, ''))
+		.pipe(
+      plugins.replace(
+        /<script *src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
+        ''
+      )
+    )
 		.pipe(gulp.dest(path.join(__dirname, clientFolder)));
 });
 
@@ -43,9 +48,18 @@ gulp.task('stripLRScript', function() {
 // @describe	inject livereload script into index.html
 gulp.task('injectLRScript', function() {
 	return gulp.src(path.join(__dirname, clientFolder, 'index.html'))
-			.pipe(plugins.replace(/<script *src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g, ''))
-			.pipe(plugins.replace(/<\/body>/,
-					'<script src="http://localhost:35729/livereload.js?snipver=1"></script>\n</body>'))
+			.pipe(
+        plugins.replace(
+          /<script *src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
+          ''
+        )
+      )
+			.pipe(
+        plugins.replace(
+          /<\/body>/,
+					'<script src="http://localhost:35729/livereload.js?snipver=1"></script>\n</body>'
+        )
+      )
 			.pipe(gulp.dest(path.join(__dirname, clientFolder)));
 });
 
@@ -104,7 +118,7 @@ gulp.task('imagemin', function() {
 gulp.task('buildjs', function () {
 	return gulp.src(clientFolder + '/app/**/*.js')
 			.pipe(plugins.es6ModuleTranspiler({
-				type: "amd",
+				type: 'amd',
 				moduleName: function(path) {
 					return modulePrefix + '/' + path;
 				}
