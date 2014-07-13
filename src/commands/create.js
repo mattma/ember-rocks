@@ -81,6 +81,12 @@ function gitInit(rootPath, callback) {
         gutil.colors.cyan('cd ' + argv._[1]),
         gutil.colors.gray('# navigate to the newly created application')
       );
+      gutil.log(
+        gutil.colors.bold('[-copy:] =>'),
+        gutil.colors.cyan('em serve'),
+        gutil.colors.gray(' # kick start the server, open project in favorite browser,'),
+        gutil.colors.gray('auto watch file changes and rebuild the project')
+      );
       callback();
     });
 }
@@ -121,7 +127,11 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
           gutil.log(
             gutil.colors.green('[-done:] A new'),
             gutil.colors.cyan('Node.js'),
-            gutil.colors.green('web server have been successfully created!') );
+            gutil.colors.green('web server have been successfully created!')
+          );
+          gutil.log(
+            gutil.colors.magenta('Be patient, fetching packages from internet ...')
+          );
         })
         .pipe(gulp.dest(dest));
 
