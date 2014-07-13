@@ -18,6 +18,25 @@ function installer ( rootPath, command, description, nextStepFn, callback ) {
     if (error !== null) {
       var log = stderr.toString();
       gutil.log( gutil.colors.red('[-Error:] ' + log) );
+      if (command === 'npm install') {
+        gutil.log(
+          gutil.colors.red('[-Error:] npm install failed dramatically.'),
+          gutil.colors.red('[-Error:] Need to manually do \'npm install\' and \'bower install\' '),
+          gutil.colors.red('[-Error:] Before the project is fully ready for development')
+        );
+      } else if (command === 'bower install') {
+        gutil.log(
+          gutil.colors.red('[-Error:] bower install failed dramatically.'),
+          gutil.colors.red('[-Error:] Need to manually do \'bower install\''),
+          gutil.colors.red('[-Error:] Before the project is fully ready for development')
+        );
+      } else {
+        gutil.log(
+          gutil.colors.red('[-Error:] initialize git repository failed dramatically.'),
+          gutil.colors.red('[-Error:] Need to manually do'),
+          gutil.colors.red('[-Error:] \'git init && git add . && git commit -m\'')
+        );
+      }
       return callback(log);
     }
     nextStepFn(rootPath, callback);
