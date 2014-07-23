@@ -6,7 +6,7 @@
 
 
 # Numerous always-ignore extensions
-*.sass-cache
+.sass-cache
 .nodemonignore
 *.diff
 *.err
@@ -25,6 +25,7 @@
 .cache
 .project
 .settings
+.tmp
 .tmproj
 nbproject
 Thumbs.db
