@@ -115,7 +115,7 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
   gutil.log(
     gutil.colors.gray('[-log:]'),
     'Starting to generate an application at',
-    gutil.colors.cyan( tildify(dest) )
+    gutil.colors.magenta( tildify(dest) )
   );
 
   var coreSrc = [ coreSrcPath + '/**/*'],
@@ -130,7 +130,11 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
             gutil.colors.green('web server have been successfully created!')
           );
           gutil.log(
-            gutil.colors.gray('[-log:] '),
+            gutil.colors.gray('[-log:]'),
+            gutil.colors.magenta('It may take up to 1 minute and half!')
+          );
+          gutil.log(
+            gutil.colors.gray('[-log:]'),
             gutil.colors.magenta('Be patient, fetching packages from internet ...')
           );
         })

@@ -5,6 +5,7 @@ var gulp = require('gulp'),
   jshint = require('gulp-jshint');
 
 var lintFiles = [
+  'bin/em',
   'src/commands/*.js',
   'src/utils/*.js',
   'src/skeletons/core/*.js',

@@ -13,49 +13,74 @@ var program = require('commander'),
     create = require('../src/commands/create'),
     generate = require('../src/commands/generate'),
     serve = require('../src/commands/serve'),
+    build = require('../src/commands/build'),
     pkg = require('../package.json');
 
 program
-	.version('em-cli ' + pkg.version)
-  .usage("[command] [options]\n\n  Command-Specific Help\n\n    em [command] --help");
+  .version('em-cli ' + pkg.version)
+  .usage('[command] [options]\n\n  Command-Specific Help\n\n    em [command] --help');
 
 program
   .command('new')
-  .option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
-  .option('-T, --test', '# running in test mode. It won\'s fetch npm or bower packages or init the git repo')
+  .option(
+      '-p, --path [path]',
+      '# the generator url on web (ex: github.com/mattma/ember-generator)'
+  )
+  .option(
+      '-T, --test',
+      '# running in test mode. It won\'s fetch npm or bower packages or init the git repo'
+  )
   .description('Creates a new ember application at [dirName]')
-  .usage('[ dirName ]  # Make a new directory and Scaffold a new web application \n  Ex:    em new my-app')
+  .usage(
+      '[ dirName ]  # Make a new directory and Scaffold a new web application' +
+      '\n  Ex:    em new my-app'
+  )
   .action(create);
 
 program
   .command('gen')
-  //.option('-p, --path [path]', '# the generator url on web (ex: github.com/mattma/ember-generator)')
+  // ex: github.com/mattma/ember-generator
+  //.option('-p, --path [path]', '# the generator url on web')
   .description('Generate a new file with ES6 support in the ember app')
-  .usage('[ type:name(/nested/folder/fileName) ]      # Generate a new file located app/routes/post.js' +
-         "\n " +
-         "\n  @arg   type:  'component', 'controller', 'helper', 'model', 'route', 'template', 'view', 'mixin', 'adapter'" +
-         "\n  @arg   name:  any string, or use '/' separated string to create a nested folder structure" +
-         "\n " +
-         '\n  Ex:    em gen route(s):post           # Generate a path  app/routes/post.js' +
-         '\n  Ex:    em gen route(s):posts/awesome  # Generate a path  app/routes/posts/awesome.js' +
-         '\n  Ex:    em gen template(s):posts/post  # Generate a path  app/templates/posts/post.hbs' +
-         '\n  Ex:    em gen template(s):component(s)/x-foo  # Generate a path  app/templates/components/x-foo.hbs')
+  .usage('[type:[name | /nested/folder/to/name]]' +
+      '\n\n  @description Generate a new file located app/[type]/[name].js' +
+      '\n\n  @arg type: \'component\', \'controller\', \'helper\', \'model\', ' +
+      '\'route\', \'template\', \'view\', \'mixin\', \'adapter\'' +
+      '\n  @arg name:  any string, or use \'/\'' +
+      ' separated string to create a nested folder structure' +
+      '\n\n  Ex:  em gen route(s):post           # Generated  app/routes/post.js' +
+      '\n  Ex:  em gen route(s):posts/awesome  # Generated  app/routes/posts/awesome.js' +
+      '\n  Ex:  em gen template(s):posts/post  # Generated  app/templates/posts/post.hbs' +
+      '\n  Ex:  em gen template(s):component(s)/x-foo' +
+      ' # Generated  app/templates/components/x-foo.hbs')
   .action(generate);
 
 program
   .command('serve')
   .description('Builds and serves your app, rebuilding on file changes.')
-  //.usage('[ dirName ]  # Make a new directory and Scaffold a new web application \n  Ex:    em new my-app')
+  // \n  Ex:    em new my-app
+  //.usage('[ dirName ]  # Make a new directory and Scaffold a new web application')
   .action(serve);
+
+program
+  .command('build')
+  .description('Release your app and places it into the output path \'~/build\'')
+  .action(build);
 
 // must be before .parse() since node's emit() is immediate
 program.on('--help', function(){
-	console.log('  Examples:');
-	console.log('');
-	console.log('    $ em new [dirName]  # Scaffold a node.js server-side app and an Ember.js client-side app (ex: em gen my-app && cd my-app)');
-	console.log('');
-  console.log('    $ em gen [type:name(nested/path/to/name)]  # Generate a new file ember app folder (ex: em gen route:post => client/app/routes/post.js)');
-	console.log('');
+  console.log('  Examples:');
+  console.log('');
+  console.log('    $ em new [dirName]' +
+    '\n\n      @description Scaffold a node.js server-side app and an Ember.js client-side app' +
+    '\n\n      @example  em new my-app && cd my-app');
+  console.log('');
+  console.log('    $ em gem [type:[name | /nested/folder/to/name]]' +
+    '\n\n      @description Generate a new file ember app folder' +
+    '\n\n      @example  em gen route:post  =>  client/app/routes/post.js' +
+    '\n      @example  em gen route(s):posts/awesome  =>  app/routes/posts/awesome.js' +
+    '\n      @example  em gen component(s)/x-foo  =>  app/components/x-foo.js');
+  console.log('');
 });
 
 program.parse(process.argv);

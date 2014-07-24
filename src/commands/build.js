@@ -6,7 +6,7 @@ var runner = require('../utils/runner'),
     cb = require('../utils/callback');
 
 var serve = function() {
-  runner(cb, 'serve');
+  runner(cb, 'release');
 };
 
 module.exports = serve;
