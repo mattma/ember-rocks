@@ -29,7 +29,7 @@
     "gulp-changed": "^0.4.0",
     "gulp-if": "^1.2.4",
     "gulp-imagemin": "^0.6.1",
-    "gulp-jshint": "^1.6.3",
+    "gulp-jshint": "^1.7.1",
     "gulp-load-plugins": "^0.5.3",
     "gulp-replace": "^0.4.0",
     "gulp-ruby-sass": "^0.6.0",
