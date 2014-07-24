@@ -41,8 +41,7 @@ describe("Created directory", function() {
         "test-app/package.json",
         "test-app/bower.json",
         //"test-app/gulpfile.js",
-        "test-app/server/app.coffee",
-        "test-app/client/views/index.hbs"
+        "test-app/server/app.js"
       ], done);
     });
   });
