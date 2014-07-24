@@ -118,11 +118,11 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
     gutil.colors.cyan( tildify(dest) )
   );
 
-  var coreSrc = [ coreSrcPath + '/**', coreSrcPath + '/**/.*' ],
-      appSrc = [ appSrcPath + '/**' ];
+  var coreSrc = [ coreSrcPath + '/**/*'],
+      appSrc = [ appSrcPath + '/**/*' ];
 
   return gulp.task('generator', function (callback) {
-      gulp.src(coreSrc)
+      gulp.src(coreSrc, {dot: true})
         .on('end', function() {
           gutil.log(
             gutil.colors.green('[-done:] A new'),
@@ -130,12 +130,13 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
             gutil.colors.green('web server have been successfully created!')
           );
           gutil.log(
+            gutil.colors.gray('[-log:] '),
             gutil.colors.magenta('Be patient, fetching packages from internet ...')
           );
         })
         .pipe(gulp.dest(dest));
 
-      gulp.src(appSrc)
+      gulp.src(appSrc, {dot: true})
         .on('end', function() {
           gutil.log(
             gutil.colors.green('[-done:] A new'),
