@@ -5,9 +5,7 @@ var gulp = require('gulp'),
   $ = require('gulp-load-plugins')(),
   del = require('del'),
   opn = require('opn'),
-  pagespeed = require('psi'),
-  browserSync = require('browser-sync'),
-  reload = browserSync.reload;
+  pagespeed = require('psi');
 
 // https://github.com/ai/autoprefixer. Default: > 1%, last 2 versions, Firefox ESR, Opera 12.1
 // Android, BlackBerry or bb, iOS
@@ -45,10 +43,8 @@ gulp.task('lint', function() {
   var src = [ 'gulpfile.js' ];
 
   return gulp.src( src )
-      .pipe(reload({stream: true, once: true}))
       .pipe($.jshint())
-      .pipe($.jshint.reporter('jshint-stylish'))
-      .pipe($.if(!browserSync.active, $.jshint.reporter('fail')));
+      .pipe($.jshint.reporter('jshint-stylish'));
 });
 
 // task: stripLRScript
@@ -329,7 +325,8 @@ gulp.task('serve', [ 'express', 'sass', 'build', 'injectLRScript' ], function() 
     gulp.watch(clientFolder + '/app/**/*.js', rebuildProject);
     gulp.watch(clientFolder + '/app/**/*.hbs', rebuildProject);
     gulp.watch(clientFolder + '/index.html', notifyLivereload);
-    gulp.watch(clientFolder + '/build/*.js', notifyLivereload);
+    gulp.watch(clientFolder + '/assets/build/*.js', notifyLivereload);
+    gulp.watch(clientFolder + '/assets/images/**/*', notifyLivereload);
     gulp.watch(clientFolder + '/assets/styles/**/*.css', notifyLivereload);
   });
 });
