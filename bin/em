@@ -39,8 +39,6 @@ program
 
 program
   .command('gen')
-  // ex: github.com/mattma/ember-generator
-  //.option('-p, --path [path]', '# the generator url on web')
   .description('Generate a new file with ES6 support in the ember app')
   .usage('[type:[name | /nested/folder/to/name]]' +
       '\n\n  @description Generate a new file located app/[type]/[name].js' +
@@ -74,6 +72,10 @@ program.on('--help', function(){
   console.log('    $ em new [dirName]' +
     '\n\n      @description Scaffold a node.js server-side app and an Ember.js client-side app' +
     '\n\n      @example  em new my-app && cd my-app');
+  console.log('');
+  console.log('    $ em new [dirName] -p git_public_url' +
+    '\n\n      @description Do same things above and fetch an Ember app boilerplate from custom git repo' +
+    '\n\n      @example  em new my-app -p github.com/mattma/ember-generator');
   console.log('');
   console.log('    $ em gem [type:[name | /nested/folder/to/name]]' +
     '\n\n      @description Generate a new file ember app folder' +

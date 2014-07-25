@@ -55,12 +55,11 @@ function gitInit(rootPath, callback) {
 
   rootPath = rootPath || process.cwd();
   process.chdir(rootPath);
+
   var month = [
-    'Jan', 'Feb', 'Mar',
-    'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep',
-    'Oct', 'Nov', 'Dec'
-  ],
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ],
     today = new Date(),
     todayDate = today.getDate(),
     todayMonth = month[today.getMonth()],
@@ -112,6 +111,22 @@ function installNpm (rootPath, callback) {
   );
 }
 
+function simpleLogger() {
+    gutil.log(
+      gutil.colors.green('[-done:] A new'),
+      gutil.colors.cyan('Ember.js'),
+      gutil.colors.green('mvc application have been successfully created!')
+    );
+}
+
+function runningCallback(isRunningTest, dest, callback) {
+    if( !isRunningTest ) {
+      installNpm( dest, callback );
+    } else {
+      callback();
+    }
+}
+
 function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
   gutil.log(
     gutil.colors.gray('[-log:]'),
@@ -150,12 +165,21 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
           rootPath = dest || process.cwd(),
           clientPath = rootPath + '/client';
 
+        // if client/ folder is not existed, simply create one
         if (!fs.existsSync(clientPath)) {
           fs.mkdirSync(clientPath);
         }
 
+        gutil.log(
+          gutil.colors.gray('[-log:]'),
+          'Going to fetch the app template from ',
+          gutil.colors.cyan(appSrc)
+        );
+
+        // change to the client folder to install app template
         process.chdir( path.resolve(clientPath) );
 
+        // fetch the git url now
         exec( command, function(error, stdout, stderr) {
           if (error !== null) {
             var log = stderr.toString();
@@ -165,38 +189,27 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
           }
 
           gutil.log(
-            gutil.colors.green('[-done:] A new'),
-            gutil.colors.cyan('Ember.js'),
-            gutil.colors.green('mvc application have been successfully created!')
+            gutil.colors.green('[-done:] Successfully fetched and installed the app template ')
           );
 
+          simpleLogger();
+
+          // After fetching a git repo, then remove the .git folder
           return rimraf(path.join(dest, 'client', 'app', '.git'), function(error) {
             if (error !== null) {
               var log = stderr.toString();
               gutil.log( gutil.colors.red('[-Error:] ' + log) );
               process.exit(0);
             }
-
-            if( !isRunningTest ) {
-              installNpm( dest, callback );
-            } else {
-              callback();
-            }
+            // running npm install callback
+            runningCallback(isRunningTest, dest, callback);
           });
         });
      } else {
         gulp.src(appSrc, {dot: true})
           .on('end', function() {
-            gutil.log(
-              gutil.colors.green('[-done:] A new'),
-              gutil.colors.cyan('Ember.js'),
-              gutil.colors.green('mvc application have been successfully created!')
-            );
-            if( !isRunningTest ) {
-              installNpm( dest, callback );
-            } else {
-              callback();
-            }
+            simpleLogger();
+            runningCallback(isRunningTest, dest, callback);
           })
           .pipe(gulp.dest(dest+'/client/app'));
      }
@@ -227,7 +240,7 @@ var create = function(generatorPath, options) {
   // check for the mode, is running test or not
   var isRunningTest = options.test || false;
 
-  //@TODO: Pass in a git url for installing app checking the url prefix
+  //Pass in a valid git url for installing ember-application-template
   var re = /^http(?:s)?:\/\//,
     userInputPath = options.path,
 
