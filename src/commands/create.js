@@ -142,16 +142,25 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
         })
         .pipe(gulp.dest(dest));
 
+      // if option.path exist and it is a git url, it will be fetched
+      // Otherwise, it will use the default scaffold folder app
       if (typeof appSrc === 'string') {
-        var command = 'git clone ' + appSrc + ' app',
-          rootPath = dest || process.cwd();
 
-        process.chdir( path.resolve(rootPath) );
+        var command = 'git clone ' + appSrc + ' app',
+          rootPath = dest || process.cwd(),
+          clientPath = rootPath + '/client';
+
+        if (!fs.existsSync(clientPath)) {
+          fs.mkdirSync(clientPath);
+        }
+
+        process.chdir( path.resolve(clientPath) );
 
         exec( command, function(error, stdout, stderr) {
           if (error !== null) {
             var log = stderr.toString();
             gutil.log( gutil.colors.red('[-Error:] ' + log) );
+            gutil.log( gutil.colors.red('[-Error:] --path ' + appSrc + ' cannot be fetched!') );
             process.exit(0);
           }
 
@@ -161,7 +170,7 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
             gutil.colors.green('mvc application have been successfully created!')
           );
 
-          return rimraf(path.join(dest, 'app', '.git'), function(error) {
+          return rimraf(path.join(dest, 'client', 'app', '.git'), function(error) {
             if (error !== null) {
               var log = stderr.toString();
               gutil.log( gutil.colors.red('[-Error:] ' + log) );
