@@ -15,7 +15,7 @@ module.exports = function(options) {
 	VIEWS_PATH = sysPath.join(__dirname, '..', 'server/views');
 
 	env = process.env.NODE_ENV || 'development';
-	
+
 	var homeRoute = require('./routes/index');
 
 	app.set('view engine', 'jade');
@@ -28,7 +28,14 @@ module.exports = function(options) {
 	//app.use(express.methodOverride());
 	app.use(express.static(PUBLIC_PATH));
 
+      // Route General
 	app.use('/', homeRoute);
+
+      // Need to be deleted in development
+      // GET mocks data from /server/mocks/people.json
+      var fakePeopleRoute = require('./routes/mock_people');
+      app.get('/api/:query', fakePeopleRoute.all);
+      app.get('/api/:query/:other_id', fakePeopleRoute.one);
 
 	/// catch 404 and forward to error handler
 	app.use(function(req, res, next) {
