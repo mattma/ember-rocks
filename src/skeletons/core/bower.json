@@ -15,7 +15,8 @@
     "jquery": "^1.11.1",
     "ember": "1.6.1",
     "ember-data": "~1.0.0-beta.8",
-    "ember-resolver": "~0.1.5"
+    "ember-resolver": "~0.1.5",
+    "ember-load-initializers": "stefanpenner/ember-load-initializers#0.0.2"
   },
   "devDependencies": {
 
