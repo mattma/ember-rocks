@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 /*
- * commander
  * https://github.com/mattma/ember-rocks
  *
  * Copyright (c) 2014 Matt Ma
@@ -56,8 +55,6 @@ program
 program
   .command('serve')
   .description('Builds and serves your app, rebuilding on file changes.')
-  // \n  Ex:    em new my-app
-  //.usage('[ dirName ]  # Make a new directory and Scaffold a new web application')
   .action(commands);
 
 program
