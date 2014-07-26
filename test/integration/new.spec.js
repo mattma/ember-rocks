@@ -45,4 +45,15 @@ describe("Created directory", function() {
       ], done);
     });
   });
+
+  it("should have an path option for fetching a valid git repo", function(done){
+    exec("./bin/em new test-app --test -p github.com/yeoman/generator-ember",
+      function(error, stdout, stderr) {
+        stdout.should.include('Going to fetch the app template from');
+        stdout.should.include('http://github.com/yeoman/generator-ember');
+        stdout.should.include('[-done:] Successfully fetched and installed the app template');
+        done();
+    });
+  });
+
 });

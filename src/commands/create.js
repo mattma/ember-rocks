@@ -6,6 +6,7 @@ var path = require('path'),
     argv = require('minimist')(process.argv.slice(2)),
     tildify = require('tildify'),
     gulp = require('gulp'),
+    rimraf = require('rimraf'),
     gutil = require('gulp-util');
 
 // installer plugins to handle the npm and bower packages installation
@@ -54,12 +55,11 @@ function gitInit(rootPath, callback) {
 
   rootPath = rootPath || process.cwd();
   process.chdir(rootPath);
+
   var month = [
-    'Jan', 'Feb', 'Mar',
-    'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep',
-    'Oct', 'Nov', 'Dec'
-  ],
+      'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+      'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+    ],
     today = new Date(),
     todayDate = today.getDate(),
     todayMonth = month[today.getMonth()],
@@ -111,6 +111,22 @@ function installNpm (rootPath, callback) {
   );
 }
 
+function simpleLogger() {
+    gutil.log(
+      gutil.colors.green('[-done:] A new'),
+      gutil.colors.cyan('Ember.js'),
+      gutil.colors.green('mvc application have been successfully created!')
+    );
+}
+
+function runningCallback(isRunningTest, dest, callback) {
+    if( !isRunningTest ) {
+      installNpm( dest, callback );
+    } else {
+      callback();
+    }
+}
+
 function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
   gutil.log(
     gutil.colors.gray('[-log:]'),
@@ -119,9 +135,10 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
   );
 
   var coreSrc = [ coreSrcPath + '/**/*'],
-      appSrc = [ appSrcPath + '/**/*' ];
+      appSrc = ( appSrcPath.indexOf('http') !== -1 ) ? appSrcPath : [ appSrcPath + '/**/*' ];
 
   return gulp.task('generator', function (callback) {
+
       gulp.src(coreSrc, {dot: true})
         .on('end', function() {
           gutil.log(
@@ -140,20 +157,62 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
         })
         .pipe(gulp.dest(dest));
 
-      gulp.src(appSrc, {dot: true})
-        .on('end', function() {
-          gutil.log(
-            gutil.colors.green('[-done:] A new'),
-            gutil.colors.cyan('Ember.js'),
-            gutil.colors.green('mvc application have been successfully created!')
-          );
-          if( !isRunningTest ) {
-            installNpm( dest, callback );
-          } else {
-            callback();
+      // if option.path exist and it is a git url, it will be fetched
+      // Otherwise, it will use the default scaffold folder app
+      if (typeof appSrc === 'string') {
+
+        var command = 'git clone ' + appSrc + ' app',
+          rootPath = dest || process.cwd(),
+          clientPath = rootPath + '/client';
+
+        // if client/ folder is not existed, simply create one
+        if (!fs.existsSync(clientPath)) {
+          fs.mkdirSync(clientPath);
+        }
+
+        gutil.log(
+          gutil.colors.gray('[-log:]'),
+          'Going to fetch the app template from ',
+          gutil.colors.cyan(appSrc)
+        );
+
+        // change to the client folder to install app template
+        process.chdir( path.resolve(clientPath) );
+
+        // fetch the git url now
+        exec( command, function(error, stdout, stderr) {
+          if (error !== null) {
+            var log = stderr.toString();
+            gutil.log( gutil.colors.red('[-Error:] ' + log) );
+            gutil.log( gutil.colors.red('[-Error:] --path ' + appSrc + ' cannot be fetched!') );
+            process.exit(0);
           }
-        })
-        .pipe(gulp.dest(dest+'/client/app'));
+
+          gutil.log(
+            gutil.colors.green('[-done:] Successfully fetched and installed the app template ')
+          );
+
+          simpleLogger();
+
+          // After fetching a git repo, then remove the .git folder
+          return rimraf(path.join(dest, 'client', 'app', '.git'), function(error) {
+            if (error !== null) {
+              var log = stderr.toString();
+              gutil.log( gutil.colors.red('[-Error:] ' + log) );
+              process.exit(0);
+            }
+            // running npm install callback
+            runningCallback(isRunningTest, dest, callback);
+          });
+        });
+     } else {
+        gulp.src(appSrc, {dot: true})
+          .on('end', function() {
+            simpleLogger();
+            runningCallback(isRunningTest, dest, callback);
+          })
+          .pipe(gulp.dest(dest+'/client/app'));
+     }
     });
 }
 
@@ -181,15 +240,14 @@ var create = function(generatorPath, options) {
   // check for the mode, is running test or not
   var isRunningTest = options.test || false;
 
-  // @TODO: implment so that user could pass in a git url for installing app
-//  checking the url prefix
-//   var re = /^http(?:s)?:\/\//,
-//       userInputPath = options.path;
+  //Pass in a valid git url for installing ember-application-template
+  var re = /^http(?:s)?:\/\//,
+    userInputPath = options.path,
 
-  //  check for remote URL path
-//       remoteUrl = ( userInputPath ) ?
-//                       ( re.test(userInputPath) ) ?
-//                         userInputPath : ('http://' + userInputPath) : undefined;
+    //check for remote URL path
+    remoteUrl = ( userInputPath ) ?
+          ( re.test(userInputPath) ) ?
+          userInputPath : ('http://' + userInputPath) : undefined;
 
   // get the full path to the core of application. ( Server && Client )
   var skeletonsCorePath = getSkeletonsCorePath(),
@@ -206,6 +264,10 @@ var create = function(generatorPath, options) {
   } else {
     // Create a new directory name what user passed in
     fs.mkdirSync(generatorPath);
+  }
+
+  if ( remoteUrl !== undefined ) {
+      skeletonsAppPath = remoteUrl;
   }
 
   var currentAppPath = path.resolve(generatorPath);

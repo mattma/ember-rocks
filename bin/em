@@ -12,8 +12,7 @@
 var program = require('commander'),
     create = require('../src/commands/create'),
     generate = require('../src/commands/generate'),
-    serve = require('../src/commands/serve'),
-    build = require('../src/commands/build'),
+    commands = require('../src/commands/commands'),
     pkg = require('../package.json');
 
 program
@@ -39,8 +38,7 @@ program
 
 program
   .command('gen')
-  // ex: github.com/mattma/ember-generator
-  //.option('-p, --path [path]', '# the generator url on web')
+  .alias('generate')
   .description('Generate a new file with ES6 support in the ember app')
   .usage('[type:[name | /nested/folder/to/name]]' +
       '\n\n  @description Generate a new file located app/[type]/[name].js' +
@@ -60,12 +58,12 @@ program
   .description('Builds and serves your app, rebuilding on file changes.')
   // \n  Ex:    em new my-app
   //.usage('[ dirName ]  # Make a new directory and Scaffold a new web application')
-  .action(serve);
+  .action(commands);
 
 program
   .command('build')
   .description('Release your app and places it into the output path \'~/build\'')
-  .action(build);
+  .action(commands);
 
 // must be before .parse() since node's emit() is immediate
 program.on('--help', function(){
@@ -75,7 +73,12 @@ program.on('--help', function(){
     '\n\n      @description Scaffold a node.js server-side app and an Ember.js client-side app' +
     '\n\n      @example  em new my-app && cd my-app');
   console.log('');
-  console.log('    $ em gem [type:[name | /nested/folder/to/name]]' +
+  console.log('    $ em new [dirName] -p git_public_url' +
+    '\n\n      @description Do same things above and fetch an Ember app boilerplate ' +
+                  'from custom git repo' +
+    '\n\n      @example  em new my-app -p github.com/mattma/ember-generator');
+  console.log('');
+  console.log('    $ em gen [type:[name | /nested/folder/to/name]]' +
     '\n\n      @description Generate a new file ember app folder' +
     '\n\n      @example  em gen route:post  =>  client/app/routes/post.js' +
     '\n      @example  em gen route(s):posts/awesome  =>  app/routes/posts/awesome.js' +
