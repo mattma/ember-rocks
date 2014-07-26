@@ -172,7 +172,8 @@ gulp.task('envProd', function(){
     dest = 'client';
 
   return gulp.src(src)
-      //.pipe( $.replace( /\/vendors\/jquery\/jquery.js/, '/vendors/jquery/jquery.min.js'))
+  jquery/dist/jquery
+  //.pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.js/, '/vendors/jquery/dist/jquery.min.js'))
       .pipe( $.replace(
           /\/vendors\/handlebars\/handlebars.js/, '/vendors/handlebars/handlebars.min.js'
       ))
@@ -186,7 +187,7 @@ gulp.task('envDev', function(){
     dest = 'client';
 
   return gulp.src(src)
-      //.pipe( $.replace( /\/vendors\/jquery\/jquery.min.js/, '/vendors/jquery/jquery.js'))
+  //.pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.min.js/, '/vendors/jquery/dist/jquery.js'))
       .pipe( $.replace(
           /\/vendors\/handlebars\/handlebars.min.js/, '/vendors/handlebars/handlebars.js'
       ))
