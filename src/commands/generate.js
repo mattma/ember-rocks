@@ -105,27 +105,67 @@ function setupTask( generator ) {
         );
       }
 
-      var srcPath = path.join(__dirname, '..', 'skeletons/generators', type),
-          dirName = (type === 'store') ? type : ( type.slice(-1) === 's' ) ? type : type +'s',
-          finalPath = pathNested ? dirName + pathName : dirName,
+      // when generator type is route or component
+      // it will also generate the template as well
+      var srcPath = (type === 'route' || type === 'component')
+                              ? [{
+                                    type: type,
+                                    generatorPath: path.join(__dirname, '..', 'skeletons/generators', type)  + '.js'
+                                  }, {
+                                    type: 'template',
+                                    injection: ( type === 'component' ) ? 'components' : void 0,
+                                    generatorPath: path.join(__dirname, '..', 'skeletons/generators', 'template.js')
+                                  }]
+                              : path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
+
+      var dirName, finalPath, destPath;
+
+      // if it is a string, simple call generatorEngine once
+      // else it is an object(array), repeat the generatorEngine call
+      if ( typeof srcPath === 'string' ) {
+
+        dirName = (type === 'store') ? type : ( type.slice(-1) === 's' ) ? type : type +'s';
+        finalPath = pathNested ? dirName + pathName : dirName;
+        destPath =  path.resolve('client/app') + '/' + finalPath;
+
+        generatorEngine( type, srcPath, moduleName, fileName, finalPath, destPath );
+      } else {
+
+        for ( var i = 0, l = srcPath.length; i < l; i++ ) {
+          var _type = srcPath[i].type,
+            // when original type is 'component'
+            // it will create a template file at 'templates/components' folder
+            injection = srcPath[i].injection;
+
+          dirName = (_type === 'store') ? _type : ( _type.slice(-1) === 's' ) ? _type : _type +'s';
+          dirName = ( injection ) ? dirName + '/' + injection : dirName;
+
+          finalPath = pathNested ? dirName + pathName : dirName;
           destPath =  path.resolve('client/app') + '/' + finalPath;
 
-      return gulp.src( srcPath + '.js' )
-        .pipe(replace(/__NAMESPACE__/g, moduleName))
-        .pipe(rename({
-          basename : fileName,
-          extname: (type === 'template') ? '.hbs' : '.js'
-        }))
-        .on('end', function() {
-          gutil.log(
-            gutil.colors.green('[-done:] Generate a new file at'),
-            gutil.colors.cyan(
-              'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
-            )
-          );
-        })
-        .pipe(gulp.dest(destPath));
+          generatorEngine( _type, srcPath[i].generatorPath, moduleName, fileName, finalPath, destPath );
+        }
+      }
     });
+}
+
+function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPath ) {
+    console.log('moduleName: ', moduleName);
+    return gulp.src( srcPath )
+      .pipe(replace(/__NAMESPACE__/g, moduleName))
+      .pipe(rename({
+        basename : fileName,
+        extname: (type === 'template') ? '.hbs' : '.js'
+      }))
+      .on('end', function() {
+        gutil.log(
+          gutil.colors.green('[-done:] Generate a new file at'),
+          gutil.colors.cyan(
+            'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
+          )
+        );
+      })
+      .pipe(gulp.dest(destPath));
 }
 
 var generate = function() {
