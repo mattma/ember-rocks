@@ -16,6 +16,14 @@ function isArray ( obj ) {
   return Object.prototype.toString.call(obj) === '[object Array]';
 }
 
+var STRING_CAMELIZE_REGEXP = (/(\-|_|\.|\s)+(.)?/g);
+
+function camelize(str) {
+  return str.replace(STRING_CAMELIZE_REGEXP, function(match, separator, chr) {
+    return chr ? chr.toUpperCase() : '';
+  })
+}
+
 function dashizeNameError ( filename ) {
   if ( filename.indexOf('-') === -1 ) {
     gutil.log(
@@ -81,6 +89,8 @@ function setupTask( generator ) {
       }
 
       moduleName += capitaliseFirstLetter(type);
+
+      moduleName = camelize(moduleName);
 
       // ignore the 'store' case, since it is already created
       var typeFolder = path.resolve('client/app', type+'s');
