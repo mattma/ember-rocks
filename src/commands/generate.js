@@ -3,6 +3,7 @@
 var path = require('path'),
     fs = require('fs'),
     argv = require('minimist')(process.argv.slice(2)),
+    tildify = require('tildify'),
     gulp = require('gulp'),
     gutil = require('gulp-util'),
     replace = require('gulp-replace'),
@@ -39,6 +40,24 @@ function dashizeNameError ( filename ) {
 }
 
 function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPath ) {
+
+     var ext = (type === 'template') ? '.hbs' : '.js',
+        fullFilePath = destPath + '/' + fileName + ext;
+
+    // if the file has existed, it will abort the task
+    if ( fs.existsSync( fullFilePath ) ) {
+      gutil.log(
+        gutil.colors.red('[-Error:] '),
+        gutil.colors.cyan(fileName + ext),
+        gutil.colors.red('has existed at '),
+        gutil.colors.magenta( tildify(destPath) )
+      );
+      gutil.log(
+        gutil.colors.red('[-Error:]  Generate task has been canceled')
+      );
+      process.exit(0);
+    }
+
     // @TODO when generate multiple files on certain type
     // moduleName is not being defined correctly.
     // fine for now, since multiple file generation are only template file
@@ -46,14 +65,14 @@ function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPat
       .pipe(replace(/__NAMESPACE__/g, moduleName))
       .pipe(rename({
         basename : fileName,
-        extname: (type === 'template') ? '.hbs' : '.js'
+        extname: ext
       }))
       .on('end', function() {
         gutil.log(
-          gutil.colors.green('[-done:] Generate a new file at'),
-          gutil.colors.cyan(
-            'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
-          )
+          gutil.colors.green('[-done:] Generate'),
+          gutil.colors.cyan(fileName + ext),
+          gutil.colors.green('at'),
+          gutil.colors.magenta( tildify(destPath) )
         );
       })
       .pipe(gulp.dest(destPath));
@@ -175,6 +194,8 @@ function setupTask( generator ) {
 
 var generate = function(options) {
 
+  // if the folder 'client/app' is not existed
+  // can assume that the project may not be created by Ember Rocks
   if ( !fs.existsSync('client') && !fs.existsSync('client/app') ) {
     gutil.log(
       gutil.colors.red(
