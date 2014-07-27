@@ -1,8 +1,10 @@
 var exec = require('child_process').exec;
+var mkdirp = require('mkdirp');
 var rm = require('rimraf');
 var helpers = require('../helpers/utils');
 var should = require('chai').should();
 
+/*
 describe('Command `em generate` - Wrong Argument(s)', function() {
   it('should provide at least one argument', function(done){
     exec('./bin/em generate', function(error, stdout) {
@@ -89,9 +91,13 @@ describe('Command `em generate` - Wrong Argument(s)', function() {
     });
   });
 });
+*/
 
-/*
-describe('Command `em gen` - Generated and Done', function() {
+describe('Command `em generate` - Generated and Done', function() {
+    beforeEach(function(done) {
+      mkdirp('client/app', done);
+    });
+
     afterEach(function(done) {
       rm('./client', done);
     });
@@ -159,5 +165,5 @@ describe('Command `em gen` - Generated and Done', function() {
     it('should generate a js file at app/adapters/ folder when type is \'adapter(s)\'', function(done){
       helpers.genCommandTester('./bin/em generate adapter:application', 'adapters/application.js', done);
     });
+
   });
-*/

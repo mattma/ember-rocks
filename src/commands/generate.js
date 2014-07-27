@@ -173,7 +173,20 @@ function setupTask( generator ) {
     });
 }
 
-var generate = function() {
+var generate = function(options) {
+
+  if ( !fs.existsSync('client') && !fs.existsSync('client/app') ) {
+    gutil.log(
+      gutil.colors.red(
+        '[-Error:] This project may not be created by \'Ember-Rocks\'\n'
+      ),
+      gutil.colors.red(
+        '[-Error:] `em new [dirName]` does not install the NPM packages dependencies correctly'
+      )
+    );
+    process.exit(1);
+  }
+
   // Error out when user did not provide any arugments
   if (argv._.length < 2) {
     gutil.log(gutil.colors.red('[-Error:] Missing type:name argument.'), 'ex: em new route:post');
