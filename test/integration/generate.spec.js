@@ -97,7 +97,35 @@ describe('Command `em generate` - Wrong Argument(s)', function() {
       done();
     });
   });
+
+  // generator will abort if the file has existed in the folder
+  // it should work in all types
+  it('should abort the task if the route file has existed', function(done){
+    mkdirp('client/app/routes/post.js', function(){
+      exec('./bin/em generate route:post', function(error, stdout) {
+        stdout.should.include('[-Error:]');
+        stdout.should.include('post.js has existed');
+        stdout.should.include('Generate task has been canceled');
+        done();
+      });
+    });
+  });
+
+  // generator will abort if the file has existed in the folder
+  // it should work in all types
+  it('should abort the task if the component file has existed', function(done){
+    mkdirp('client/app/components/my-post.js', function(){
+      exec('./bin/em generate component:my-post', function(error, stdout) {
+        stdout.should.include('[-Error:]');
+        stdout.should.include('my-post.js has existed');
+        stdout.should.include('Generate task has been canceled');
+        done();
+      });
+    });
+  });
+
 });
+
 
 describe('Command `em generate` - Generated and Done', function() {
     beforeEach(function(done) {
