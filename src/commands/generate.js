@@ -90,6 +90,7 @@ function setupTask( generator ) {
 
       moduleName += capitaliseFirstLetter(type);
 
+      // if it has dashized moduleName, it will camelize
       moduleName = camelize(moduleName);
 
       // ignore the 'store' case, since it is already created
