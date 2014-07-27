@@ -41,15 +41,39 @@ program
   .description('Generate a new file with ES6 support in the ember app')
   .usage('[type:[name | /nested/folder/to/name]]' +
       '\n\n  @description Generate a new file located app/[type]/[name].js' +
-      '\n\n  @arg type: \'component\', \'controller\', \'helper\', \'model\', ' +
-      '\'route\', \'template\', \'view\', \'mixin\', \'adapter\'' +
-      '\n  @arg name:  any string, or use \'/\'' +
-      ' separated string to create a nested folder structure' +
-      '\n\n  Ex:  em gen route(s):post           # Generated  app/routes/post.js' +
-      '\n  Ex:  em gen route(s):posts/awesome  # Generated  app/routes/posts/awesome.js' +
-      '\n  Ex:  em gen template(s):posts/post  # Generated  app/templates/posts/post.hbs' +
-      '\n  Ex:  em gen template(s):component(s)/x-foo' +
-      ' # Generated  app/templates/components/x-foo.hbs')
+      '\n\n  @arg type: ' +
+      '\n\n     adapter        ex: em g adapter(s):post' +
+      '\n                    Generated: app/adapters/post.js'+
+      '\n\n     component      ex: em g component(s):my-post' +
+      '\n                    Generated: app/components/my-post.js'+
+      '\n                    Generated: app/templates/components/my-post.hbs'+
+      '\n\n     controller     ex: em g controller(s):blog/post' +
+      '\n                    Generated: app/controllers/blog/post.js'+
+      '\n\n     helper         ex: em g helper(s):post' +
+      '\n                    Generated: app/helpers/post.js'+
+      '\n\n     initializer    ex: em g initializer(s):post' +
+      '\n                    Generated: app/initializers/post.js'+
+      '\n\n     mixin          ex: em g mixin(s):post' +
+      '\n                    Generated: app/mixins/post.js'+
+      '\n\n     model          ex: em g model(s):post' +
+      '\n                    Generated: app/models/post.js'+
+      '\n\n     route          ex: em g route(s):post' +
+      '\n                    Generated: app/routes/post.js'+
+      '\n                    Generated: app/templates/post.hbs'+
+      '\n\n     serializer     ex: em g serializer(s):post' +
+      '\n                    Generated: app/serializers/post.js'+
+      '\n\n     template       ex: em g template(s):post' +
+      '\n                    Generated: app/templates/post.hbs'+
+      '\n\n     transform      ex: em g transform(s):post' +
+      '\n                    Generated: app/transforms/post.js'+
+      '\n\n     util           ex: em g util(s):post' +
+      '\n                    Generated: app/utils/post.js'+
+      '\n\n     view           ex: em g view(s):long/folder/name/post' +
+      '\n                    Generated: app/views/long/folder/name/post.js'+
+
+      '\n\n  @arg name: any valid string' +
+      ' \n             or use \'/\'separated string to create a nested folder structure' +
+      '\n             See @arg type (above): controller and view sections for details')
   .action(generate);
 
 program
@@ -75,11 +99,16 @@ program.on('--help', function(){
                   'from custom git repo' +
     '\n\n      @example  em new my-app -p github.com/mattma/ember-generator');
   console.log('');
-  console.log('    $ em gen [type:[name | /nested/folder/to/name]]' +
+  console.log('    $ em generate [type:[name | /nested/folder/to/name]]' +
     '\n\n      @description Generate a new file ember app folder' +
-    '\n\n      @example  em gen route:post  =>  client/app/routes/post.js' +
-    '\n      @example  em gen route(s):posts/awesome  =>  app/routes/posts/awesome.js' +
-    '\n      @example  em gen component(s)/x-foo  =>  app/components/x-foo.js');
+    '\n\n      @info \'em generate --help\' for addtional helper information ' +
+    '\n\n      @example  em generate route(s):posts/post' +
+    '\n      @example  em generate component(s)/x-foo'
+    );
+  console.log('');
+  console.log('    $ em serve' );
+  console.log('');
+  console.log('    $ em build' );
   console.log('');
 });
 
