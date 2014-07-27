@@ -1,14 +1,15 @@
-// ensure we don't share routes between all Router instances
-var Router = Ember.Router.extend();
+import Ember from 'ember';
 
-Router.map(function() {
-	this.resource('index', { path: '/'});
-	this.resource('other', { path: '/other/:other_id'});
+// ensure we don't share routes between all Router instances
+var Router = Ember.Router.extend({
+  // Create a clean URL, without the #/
+  // 'history', 'auto'
+  location: 'auto'
 });
 
-// Create a clean URL, without the #/
-// Router.reopen({
-//   location: 'history'
-// });
+Router.map(function() {
+  this.resource('index', { path: '/'});
+  this.resource('other', { path: '/other/:other_id'});
+});
 
 export default Router;
