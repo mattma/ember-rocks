@@ -1,6 +1,7 @@
 'use strict';
 
 var path = require('path'),
+    fs = require('fs'),
     argv = require('minimist')(process.argv.slice(2)),
     gulp = require('gulp'),
     gutil = require('gulp-util'),
@@ -81,6 +82,18 @@ function setupTask( generator ) {
 
       moduleName += capitaliseFirstLetter(type);
 
+      // ignore the 'store' case, since it is already created
+      var typeFolder = path.resolve('client/app', type+'s');
+
+      // if client/app/[type](s) is not existed, simply create one
+      if (!fs.existsSync(typeFolder)) {
+        fs.mkdirSync(typeFolder);
+        gutil.log(
+          gutil.colors.gray('[-log:] Created a new folder at '),
+          gutil.colors.cyan( '~/client/app/' +  type + 's')
+        );
+      }
+
       var srcPath = path.join(__dirname, '..', 'skeletons/generators', type),
           dirName = (type === 'store') ? type : ( type.slice(-1) === 's' ) ? type : type +'s',
           finalPath = pathNested ? dirName + pathName : dirName,
@@ -108,7 +121,7 @@ var generate = function() {
   // Error out when user did not provide any arugments
   if (argv._.length < 2) {
     gutil.log(gutil.colors.red('[-Error:] Missing type:name argument.'), 'ex: em new route:post');
-    gutil.log(gutil.colors.red('[-Error:]'), 'See \'em gen --help\'');
+    gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
     process.exit(0);
   }
 
@@ -116,7 +129,7 @@ var generate = function() {
     generatorAndTasks = typeAndName.length ? typeAndName.split(':') : undefined,
     validTypes = [
       'component', 'controller', 'helper', 'model',
-      'route', 'template', 'view', 'adapter'
+      'route', 'template', 'view', 'adapter', 'transform'
     ],
     gen;
 
@@ -142,7 +155,7 @@ var generate = function() {
           gutil.colors.cyan( name ),
           gutil.colors.red(' must be a valid string.')
         );
-        gutil.log(gutil.colors.red('[-Error:]'), 'See \'em gen --help\'');
+        gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
         process.exit(0);
       }
     } else {
@@ -160,11 +173,11 @@ var generate = function() {
   } else {
     gutil.log(
       gutil.colors.red('[-Error:] Provide the wrong argument. It must be in this format '),
-      gutil.colors.cyan('type:name'), ' ex: em gen route:post'
+      gutil.colors.cyan('type:name'), ' ex: em generate route:post'
     );
     gutil.log(
       gutil.colors.red('[-Error:]'),
-      'See \'em gen --help\''
+      'See \'em generate --help\''
     );
     process.exit(0);
   }
