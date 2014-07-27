@@ -197,7 +197,7 @@ var generate = function(options) {
   var typeAndName = argv._.slice()[1],
     generatorAndTasks = typeAndName.length ? typeAndName.split(':') : undefined,
     validTypes = [
-      'adapter', 'component', 'controller', 'helper', 'initalizer',
+      'adapter', 'component', 'controller', 'helper', 'initializer',
       'mixin', 'model', 'route', 'serializer', 'template',
       'transform', 'util', 'view'
     ],
