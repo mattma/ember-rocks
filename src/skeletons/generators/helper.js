@@ -1,5 +1,9 @@
-var *NAMESPACE* = Ember.Handlebars.makeBoundHelper(function(input) {
-  return new Ember.Handlebars.SafeString(window.showdown.makeHtml(input));
+'use strict';
+
+import Ember from 'ember';
+
+var __NAMESPACE__ = Ember.Handlebars.makeBoundHelper(function(value) {
+  return new Ember.Handlebars.SafeString(value);
 });
 
-export default *NAMESPACE*;
+export default __NAMESPACE__;

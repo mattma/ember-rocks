@@ -1,6 +1,6 @@
 import Ember from 'ember';
 
-var __NAMESPACE__ = Ember.Component.extend({
+var __NAMESPACE__ = Ember.Mixin.create({
 
 });
 

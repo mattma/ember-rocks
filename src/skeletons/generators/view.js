@@ -1,11 +1,10 @@
-var *NAMESPACE* = Ember.View.extend({
-	// init: function() {
-	// 	this._super();
-	// },
-	templateName: "templateName",
+import Ember from 'ember';
+
+var __NAMESPACE__ = Ember.View.extend({
+	//templateName: 'templateName',
 	actions: {
 
 	}
 });
 
-export default *NAMESPACE*;
+export default __NAMESPACE__;

@@ -1,7 +1,9 @@
-var *NAMESPACE* = Ember.Route.extend({
-	model: function() {
-		//return ['red', 'blue', 'green']
-	}
+import Ember from 'ember';
+
+var __NAMESPACE__ = Ember.Route.extend({
+  model: function() {
+    // return a promise
+  }
 });
 
-export default *NAMESPACE*;
+export default __NAMESPACE__;

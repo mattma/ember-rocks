@@ -87,7 +87,7 @@ function setupTask( generator ) {
           destPath =  path.resolve('client/app') + '/' + finalPath;
 
       return gulp.src( srcPath + '.js' )
-        .pipe(replace(/\*NAMESPACE\*/g, moduleName))
+        .pipe(replace(/__NAMESPACE__/g, moduleName))
         .pipe(rename({
           basename : fileName,
           extname: (type === 'template') ? '.hbs' : '.js'

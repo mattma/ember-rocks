@@ -1,14 +1,7 @@
-var *NAMESPACE* = Ember.ObjectController.extend({
-  isEditing: false,
+import Ember from 'ember';
 
-  edit: function() {
-    this.set('isEditing', true);
-  },
+var __NAMESPACE__ = Ember.Controller.extend({
 
-  doneEditing: function() {
-    this.set('isEditing', false);
-    this.get('store').commit();
-  }
 });
 
-export default *NAMESPACE*;
+export default __NAMESPACE__;

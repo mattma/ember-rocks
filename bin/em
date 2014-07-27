@@ -36,7 +36,7 @@ program
   .action(create);
 
 program
-  .command('gen')
+  .command('g')
   .alias('generate')
   .description('Generate a new file with ES6 support in the ember app')
   .usage('[type:[name | /nested/folder/to/name]]' +
