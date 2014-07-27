@@ -30,7 +30,7 @@
     "node": ">=0.10.0"
   },
   "scripts": {
-    "test": "node_modules/.bin/mocha $(find test -name \"*.spec.js\")"
+    "test": "node_modules/.bin/mocha $(find test -name \"generate.spec.js\")"
   },
   "dependencies": {
     "commander": "^2.2.0",
