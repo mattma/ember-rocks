@@ -21,7 +21,7 @@ var STRING_CAMELIZE_REGEXP = (/(\-|_|\.|\s)+(.)?/g);
 function camelize(str) {
   return str.replace(STRING_CAMELIZE_REGEXP, function(match, separator, chr) {
     return chr ? chr.toUpperCase() : '';
-  })
+  });
 }
 
 function dashizeNameError ( filename ) {
@@ -36,6 +36,27 @@ function dashizeNameError ( filename ) {
     );
     process.exit(0);
   }
+}
+
+function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPath ) {
+    // @TODO when generate multiple files on certain type
+    // moduleName is not being defined correctly.
+    // fine for now, since multiple file generation are only template file
+    return gulp.src( srcPath )
+      .pipe(replace(/__NAMESPACE__/g, moduleName))
+      .pipe(rename({
+        basename : fileName,
+        extname: (type === 'template') ? '.hbs' : '.js'
+      }))
+      .on('end', function() {
+        gutil.log(
+          gutil.colors.green('[-done:] Generate a new file at'),
+          gutil.colors.cyan(
+            'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
+          )
+        );
+      })
+      .pipe(gulp.dest(destPath));
 }
 
 function setupTask( generator ) {
@@ -107,16 +128,17 @@ function setupTask( generator ) {
 
       // when generator type is route or component
       // it will also generate the template as well
-      var srcPath = (type === 'route' || type === 'component')
-                              ? [{
-                                    type: type,
-                                    generatorPath: path.join(__dirname, '..', 'skeletons/generators', type)  + '.js'
-                                  }, {
-                                    type: 'template',
-                                    injection: ( type === 'component' ) ? 'components' : void 0,
-                                    generatorPath: path.join(__dirname, '..', 'skeletons/generators', 'template.js')
-                                  }]
-                              : path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
+      var srcPath =
+          (type === 'route' || type === 'component') ?
+            [{
+                type: type,
+                generatorPath: path.join(__dirname, '..', 'skeletons/generators', type)  + '.js'
+              }, {
+                type: 'template',
+                injection: ( type === 'component' ) ? 'components' : void 0,
+                generatorPath: path.join(__dirname, '..', 'skeletons/generators', 'template.js')
+              }]
+            : path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
 
       var dirName, finalPath, destPath;
 
@@ -131,11 +153,11 @@ function setupTask( generator ) {
         generatorEngine( type, srcPath, moduleName, fileName, finalPath, destPath );
       } else {
 
-        for ( var i = 0, l = srcPath.length; i < l; i++ ) {
-          var _type = srcPath[i].type,
+        for ( var j = 0, l = srcPath.length; j < l; j++ ) {
+          var _type = srcPath[j].type,
             // when original type is 'component'
             // it will create a template file at 'templates/components' folder
-            injection = srcPath[i].injection;
+            injection = srcPath[j].injection;
 
           dirName = (_type === 'store') ? _type : ( _type.slice(-1) === 's' ) ? _type : _type +'s';
           dirName = ( injection ) ? dirName + '/' + injection : dirName;
@@ -143,29 +165,12 @@ function setupTask( generator ) {
           finalPath = pathNested ? dirName + pathName : dirName;
           destPath =  path.resolve('client/app') + '/' + finalPath;
 
-          generatorEngine( _type, srcPath[i].generatorPath, moduleName, fileName, finalPath, destPath );
+          generatorEngine(
+            _type, srcPath[j].generatorPath, moduleName, fileName, finalPath, destPath
+          );
         }
       }
     });
-}
-
-function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPath ) {
-    console.log('moduleName: ', moduleName);
-    return gulp.src( srcPath )
-      .pipe(replace(/__NAMESPACE__/g, moduleName))
-      .pipe(rename({
-        basename : fileName,
-        extname: (type === 'template') ? '.hbs' : '.js'
-      }))
-      .on('end', function() {
-        gutil.log(
-          gutil.colors.green('[-done:] Generate a new file at'),
-          gutil.colors.cyan(
-            'client/app/' + finalPath + '/' + fileName + (type === 'template' ? '.hbs' : '.js')
-          )
-        );
-      })
-      .pipe(gulp.dest(destPath));
 }
 
 var generate = function() {
