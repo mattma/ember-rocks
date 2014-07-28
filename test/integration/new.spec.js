@@ -47,7 +47,7 @@ describe("Created directory", function() {
   });
 
   it("should have an path option for fetching a valid git repo", function(done){
-    exec("./bin/em new test-app --test -p github.com/mattma/Ember-Rocks-Template-Basic",
+    exec("./bin/em new test-app --test --path github.com/mattma/Ember-Rocks-Template-Basic",
       function(error, stdout, stderr) {
         stdout.should.include('Going to fetch the app template from');
         stdout.should.include('github.com/mattma/Ember-Rocks-Template-Basic');

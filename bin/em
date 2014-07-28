@@ -97,7 +97,7 @@ program.on('--help', function(){
   console.log('    $ em new [dirName] -p git_public_url' +
     '\n\n      @description Do same things above and fetch an Ember app boilerplate ' +
                   'from custom git repo' +
-    '\n\n      @example  em new my-app -p github.com/mattma/ember-generator');
+    '\n\n      @example  em new my-app --path github.com/mattma/Ember-Rocks-Template-Basic');
   console.log('');
   console.log('    $ em generate [type:[name | /nested/folder/to/name]]' +
     '\n\n      @description Generate a new file ember app folder' +
