@@ -1,10 +1,12 @@
-var attr = DS.attr;
+import DS from 'ember-data';
+
+var attr = DS.attr,
+  belongsTo = DS.belongsTo;
 
 var Others = DS.Model.extend({
-	number: attr(),
-	other: attr('string')
+  idField: attr(),
+  other: attr('string'),
+  users: belongsTo('user')
 });
-
-Others.idField = 'number';
 
 export default Others;

@@ -1,15 +1,1 @@
-<ul>
-	{{#each person in controller}}
-		<li>
-			{{!-- <div> {{!#link-to 'index' person}} {{!person.fullName}} {{!/link-to}}<div> --}}
-			<div> {{person.fullName}} <div>
-			<ul>
-				{{#each others in person.others}}
-					<li>{{others.other}}</li>
-				{{/each}}
-			</ul>
-		</li>
-	  {{else}}
-	  	<li>No person</li>
-	{{/each}}
-</ul>
+<p>Here is the homepage of Ember Rocks Application</p>

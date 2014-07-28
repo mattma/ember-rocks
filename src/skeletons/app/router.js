@@ -3,13 +3,13 @@ import Ember from 'ember';
 // ensure we don't share routes between all Router instances
 var Router = Ember.Router.extend({
   // Create a clean URL, without the #/
-  // 'history', 'auto'
-  location: 'auto'
+  // 'history', 'auto', 'hash'
+  location: 'hash'
 });
 
 Router.map(function() {
-  this.resource('index', { path: '/'});
-  this.resource('other', { path: '/other/:other_id'});
+  this.resource('users');
+  this.resource('user', { path: '/users/:user_id' } );
 });
 
 export default Router;
