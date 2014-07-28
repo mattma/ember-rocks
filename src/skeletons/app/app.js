@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
-//import registerComponents from 'rocks/_common/utils/register_components';
+//import registerComponents from 'rocks/utils/register-components';
 
 var App = Ember.Application.extend({
     LOG_ACTIVE_GENERATION: true,
