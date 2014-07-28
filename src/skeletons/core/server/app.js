@@ -33,9 +33,9 @@ module.exports = function(options) {
 
       // Need to be deleted in development
       // GET mocks data from /server/mocks/people.json
-      var fakePeopleRoute = require('./routes/mock_people');
-      app.get('/api/:query', fakePeopleRoute.all);
-      app.get('/api/:query/:other_id', fakePeopleRoute.one);
+      var fakeUsersRoute = require('./routes/mock_users');
+      app.get('/api/:query', fakeUsersRoute.all);
+      app.get('/api/:query/:other_id', fakeUsersRoute.one);
 
 	/// catch 404 and forward to error handler
 	app.use(function(req, res, next) {
