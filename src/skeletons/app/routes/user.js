@@ -2,7 +2,8 @@ import Ember from 'ember';
 
 var UserRoute = Ember.Route.extend({
   model: function(params) {
-    return this.store.find('user', params.user_id);
+    var users = this.modelFor('users');
+    return users.get('store').find('user', params.user_id);
   }
 });
 

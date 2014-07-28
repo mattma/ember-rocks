@@ -1,15 +1,4 @@
-<ul>
-  {{#each user in controller}}
-    <li>
-      {{!-- <div> {{!#link-to 'index' user}} {{!user.fullName}} {{!/link-to}}<div> --}}
-      <h4> {{#link-to 'user' user}} {{user.fullName}} {{/link-to}} <h4>
-      <ul>
-        {{#each others in user.others}}
-          <li>{{others.other}}</li>
-        {{/each}}
-      </ul>
-    </li>
-    {{else}}
-      <li>No user</li>
-  {{/each}}
-</ul>
+<h3> Users Page </h3>
+
+{{outlet}}
+
