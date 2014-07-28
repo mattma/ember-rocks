@@ -35,7 +35,6 @@ module.exports = function(options) {
       // GET mocks data from /server/mocks/people.json
       var fakeUsersRoute = require('./routes/mock_users');
       app.get('/api/:query', fakeUsersRoute.all);
-      app.get('/api/:query/:other_id', fakeUsersRoute.one);
 
 	/// catch 404 and forward to error handler
 	app.use(function(req, res, next) {
