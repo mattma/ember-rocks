@@ -28,6 +28,13 @@ module.exports = function(options) {
   //app.use(express.methodOverride());
   app.use(express.static(PUBLIC_PATH));
 
+  // Send cross-origin resource sharing enabling header.
+  // app.use(function(req, response, next) {
+  //   req.header('Cache-Control', 'no-cache');
+  //   req.header('Access-Control-Allow-Origin', '*');
+  //   next();
+  // });
+
   // Need to be deleted in development
   // GET mocks data from /server/mocks/people.json
   var fakeUsersRoute = require('./routes/mock_users');
