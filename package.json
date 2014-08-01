@@ -2,7 +2,7 @@
   "name": "ember-rocks",
   "description": "An Em(ber) command line utility to help you build an ambitious web application",
   "version": "0.1.0",
-  "homepage": "http://mattmadesign.com",
+  "homepage": "https://github.com/mattma/ember-rocks",
   "author": {
     "name": "Matt Ma",
     "email": "matt@mattmadesign.com",
@@ -29,6 +29,16 @@
   "engines": {
     "node": ">=0.10.0"
   },
+  "keywords": [
+    "ember.js",
+    "ember",
+    "cli",
+    "app",
+    "kit",
+    "app-kit",
+    "ember-app-kit",
+    "rocks"
+  ],
   "scripts": {
     "test": "node_modules/.bin/mocha $(find test -name \"*.spec.js\")"
   },
