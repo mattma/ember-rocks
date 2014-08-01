@@ -4,7 +4,7 @@ import Ember from 'ember';
 var Router = Ember.Router.extend({
   // Create a clean URL, without the #/
   // 'history', 'auto', 'hash'
-  location: 'hash'
+  location: 'auto'
 });
 
 Router.map(function() {
