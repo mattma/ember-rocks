@@ -31,6 +31,7 @@ nav
     width: 100%
     padding: 0
     font-size: 1em
+    position: relative
 
     a
       color: rgb(119, 119, 119)
@@ -52,14 +53,14 @@ nav
 @media all and (min-width: 990px)
   nav
     display: block
-    width: auto
+    width: 70%
     height: $header-height
     background-color: transparent
-    position: absolute
-    left: 21%
     z-index: 2
     transform: translate(0, 0)
     transition: none
+    overflow: hidden
+    left: 21%
 
     h4
       display: none
@@ -71,7 +72,6 @@ nav
       float: left
       width: auto
       height: $header-height
-      position: relative
       border: 0 none
 
       a
@@ -83,3 +83,14 @@ nav
 
         &.active
           background-image: linear-gradient(to bottom,rgb(34, 34, 34) 0,rgb(40, 40, 40) 100%)
+
+// @TODO, currently hack around for the floating navigation bar in the browser view
+@media all and (min-width: 1280px)
+  nav
+    left: 19%
+@media all and (min-width: 1640px)
+  nav
+    left: 15%
+@media all and (min-width: 2040px)
+  nav
+    left: 13%
