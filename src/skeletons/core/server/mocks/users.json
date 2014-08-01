@@ -5,21 +5,21 @@
 			"id": 1,
 			"firstName": "Matt",
 			"lastName": "Ma",
-			"occupation": "developer",
+			"occupation": "Developer",
 			"others": ["1", "2"]
 		},
 		{
 			"id": 2,
 			"firstName": "John",
 			"lastName": "Doe",
-			"occupation": "account",
+			"occupation": "Accountant",
 			"others": ["3"]
 		},
 		{
 			"id": 3,
 			"firstName": "Jane",
 			"lastName": "Doe",
-			"occupation": "student",
+			"occupation": "Student",
 			"others": ["4"]
 		}
 	],
@@ -27,19 +27,19 @@
 	"others": [
 		{
 			"id": 1,
-			"other": "something 1"
+			"other": "Ember rocks can create an ambitious web application."
 		},
 		{
 			"id": 2,
-			"other": "something 2"
+			"other": "Ember rocks is an alternative project to Ember-Cli."
 		},
 		{
 			"id": 3,
-			"other": "something 3"
+			"other": "Ember rocks can scaffold and build an accounting software."
 		},
 		{
 			"id": 4,
-			"other": "something 4"
+			"other": "Ember rocks is a great tool for any beginner."
 		}
 	]
 }

@@ -1,0 +1,85 @@
+nav
+  transform: translate(-$nav-sidebar-width, 0)
+  width: $nav-sidebar-width
+  height: 100%
+  background-color: rgb(34, 34, 34)
+  position: absolute
+  top: 0
+  left: 0
+  overflow-y: auto
+
+  &.open
+    transform: translate(0, 0)
+
+  h4
+    background-color: rgb(43,43,43)
+    color: white
+    padding: 17px 20px
+    margin: 15px 0
+    line-height: 1.4em
+    font-size: 1.6em
+    font-weight: 700
+
+  ul
+    padding: 0
+    margin: 0
+    width: 100%
+    height: 100%
+
+  li
+    border-bottom: 1px solid rgb(51,51,51)
+    width: 100%
+    padding: 0
+    font-size: 1em
+
+    a
+      color: rgb(119, 119, 119)
+      font-weight: 500
+      transition: background-color 0.2s ease-out
+      white-space: nowrap
+      padding: 17px 20px
+      font-size: 1.2em
+      border-bottom: 1px solid rgb(16,16,16)
+
+      &:hover, &.active
+        color: white
+      &:hover
+        cursor: pointer
+      &.active
+        background-color: rgb(15, 15, 15)
+
+// Larger Screens - desktops and tablets
+@media all and (min-width: 990px)
+  nav
+    display: block
+    width: auto
+    height: $header-height
+    background-color: transparent
+    position: absolute
+    left: 21%
+    z-index: 2
+    transform: translate(0, 0)
+    transition: none
+
+    h4
+      display: none
+
+    ul
+      height: $header-height
+
+    li
+      float: left
+      width: auto
+      height: $header-height
+      position: relative
+      border: 0 none
+
+      a
+        font-size: 1.8em
+        line-height: $header-height
+        height: $header-height
+        padding: 0 15px
+        background: transparent
+
+        &.active
+          background-image: linear-gradient(to bottom,rgb(34, 34, 34) 0,rgb(40, 40, 40) 100%)

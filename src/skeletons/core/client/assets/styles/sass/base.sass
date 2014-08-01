@@ -8,15 +8,51 @@
 
 //@import 'framework/_init'
 
+$header-height: 50px
+$nav-sidebar-width: 210px
+
 @import "sections/header"
+@import "sections/nav"
 @import "sections/main"
+@import "sections/users"
+
+html, body
+  width: 100%
+  height: 100%
 
 body
-	background: #f4f4f4
+  background: #f4f4f4
+  min-height: 100%
+
+  &>div
+    min-height: 100%
+    position: relative
+
+  &.open
+    overflow: hidden
+
+header.open, header.open ~ main
+  transform: translate($nav-sidebar-width, 0)
+
+header, nav, main
+  transition: transform 0.3s ease-out
+
+*
+  box-sizing: border-box
+
+// Larger Screens - desktops and tablets
+@media all and (min-width: 990px)
+  body
+    overflow-y: scroll
+
+  header.open, header.open ~ main
+    transform: translate(0, 0)
+
+
 
 //  ======================
 //  = OPERA STYLES ONLY  =
 //  ======================
 
 //.modern //need to add a new class to HTML to detect modern browser
-//	*:-o-prefocus, p  //follow with any tag, class, id
+//  *:-o-prefocus, p  //follow with any tag, class, id
