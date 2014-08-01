@@ -44,7 +44,8 @@
     "pretty-hrtime": "^0.2.1",
     "semver": "^3.0.1",
     "tildify": "^0.2.0",
-    "rimraf": "^2.2.8"
+    "rimraf": "^2.2.8",
+    "resolve": "^0.7.4"
   },
   "devDependencies": {
     "mocha": "*",
