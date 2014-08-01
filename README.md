@@ -29,8 +29,8 @@ After it is done, you should have a global command `em` available for you. Try `
 ## Quick Start
 
     em new my-app          // generate a brand new ember app in *my-app* folder
-    cd my-app                  // switch to application folder
-    em serve                     // start a server, open the new app in browser, livereload all resources
+    cd my-app               // switch to application folder
+    em serve                // start a server, open the new app in browser, livereload all resources
 
 ## Usage
     
@@ -40,11 +40,11 @@ After it is done, you should have a global command `em` available for you. Try `
 
         new [options]      // Creates a new ember application at [dirName]
            
-        g|generate          // Generate a new file with ES6 support in the ember app
+        g|generate        // Generate a new file with ES6 support in the ember app
                
-        serve                   // Builds and serves your app, rebuilding on file changes.
+        serve              // Builds and serves your app, rebuilding on file changes.
            
-        build                   // Release your app and places it into the output path '~/build'
+        build              // Release your app and places it into the output path '~/build'
        
     Options:
 
@@ -66,7 +66,7 @@ _(Coming soon)_
 _(Coming soon)_
 
 ## Release History
-0.1.0  # Initial release
+0.1.0       # Initial release
 
 ## License
 Copyright (c) 2014 [Matt Ma](http://mattmadesign.com)
