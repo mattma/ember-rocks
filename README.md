@@ -63,11 +63,13 @@ _(Coming soon)_
 _(Coming soon)_
 
 ## Contributing
-Anyone can help make this project better - check out the [Contributing guide](/CONTRIBUTING.md)
+Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md)
 
 ## Release History
 
-#### 0.1.0  (8/1/14)     - Initial Release
+#### 0.1.0  (8/1/14)     
+
+- Initial Release
 
 ## License
 Copyright (c) 2014 [Matt Ma](http://mattmadesign.com)
