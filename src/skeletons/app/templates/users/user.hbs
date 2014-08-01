@@ -1,8 +1,14 @@
-<h4>{{fullName}}</h4>
-<p>{{occupation}}</p>
+<h2> Users Detail Page </h2>
 
-<ul>
+{{#link-to 'users' class='go-back'}} Go Back {{/link-to}}
+
+<h3> {{ fullName }} </h3>
+<h4>title: {{ occupation }} </h4>
+
+<ul class='user'>
   {{#each others}}
-    <li>{{other}}</li>
+    <li>
+      <p> {{ other }} </p>
+    </li>
   {{/each}}
 </ul>

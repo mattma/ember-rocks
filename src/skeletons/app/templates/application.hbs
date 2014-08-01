@@ -1,14 +1,22 @@
-<header>
-  <h1> {{#link-to 'index'}} Ember Rocks {{/link-to}} </h1>
-
-  <nav>
-    <ul>
-      <li> {{#link-to 'index'}} Home {{/link-to}} </li>
-      <li> {{#link-to 'users'}} Users {{/link-to}} </li>
-    </ul>
-  </nav>
+<header {{bind-attr class='isMenuOpen:open'}}>
+  <div class='app-bar'>
+    <button class="menu" {{action 'toggleMenu'}}>
+      <span>navigation bar</span>
+      <span>navigation bar</span>
+      <span>navigation bar</span>
+    </button>
+    <h1> {{#link-to 'index'}} Ember Rocks {{/link-to}} </h1>
+  </div>
 </header>
 
-<section class='main'>
+<nav {{bind-attr class='isMenuOpen:open'}} {{action 'close'}}>
+  <h4> Navigation </h4>
+  <ul>
+    <li> {{#link-to 'index'}} Home {{/link-to}} </li>
+    <li> {{#link-to 'users'}} Users {{/link-to}} </li>
+  </ul>
+</nav>
+
+<main>
   {{outlet}}
-</section>
+</main>

@@ -1,11 +1,14 @@
+<h2> Users Page </h2>
+
 <ul>
   {{#each user in controller}}
     <li>
-      {{!-- <div> {{!#link-to 'index' user}} {{!user.fullName}} {{!/link-to}}<div> --}}
-      <h4> {{#link-to 'users.user' user.id}} {{user.fullName}} {{/link-to}} <h4>
+      <h3> {{#link-to 'users.user' user.id}} {{ user.fullName }} {{/link-to}} </h3>
       <ul>
         {{#each others in user.others}}
-          <li>{{others.other}}</li>
+          <li>
+            <p> {{ others.other }} </p>
+          </li>
         {{/each}}
       </ul>
     </li>
