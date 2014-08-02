@@ -1,10 +1,25 @@
-Ember Rocks
-=============
+# Ember Rocks Project
 
-## What is Ember-Rocks?
+> Project description goes here.
 
-> Ember-Rocks is an **Awesome** toolset to create **Ambitious** Ember MVC applications. It includes an Node.js web server to handle all the static files, incremental build process powered by Node.js Stream API, custom module generators, and much more!
 
-## Project Details
+## Installation
 
-- Express 4 ( The latest version of the popular Node.js server framework. )
+* `git clone` this repository
+* `npm install`
+* `bower install`
+
+## Running
+
+* `em server`
+* Visit your app at http://localhost:3001
+
+## Running Tests
+
+__( Coming Soon)__
+
+## Building
+
+* `em build`
+
+For more information, visit [Ember Rocks](https://github.com/mattma/ember-rocks).
