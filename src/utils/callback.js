@@ -3,7 +3,8 @@
 var tildify = require('tildify'),
     gutil = require('gulp-util'),
     semver = require('semver'),
-    cliPackage = require('../../node_modules/gulp/package'),
+    path = require('path'),
+    cliPackage = require(path.resolve( 'node_modules', 'gulp/package')),
     logEvents = require('./logEvents');
 
 function callback (env) {
