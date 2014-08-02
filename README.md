@@ -71,7 +71,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### 0.1.5  (8/1/14)     
+#### 0.1.6  (8/2/14)     
 
 - Add badges, Travis CI, Lisense, and plenty of code fixes
 
