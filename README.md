@@ -67,7 +67,7 @@ _(Coming soon)_
 _(Coming soon)_
 
 ## Contributing
-Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md)
+Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md).
 
 ## Release History
 
@@ -77,7 +77,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## License
 Copyright (c) 2014 [Matt Ma](http://mattmadesign.com)
-Licensed under the MIT license.
+Ember Rocks is [MIT Licensed](./LICENSE.md).
 
 [npm-url]: https://www.npmjs.org/package/ember-rocks
 [npm-image]: http://img.shields.io/npm/v/npm.svg
