@@ -7,7 +7,8 @@ var path = require('path'),
     tildify = require('tildify'),
     gulp = require('gulp'),
     rimraf = require('rimraf'),
-    gutil = require('gulp-util');
+    gutil = require('gulp-util'),
+    rename = require('gulp-rename');
 
 // installer plugins to handle the npm and bower packages installation
 function installer ( rootPath, command, description, nextStepFn, callback ) {
