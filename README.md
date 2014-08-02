@@ -1,4 +1,4 @@
-# Ember Rocks ( a.k.a em-cli )
+# Ember Rocks ( a.k.a em-cli ) [![NPM version][npm-image]][npm-url] [![Build Status][travis-image]][travis-url] [![Dependency Status][dependency-image]][dependency-url]
 
 > An Em(ber) command line utility to help developer(s) build an ambitious web application. It is highly inspired by other open source projects, [ember-cli](https://github.com/stefanpenner/ember-cli), [ember-tools](https://github.com/rpflorence/ember-tools), [Web Starter Kit](https://github.com/google/web-starter-kit).
 
@@ -74,3 +74,12 @@ Anyone can help make this project better - check out the [Contributing guide](./
 ## License
 Copyright (c) 2014 [Matt Ma](http://mattmadesign.com)
 Licensed under the MIT license.
+
+[npm-url]: https://www.npmjs.org/package/ember-rocks
+[npm-image]: http://img.shields.io/npm/v/npm.svg
+
+[travis-image]: http://img.shields.io/travis/joyent/node/v0.6.svg
+[travis-url]: https://travis-ci.org/mattma/ember-rocks
+
+[dependency-image]: http://img.shields.io/david/strongloop/express.svg
+[dependency-url]: https://david-dm.org/mattma/ember-rocks
