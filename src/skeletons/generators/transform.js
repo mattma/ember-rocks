@@ -1,5 +1,3 @@
-'use strict';
-
 import DS from 'ember-data';
 
 var __NAMESPACE__ = DS.Transform.extend({

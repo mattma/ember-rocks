@@ -1,5 +1,3 @@
-'use strict';
-
 var ApplicationAdapter = DS.RESTAdapter.extend({
 	namespace: 'api'
 });

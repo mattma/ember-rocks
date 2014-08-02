@@ -13,7 +13,7 @@
   "quotmark": "single",
   "undef": true,
   "unused": "vars",
-  "strict": true,
+  "strict": false,
   "trailing": true,
   "smarttabs": true,
   "maxdepth": 4,
@@ -36,7 +36,6 @@
     "exports": false,
     "window": false,
     "alert": false,
-    "$": false,
     "jQuery": false,
     "Ember": false
   }

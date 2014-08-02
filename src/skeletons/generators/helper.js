@@ -1,5 +1,3 @@
-'use strict';
-
 import Ember from 'ember';
 
 var __NAMESPACE__ = Ember.Handlebars.makeBoundHelper(function(value) {
