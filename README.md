@@ -71,12 +71,18 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+#### 0.1.5  (8/1/14)     
+
+- Add badges, Travis CI, Lisense, and plenty of code fixes
+
 #### 0.1.0  (8/1/14)     
 
 - Initial Release
 
 ## License
+
 Copyright (c) 2014 [Matt Ma](http://mattmadesign.com)
+
 Ember Rocks is [MIT Licensed](./LICENSE.md).
 
 [npm-url]: https://www.npmjs.org/package/ember-rocks
