@@ -121,6 +121,19 @@ function simpleLogger() {
 }
 
 function runningCallback(isRunningTest, dest, callback) {
+
+    // switch to the newly generated folder
+    process.chdir( dest );
+
+    // rename `gitignore` to `.gitignore`
+    // then remove the originial `gitignore`
+    gulp.src( './gitignore' )
+      .pipe( rename( '.gitignore' ) )
+      .on('end', function() {
+        rimraf( './gitignore', function() { });
+      })
+      .pipe(gulp.dest(dest));
+
     if( !isRunningTest ) {
       installNpm( dest, callback );
     } else {
