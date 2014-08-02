@@ -4,7 +4,6 @@ var tildify = require('tildify'),
     gutil = require('gulp-util'),
     semver = require('semver'),
     path = require('path'),
-    cliPackage = require(path.resolve( 'node_modules', 'gulp/package')),
     logEvents = require('./logEvents');
 
 function callback (env) {
@@ -19,6 +18,9 @@ function callback (env) {
     );
     process.exit(1);
   }
+
+  var localGulpPackage = path.resolve( env.cwd, 'node_modules', 'gulp/package'),
+    cliPackage = require( localGulpPackage );
 
   // check for semver difference between cli and local installation
   if (semver.gt(cliPackage.version, env.modulePackage.version)) {
