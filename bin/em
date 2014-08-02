@@ -11,18 +11,16 @@
 // Provide a title to the process in `ps`
 process.title = 'em';
 
-var resolve = require('resolve'),
-  path = require('path');
+var resolve = require('resolve');
 
 resolve('ember-rocks', {
   basedir: process.cwd()
-}, function(err, localCli ) {
+}, function( err, localCli ) {
   if (err) {
     // using a global installed ember-rocks package
     require('../src/commands/cli');
   } else {
     // using a local installed ember-rocks package
-    var cliPath = path.resolve( localCli, '..', '..', 'src/commands/cli');
-    require( cliPath );
+    require( localCli );
   }
 });

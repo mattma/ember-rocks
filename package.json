@@ -1,7 +1,7 @@
 {
   "name": "ember-rocks",
   "description": "An Em(ber) command line utility to help you build an ambitious web application",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "homepage": "https://github.com/mattma/ember-rocks",
   "author": {
     "name": "Matt Ma",
@@ -21,10 +21,10 @@
       "url": "https://github.com/mattma/ember-rocks/blob/master/LICENSE-MIT"
     }
   ],
-  "main": "bin/em",
+  "main": "src/commands/cli",
   "preferGlobal": "true",
   "bin": {
-    "em": "bin/em"
+    "em": "./bin/em"
   },
   "engines": {
     "node": ">=0.10.0"
