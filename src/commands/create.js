@@ -7,7 +7,8 @@ var path = require('path'),
     tildify = require('tildify'),
     gulp = require('gulp'),
     rimraf = require('rimraf'),
-    gutil = require('gulp-util');
+    gutil = require('gulp-util'),
+    rename = require('gulp-rename');
 
 // installer plugins to handle the npm and bower packages installation
 function installer ( rootPath, command, description, nextStepFn, callback ) {
@@ -120,6 +121,19 @@ function simpleLogger() {
 }
 
 function runningCallback(isRunningTest, dest, callback) {
+
+    // switch to the newly generated folder
+    process.chdir( dest );
+
+    // rename `gitignore` to `.gitignore`
+    // then remove the originial `gitignore`
+    gulp.src( './gitignore' )
+      .pipe( rename( '.gitignore' ) )
+      .on('end', function() {
+        rimraf( './gitignore', function() { });
+      })
+      .pipe(gulp.dest(dest));
+
     if( !isRunningTest ) {
       installNpm( dest, callback );
     } else {
