@@ -99,6 +99,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 - Add badges, Travis CI, Lisense
 - more info on project README
+- jshint 100% free on all javascript files
 - lots of bug fixes
 
 
