@@ -1,15 +1,20 @@
 # Ember Rocks ( a.k.a em-cli ) 
 [![NPM version][npm-image]][npm-url]   [![Build Status][travis-image]][travis-url]   [![Dependency Status][dependency-image]][dependency-url]
 
-> An Em(ber) command line utility to help developer(s) build an ambitious web application. It is highly inspired by other open source projects, [ember-cli](https://github.com/stefanpenner/ember-cli), [ember-tools](https://github.com/rpflorence/ember-tools), [Web Starter Kit](https://github.com/google/web-starter-kit).
+> An Em(ber) command line utility to help developer(s) build an ambitious web application. It is highly inspired by other open source projects, [ember-cli](https://github.com/stefanpenner/ember-cli), [ember-tools](https://github.com/rpflorence/ember-tools), [Web Starter Kit](https://github.com/google/web-starter-kit), [Gulp](https://github.com/gulpjs/gulp/).
+
 
 ## Features
 
 - well align with Ember-Cli project
-- gulp as a build tool of choice, insanely fast node stream api
-- hackable express server as back end
+- gulp ( a build tool of choice ) build insanely fast via node stream api
+- lighting fast development rebuild system
+- live reload on all resources
 - super powerful generator system
+- hackable express server as back end
+- build a production ready application and ready to be deployed
 - tablet and touch device support out of box
+
 
 ## Ember-cli is being developed and maintained by Ember core team member. Why am I building another em(ber)-cli?
 
@@ -21,17 +26,20 @@ In addition to technology stack besides Ember.js, I have picked [sass](http://sa
 
 Just like [lodash](lodash.com) is a similar project to [underscore](http://underscorejs.com/), [Ember Rocks](https://github.com/mattma/ember-rocks) is a similar project to [ember-cli](https://github.com/stefanpenner/ember-cli). I will try to sync the features from [ember-cli](https://github.com/stefanpenner/ember-cli) to [Ember Rocks](https://github.com/mattma/ember-rocks).
 
+
 ## Getting Started
 
     npm install -g ember-rocks
 
-After it is done, you should have a global command `em` available for you. Try `em -h`, you should see a list of helper information. Try `em generate -h` to see a specific command helper information.
+After it is done, you should have a global command `em` available. Try `em --help`, you should see a list of helper information. Try `em generate --help` to see a specific command helper information.
+
 
 ## Quick Start
 
     em new my-app          // generate a brand new ember app in *my-app* folder
     cd my-app              // switch to application folder
     em serve               // start a server, open the new app in browser, livereload all resources
+
 
 ## Usage
     
@@ -56,28 +64,48 @@ After it is done, you should have a global command `em` available for you. Try `
 
         em [command] --help
 
+
 ## TODO
 
 - Add ember testing support with Mocha adapter
+   ( It should work with the existing ember rocks architecture )
+
 
 ## Guide
-_(Coming soon)_
+
+Since the project is highly inspired by [Ember-Cli](http://www.ember-cli.com/), ( both projects even share the same commands but completely different implementation under the hook, i.e. `em(ber) new`, `em(ber) generate`, `em(ber) g`, `em(ber) serve`, `em(ber) build`, etc ), **Ember Rocks** uses the same modules -- [ember resolver](https://github.com/stefanpenner/ember-jj-abrams-resolver), and [ember load initializers](https://github.com/stefanpenner/ember-load-initializers). Ember Modules system ( *client/app/* ) and the resolver guide will apply to **Ember Rocks** modules and the resolver as well.
+
+* Modules and the Resolver [Documentation](http://www.ember-cli.com/#using-modules)
+
+_( More Coming Soon )_
+
 
 ## Building Your App
-_(Coming soon)_
+
+* `em build`
+* `cd build`
+* `npm install`
+* `node server`
+* Visit your production ready app at http://localhost:3001
+
 
 ## Contributing
 Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md).
 
+
 ## Release History
 
-#### 0.1.6  (8/2/14)     
+#### 0.1.7  (8/2/14)     
 
-- Add badges, Travis CI, Lisense, and plenty of code fixes
+- Add badges, Travis CI, Lisense
+- more info on project README
+- lots of bug fixes
+
 
 #### 0.1.0  (8/1/14)     
 
 - Initial Release
+
 
 ## License
 
