@@ -4,6 +4,13 @@
 > An Em(ber) command line utility to help developer(s) build an ambitious web application. It is highly inspired by other open source projects, [ember-cli](https://github.com/stefanpenner/ember-cli), [ember-tools](https://github.com/rpflorence/ember-tools), [Web Starter Kit](https://github.com/google/web-starter-kit), [Gulp](https://github.com/gulpjs/gulp/).
 
 
+## Getting Started
+
+    npm install -g ember-rocks
+
+After it is done, you should have a global command `em` available. Try `em --help`, you should see a list of helper information. Try `em generate --help` to see a specific command helper information.
+
+
 ## Features
 
 - well align with Ember-Cli project
@@ -16,7 +23,7 @@
 - tablet and touch device support out of box
 
 
-## What is in the Ember Rocks?
+## A sample ember app in the Ember Rocks
 
 **Ember Rocks** comes with a sample application, and user could even have their own set of templates. See [Ember Rocks Template Basic](https://github.com/mattma/Ember-Rocks-Template-Basic) for details.
 
@@ -40,13 +47,6 @@ In addition, technology stack besides Ember.js, I have picked [sass](http://sass
 Just like [lodash](lodash.com) is a project which solve the same problem that [underscore](http://underscorejs.com/) does, [Ember Rocks](https://github.com/mattma/ember-rocks) is trying to solve similar problem that [ember-cli](https://github.com/stefanpenner/ember-cli) does. I will try to sync the features from [ember-cli](https://github.com/stefanpenner/ember-cli) to [Ember Rocks](https://github.com/mattma/ember-rocks). 
 
 What is on my road map? Ember Add-on, component with d3 support, and more. PRs is highly welcomed and appreciated. 
-
-
-## Getting Started
-
-    npm install -g ember-rocks
-
-After it is done, you should have a global command `em` available. Try `em --help`, you should see a list of helper information. Try `em generate --help` to see a specific command helper information.
 
 
 ## Quick Start
