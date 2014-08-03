@@ -12,7 +12,7 @@ var UserModel = DS.Model.extend({
   // lookup for models/other.js
   others: hasMany('other'),
   fullName: function() {
-    return this.get('firstName') + ' ' + this.get('lastName')
+    return this.get('firstName') + ' ' + this.get('lastName');
   }.property('firstName', 'lastName')
 });
 

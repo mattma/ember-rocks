@@ -1,3 +1,4 @@
+import DS from 'ember-data';
 import ApplicationAdapter from 'rocks/adapters/application';
 
 var Store = DS.Store.extend({
