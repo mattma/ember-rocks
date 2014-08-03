@@ -43,7 +43,8 @@ gulp.task('lint', function() {
   var src = [
     'gulpfile.js',
     'client/app/**/*.js',
-    '!client/app/utils/register-components.js'
+    '!client/app/utils/register-components.js',
+    'server/**/*.js'
   ];
 
   return gulp.src( src )

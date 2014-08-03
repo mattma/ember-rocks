@@ -4,10 +4,10 @@ var fs = require('fs'),
 
 exports.all = function(req, res) {
   var query = req.params.query,
-        ext = path.extname(query),
-        filepath = ( ext === '.json' )
-                          ? path.resolve(__dirname, '../mocks/' + query)
-                          : path.resolve( __dirname, '../mocks/' + query + '.json' );
+        ext = path.extname(query);
+
+  var filepath = ( ext === '.json' ) ? path.resolve(__dirname, '../mocks/' + query)
+    : path.resolve( __dirname, '../mocks/' + query + '.json' );
 
   fs.readFile(filepath, function(err, data){
     return res.json( JSON.parse(data) );

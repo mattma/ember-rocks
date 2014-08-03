@@ -1,5 +1,6 @@
 module.exports = function(options) {
-  var PUBLIC_PATH, VIEWS_PATH, app, express, fs, emberApp, sysPath, env, logger, favicon, cookieParser, bodyParser;
+  var PUBLIC_PATH, VIEWS_PATH, app, express, fs, emberApp,
+    sysPath, env, logger, favicon, cookieParser, bodyParser;
 
   express = require('express');
   sysPath = require('path');
@@ -86,10 +87,12 @@ module.exports = function(options) {
   });
 
   return app.listen(options.port, function() {
-    return console.log("Starting web server on port " + options.port + " in " + app.locals.settings.env + " mode");
-  }).on("error", function(err) {
+    return console.log (
+      'Starting web server on port ' + options.port + ' in ' + app.locals.settings.env + ' mode'
+    );
+  }).on('error', function(err) {
     if (err.code === 'EADDRINUSE') {
-      return console.log("Port " + options.port + "  is already in use by another process.");
+      return console.log('Port ' + options.port + '  is already in use by another process.');
     }
   });
 };
