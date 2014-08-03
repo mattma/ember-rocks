@@ -16,15 +16,30 @@
 - tablet and touch device support out of box
 
 
+## What is in the Ember Rocks?
+
+**Ember Rocks** comes with a sample application, and user could even have their own set of templates. See [Ember Rocks Template Basic](https://github.com/mattma/Ember-Rocks-Template-Basic) for details.
+
+An express server will handle all requests. A fake user api route will read the RESTful json api on the disk, return the data over the wire when Ember app request the data via latest **Ember Data** library.  
+
+The fully stylish application works on touch and tablet devices out of box. Try to resize your browser into a smaller screen resolution, you should see an animated effect from the left edge which is the most popular choice of mobile application navigation menu. You could tweak the styles and markup to fit your use cases. 
+
+
 ## Ember-cli is being developed and maintained by Ember core team member. Why am I building another em(ber)-cli?
 
-**Ember** is an opinionated framework, and **Ember-cli** has chosen [broccoli](https://github.com/broccolijs/broccoli) as its build tool and [Qunit](https://github.com/jquery/qunit) as its testing tool. **Ember-cli** project is trying to be an universal toolset to fit most of use cases for most of **Ember** developer. Well, I think that is awesome. After I built a large Backbone application (>10000 LOC), I developed a set of toolings which fit my workflow well. This approach is my opinionated toolset on building a large scaled Node.js modern web application with Ember.js on the client side.
+**Ember** is an opinionated framework, and **Ember-cli** has chosen [broccoli](https://github.com/broccolijs/broccoli) as its build tool and [Qunit](https://github.com/jquery/qunit) as its testing tool. **Ember-cli** project is trying to be an universal toolset to fit most of use cases for majority of **Ember** developers. **Ember-Cli** is awesome. 
 
-**Ember Rocks** will be installed globally on your local machine. Then user would have an `em` command available. It is chosen [gulp](https://github.com/gulpjs/gulp) as its build tool. In fact, **Ember Rocks** is powered by [gulp](https://github.com/gulpjs/gulp) under the hook. The main difference between two awesome build tools is, *broccoli* use "directory in, directory out" pattern, and *gulp* use "file in, file out" pattern. *gulp* takes advantage of *Node Stream* to pipe files elsewhere. This is the one I perfer for now until [broccoli](https://github.com/broccolijs/broccoli) is out of beta. Sorry, [Jo Liss](https://twitter.com/jo_liss), you are awesome.
+After built a large Backbone application (>15000 LOC), I developed a set of developer toolings which fit my workflow well. **Ember Rocks** approach is my opinionated toolset on building a large scaled Node.js modern web application with Ember.js framework on the client side.
 
-In addition to technology stack besides Ember.js, I have picked [sass](http://sass-lang.com/) as a css pre-compiler, [autoprefixer](https://github.com/ai/autoprefixer) as a css post-compiler, [express](http://expressjs.com/) as a node web application server, [mocha](http://visionmedia.github.io/mocha/) as a javascript test framework, other technology should be exactly the same with [ember-cli](https://github.com/stefanpenner/ember-cli).
+**Ember Rocks** can be globally installed on your local machine ( tested on Linux based operating system ) via `npm install -g ember-rocks`. After you have done that, magic happens :). You would have an `em` command available. Try `em --help`, `em generate --help` for a comprehensive guide. 
 
-Just like [lodash](lodash.com) is a similar project to [underscore](http://underscorejs.com/), [Ember Rocks](https://github.com/mattma/ember-rocks) is a similar project to [ember-cli](https://github.com/stefanpenner/ember-cli). I will try to sync the features from [ember-cli](https://github.com/stefanpenner/ember-cli) to [Ember Rocks](https://github.com/mattma/ember-rocks).
+**Ember Rocks** is chosen [gulp](https://github.com/gulpjs/gulp) as a build tool. In fact, it is powered by [gulp](https://github.com/gulpjs/gulp) under the hook. **Ember-cli** choose [broccoli](https://github.com/broccolijs/broccoli). The main difference between two awesome build tools is, *broccoli* use "directory in, directory out" pattern, and *gulp* use "file in, file out" pattern. *gulp* takes advantage of *Node Stream* to pipe files to destination folder. This is the one I perfer for now until [broccoli](https://github.com/broccolijs/broccoli) is out of beta. Sorry, [Jo Liss](https://twitter.com/jo_liss), you are awesome.
+
+In addition, technology stack besides Ember.js, I have picked [sass](http://sass-lang.com/) as css pre-compiler, [autoprefixer](https://github.com/ai/autoprefixer) as css post-compiler, [express](http://expressjs.com/) as node web application server, and [mocha](http://visionmedia.github.io/mocha/) as javascript testing framework. 
+
+Just like [lodash](lodash.com) is a project which solve the same problem that [underscore](http://underscorejs.com/) does, [Ember Rocks](https://github.com/mattma/ember-rocks) is trying to solve similar problem that [ember-cli](https://github.com/stefanpenner/ember-cli) does. I will try to sync the features from [ember-cli](https://github.com/stefanpenner/ember-cli) to [Ember Rocks](https://github.com/mattma/ember-rocks). 
+
+What is on my road map? Ember Add-on, component with d3 support, and more. PRs is highly welcomed and appreciated. 
 
 
 ## Getting Started
