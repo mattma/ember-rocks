@@ -2,6 +2,7 @@
 
 var gulp = require('gulp'),
   gutil = require('gulp-util'),
+  fs = require('fs'),
   $ = require('gulp-load-plugins')(),
   del = require('del'),
   opn = require('opn'),
@@ -111,7 +112,7 @@ gulp.task('sass', function() {
       sourcemap: true,
       style: 'expanded',
       precision: 10,
-      loadPath: [clientFolder + '/assets/styles/sass']
+      loadPath: ['/assets/styles/sass']
     }))
     .on('error', console.error.bind(console))
     .pipe($.autoprefixer.apply( this, AutoPrefixerConfig ))
@@ -127,14 +128,14 @@ gulp.task('imagemin', function() {
     imgDst = 'build/client/assets/images/';
 
   return gulp.src(imgSrc)
-      .pipe($.cache(
-        $.imagemin({
-          progressive: true,
-          interlaced: true
-        })
-      ))
-      .pipe(gulp.dest(imgDst))
-      .pipe($.size({title: '[-log:] images folder'}));
+  .pipe($.cache(
+    $.imagemin({
+      progressive: true,
+      interlaced: true
+    })
+  ))
+  .pipe(gulp.dest(imgDst))
+  .pipe($.size({title: '[-log:] images folder'}));
 });
 
 // @describe compile es6 modules into amd modules
@@ -163,9 +164,9 @@ gulp.task('buildhbs', function () {
 
 // @describe build front end code base
 gulp.task('build', ['buildjs', 'buildhbs'], function(){
-      gutil.log(
-        gutil.colors.green('[-done:] application.js and templates.js has been generated!')
-      );
+  gutil.log(
+    gutil.colors.green('[-done:] application.js and templates.js has been generated!')
+  );
 });
 
 // @describe Remove the 'build/' folder, start from a clean slate
@@ -226,20 +227,20 @@ gulp.task('releaseClient',
       .pipe($.if('*.html', $.minifyHtml()))
       .pipe(gulp.dest(dest))
       .pipe($.size({title: '[-log:] client folder'}));
-});
+  });
 
 gulp.task('releaseServer', [ 'releaseClient' ], function(){
-    var src = 'server/**/*',
-      dest = 'build',
-      destServer = dest + '/server';
+  var src = 'server/**/*',
+    dest = 'build',
+    destServer = dest + '/server';
 
-   gulp.src(src)
-      .pipe(gulp.dest(destServer))
-      .pipe($.size({title: '[-log:] server folder'}));
+  gulp.src(src)
+    .pipe(gulp.dest(destServer))
+    .pipe($.size({title: '[-log:] server folder'}));
 
-   return gulp.src('package.json')
-      .pipe( $.replace( /"devDependencies"[\S\s]+?},/, ''))
-      .pipe(gulp.dest(dest));
+  return gulp.src('package.json')
+    .pipe( $.replace( /"devDependencies"[\S\s]+?},/, ''))
+    .pipe(gulp.dest(dest));
 });
 
 gulp.task('release', [ 'releaseServer' ], function(){
@@ -320,6 +321,15 @@ gulp.task('serve', [ 'express', 'sass', 'build', 'injectLRScript' ], function() 
     sassFilePath = event.path; // Only pass changed file to the sass task
     var basename = path.basename(sassFilePath);
     compileAllSrc = ( basename.indexOf('_') > -1 ) ? true : false;
+
+    if ( sassFilePath && !compileAllSrc ) {
+      var contents = fs.readFileSync(sassFilePath, 'utf8'),
+        exist = contents.match(/[^\/\/| ]@import/gm);
+
+      if ( exist && exist.length > 0 ) {
+        compileAllSrc = true;
+      }
+    }
     gulp.start('sass');
   });
 
