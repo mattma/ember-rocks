@@ -5,7 +5,7 @@
     "name": "Matt Ma",
     "email": "matt@mattmadesign.com"
   },
-  "version": "0.1.5",
+  "version": "0.1.8",
   "private": true,
   "repository": "https://github.com/mattma/ember-rocks",
   "main": "gulpfile.js",

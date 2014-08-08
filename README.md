@@ -114,6 +114,10 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+#### 0.1.8  (8/7/14)  
+
+- Fix sass loading partial resource issue
+
 #### 0.1.7  (8/2/14)     
 
 - Add badges, Travis CI, Lisense
