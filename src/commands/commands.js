@@ -8,11 +8,11 @@ var runner = require('../utils/runner'),
 
 var commands = function(options) {
   var command = argv._[0] || options.parent.rawArgs[2];
-  switch( command ) {
-    case 'serve':
+  switch( true ) {
+    case /s|serve/.test(command):
       runner(cb, 'serve');
       break;
-    case 'build':
+    case /b|build/.test(command):
       runner(cb, 'release');
       break;
     default:
