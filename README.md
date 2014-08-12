@@ -101,10 +101,9 @@ _( More Coming Soon )_
 
 ## Building Your App
 
-* `em build`
-* `cd build`
-* `npm install`
-* `node server`
+* `em new project`
+* `cd project`
+* `em serve`
 * Visit your production ready app at http://localhost:3001
 
 
