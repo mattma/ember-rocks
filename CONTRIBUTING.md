@@ -2,9 +2,9 @@
 
 ## Local Development Setup 
 
-  git clone https://github.com/mattma/ember-rocks.git
-  cd ember-rocks
-  npm link
+    git clone https://github.com/mattma/ember-rocks.git
+    cd ember-rocks
+    npm link
 
 `npm link` is very similar to `npm install -g`, except that instead of downloading the package from the repo the just cloned **ember-rock/** folder becomes the global package. Any changes to the files in the **ember-rock/** folder will immediately affect the global **ember-rock/** package.
 
