@@ -114,6 +114,11 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+#### 0.1.9  (8/13/14)  
+
+- Add command alias ( `em server` | `em s`) && ( `em build` | `em b`)
+
+
 #### 0.1.8  (8/7/14)  
 
 - Fix sass loading partial resource issue
