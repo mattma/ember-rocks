@@ -70,9 +70,9 @@ What is on my road map? Ember Add-on, component with d3 support, and more. PRs i
            
         g|generate         // Generate a new file with ES6 support in the ember app
                
-        serve              // Builds and serves your app, rebuilding on file changes.
+        s|serve            // Builds and serves your app, rebuilding on file changes.
            
-        build              // Release your app and places it into the output path '~/build'
+        b|build            // Release your app and places it into the output path '~/build'
        
     Options:
 
