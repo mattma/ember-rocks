@@ -30,7 +30,7 @@ __( Coming Soon )__
 * `em build`
 * `cd build`
 * `npm install`
-* `node server`
+* `npm start`
 * Visit your production ready app at http://localhost:3001
 
 For more information, visit [Ember Rocks](https://github.com/mattma/ember-rocks).

@@ -1,6 +1,6 @@
 # Ember Rocks ( a.k.a em-cli ) 
 
-[![NPM](https://nodei.co/npm/ember-rocks.png?global=true)](https://nodei.co/npm/ember-rocks/)
+[![NPM][npm-badge-image]][npm-badge-url]
 
 [![NPM version][npm-image]][npm-url]   [![Build Status][travis-image]][travis-url]   [![Dependency Status][dependency-image]][dependency-url]
 
@@ -104,7 +104,7 @@ _( More Coming Soon )_
 * `em build`
 * `cd build`
 * `npm install`
-* `node server`
+* `npm start`
 * Visit your production ready app at http://localhost:3001
 
 
@@ -117,6 +117,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 #### 0.1.9  (8/13/14)  
 
 - Add command alias ( `em server` | `em s`) && ( `em build` | `em b`)
+- Dev and Prod environment can use `npm start` to kick out a Node server
 
 
 #### 0.1.8  (8/7/14)  
@@ -141,6 +142,9 @@ Anyone can help make this project better - check out the [Contributing guide](./
 Copyright (c) 2014 [Matt Ma](http://mattmadesign.com)
 
 Ember Rocks is [MIT Licensed](./LICENSE.md).
+
+[npm-badge-url]: https://nodei.co/npm/ember-rocks/
+[npm-badge-image]: https://nodei.co/npm/ember-rocks.png?global=true
 
 [npm-url]: https://www.npmjs.org/package/ember-rocks
 [npm-image]: http://img.shields.io/npm/v/npm.svg
