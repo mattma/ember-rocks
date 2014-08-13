@@ -10,9 +10,11 @@ var commands = function(options) {
   var command = argv._[0] || options.parent.rawArgs[2];
   switch( command ) {
     case 'serve':
+    case 's':
       runner(cb, 'serve');
       break;
     case 'build':
+    case 'b':
       runner(cb, 'release');
       break;
     default:

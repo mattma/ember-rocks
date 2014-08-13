@@ -76,12 +76,14 @@ program
   .action(generate);
 
 program
-  .command('serve')
+  .command('s')
+  .alias('serve')
   .description('Builds and serves your app, rebuilding on file changes.')
   .action(commands);
 
 program
-  .command('build')
+  .command('b')
+  .alias('build')
   .description('Release your app and places it into the output path \'~/build\'')
   .action(commands);
 
