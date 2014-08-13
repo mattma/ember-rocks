@@ -1,5 +1,5 @@
 (function() {
-  /* global define, Ember */
+   /* global define, Ember, DS */
   define('ember', [], function() {
     "use strict";
 
