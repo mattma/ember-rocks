@@ -1,0 +1,12 @@
+<?xml version='1.0' encoding='utf-8'?>
+<widget id="com.mattma.emberrocks" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+    <name>EmberRocks</name>
+    <description>
+        A web application which built with Ember.js and Node.js wrapped in the Cordova.
+    </description>
+    <author email="matt@mattmadesign.com" href="http://mattmadesign.com">
+        Matt Ma
+    </author>
+    <content src="http://localhost:3001" />
+    <access origin="*" />
+</widget>
