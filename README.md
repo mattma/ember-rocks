@@ -101,7 +101,7 @@ Since the project is highly inspired by [Ember-Cli](http://www.ember-cli.com/), 
 _( More Coming Soon )_
 
 
-## Building Your App
+## Building a web app (desktop and browsers)
 
 * `em build`
 * `cd build`
@@ -109,7 +109,8 @@ _( More Coming Soon )_
 * `npm start`
 * Visit your production ready app at http://localhost:3001
 
-## Building Your App
+
+## Building a native app (phone and tablet)
 
 * `em mobile`
 * `cd build`
@@ -126,7 +127,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### 0.1.10  (8/13/14)  
+#### 0.1.10  (8/20/14)  
 
 - Add command for building a Cordova application ( `em mobile` | `em m`) 
 
