@@ -25,7 +25,7 @@ After it is done, you should have a global command `em` available. Try `em --hel
 - hackable express server as back end
 - build a production ready application and ready to be deployed
 - tablet and touch device support out of box
-
+- ready to deploy on native phone and tablet via Cordova
 
 ## A sample ember app in the Ember Rocks
 
@@ -70,7 +70,9 @@ What is on my road map? Ember Add-on, component with d3 support, and more. PRs i
            
         g|generate         // Generate a new file with ES6 support in the ember app
                
-        s|serve            // Builds and serves your app, rebuilding on file changes.
+        s|serve            // Builds and serves your app, rebuilding on file changes
+
+        m|mobile           // Builds an Cordova application, and ready to deploy to phone or tablet
            
         b|build            // Release your app and places it into the output path '~/build'
        
@@ -107,12 +109,26 @@ _( More Coming Soon )_
 * `npm start`
 * Visit your production ready app at http://localhost:3001
 
+## Building Your App
+
+* `em mobile`
+* `cd build`
+* `npm install`
+* `cd build/cordova`  // if in `build` folder, just `cd cordova`
+* `cordova platform add ios` // require **cordova** executable or `npm install -g cordova`
+* `cordova run --emulator` // open the native app in simulator ( require xCode installed)
+* `npm start`
+
 
 ## Contributing
 Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md).
 
 
 ## Release History
+
+#### 0.1.10  (8/13/14)  
+
+- Add command for building a Cordova application ( `em mobile` | `em m`) 
 
 #### 0.1.9  (8/13/14)  
 
