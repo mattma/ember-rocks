@@ -200,6 +200,49 @@ gulp.task('envDev', function(){
       .pipe(gulp.dest(dest));
 });
 
+function wireUpMobile(callback) {
+  var appPath = 'build/cordova/www/',
+    indexPath = appPath+ 'index.html',
+    mainAppPath = appPath + 'assets/scripts/main.min.js',
+    scriptPath = appPath + 'assets/scripts/',
+    serverAppPath = 'build/server/app.js',
+    serverPath = 'build/server';
+
+  gulp.src(indexPath)
+    .pipe($.replace(/base(?:\s+)?href=\"\/\"/, 'base href=""'))
+    .pipe(gulp.dest(appPath));
+
+  gulp.src(mainAppPath)
+    .pipe($.replace(/\{(?:\s+)?location:(\s+)?[\'\"]auto[\'\"](?:\s+)?\}/, '{location:"hash"}'))
+    .pipe(gulp.dest(scriptPath));
+
+  gulp.src(serverAppPath)
+    .pipe($.replace(/emberApp(?:\s+)?=(?:\s+)?\'client\'/, 'emberApp = \'cordova/www\''))
+    .pipe(gulp.dest(serverPath));
+
+  del(['build/client'], {force : true}, function() {
+    callback();
+  });
+}
+
+// copy all the core files and release to production
+gulp.task('releaseMobile', [ 'release' ],
+  function(callback){
+    var cordovaPath = 'node_modules/ember-rocks/src/skeletons/cordova/**/*',
+      clientPath = 'build/client/**/*',
+      cordovaAppPath = 'build/cordova/www',
+      dest = 'build/cordova/';
+
+    gulp.src(cordovaPath)
+      .pipe(gulp.dest(dest));
+
+    gulp.src(clientPath)
+      .on('end', function(){
+        wireUpMobile(callback);
+      })
+      .pipe(gulp.dest(cordovaAppPath));
+  });
+
 // copy all the core files and release to production
 gulp.task('releaseClient',
   [ 'clean', 'sass', 'lint', 'build', 'stripLRScript', 'envProd'],
