@@ -17,6 +17,10 @@ var commands = function(options) {
     case 'b':
       runner(cb, 'release');
       break;
+    case 'mobile':
+    case 'm':
+      runner(cb, 'releaseMobile');
+      break;
     default:
       runner(cb, 'default');
   }

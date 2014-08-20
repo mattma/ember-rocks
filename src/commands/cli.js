@@ -82,6 +82,12 @@ program
   .action(commands);
 
 program
+  .command('m')
+  .alias('mobile')
+  .description('Builds an Cordova application, and ready to deploy to phone or tablet.')
+  .action(commands);
+
+program
   .command('b')
   .alias('build')
   .description('Release your app and places it into the output path \'~/build\'')
@@ -110,6 +116,11 @@ program.on('--help', function(){
   console.log('    $ em serve' );
   console.log('');
   console.log('    $ em build' );
+  console.log('');
+  console.log('    $ em mobile' +
+    '\n\n      @description Builds an Cordova application, and ready to' +
+    ' deploy to phone or tablet.');
+  console.log('');
   console.log('');
 });
 
