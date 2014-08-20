@@ -115,10 +115,16 @@ _( More Coming Soon )_
 * `em mobile`
 * `cd build`
 * `npm install`
-* `cd build/cordova`  // if in `build` folder, just `cd cordova`
+* `cd build/cordova`  // if in `build` folder, just `cd cordova`. Note: need to be in `cordova` folder to execute `cordova` command
 * `cordova platform add ios` // require **cordova** executable or `npm install -g cordova`
 * `cordova run --emulator` // open the native app in simulator ( require xCode installed)
-* `npm start`
+* `npm start`  // probably running in the separated terminal tab to serve your application
+
+Note:  
+
+Originally, I want to have some commands in **ember-rocks** to symlink some common useful Cordova commands. For example, `em mobile --add ios` map to `cordova platform add ios`, `em mobile --run` map to `cordova run --emulator`. In this approach, it would add up lots of additional options into the `em mobile` command. Although it could provide some useful shortcuts like auto `cd`ing *cordova* folder and abstract out some `cordova` learning curve by staying in *em* magics, it does add lots of **API** options to the **ember-rocks** project. I want to have a very simple **API** for users to comsume so that I decide to leave those features out of the core of the  **ember-rocks**. 
+
+As a mobile application developer, you should be in the `~/build/cordova` folder with [cordova](https://www.npmjs.org/package/cordova) installed in your computer globally. You could use `cordova` command primarily to do whatever you want to your *ember* powered web app. If you have any question with this decision, feel free to create an issue or feature requests so that we could discuss it further. 
 
 
 ## Contributing
@@ -127,7 +133,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### 0.1.10  (8/20/14)  
+#### 0.1.11  (8/20/14)  
 
 - Add command for building a Cordova application ( `em mobile` | `em m`) 
 
