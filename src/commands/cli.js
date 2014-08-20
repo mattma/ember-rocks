@@ -120,6 +120,8 @@ program.on('--help', function(){
   console.log('    $ em mobile' +
     '\n\n      @description Builds an Cordova application, and ready to' +
     ' deploy to phone or tablet.');
+  console.log('');
+  console.log('');
 });
 
 program.parse(process.argv);
