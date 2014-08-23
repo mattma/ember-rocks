@@ -47,7 +47,23 @@ describe("Created directory", function() {
         "test-app/client/assets/images/touch",
         "test-app/client/assets/styles",
         "test-app/client/assets/styles/sass",
-        "test-app/client/assets/vendors"
+        "test-app/client/assets/vendors",
+
+        // ember application folder
+        "test-app/client/app",
+        "test-app/client/app/adapters",
+        "test-app/client/app/components",
+        "test-app/client/app/controllers",
+        "test-app/client/app/helpers",
+        "test-app/client/app/models",
+        "test-app/client/app/routes",
+        "test-app/client/app/store",
+        "test-app/client/app/templates",
+        "test-app/client/app/templates/components",
+        "test-app/client/app/templates/users",
+        "test-app/client/app/utils",
+        "test-app/client/app/views",
+        "test-app/client/app/views",
       ], done);
     });
   });
