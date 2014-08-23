@@ -40,7 +40,7 @@
     "rocks"
   ],
   "scripts": {
-    "test": "node_modules/.bin/mocha $(find test -name \"new.spec.js\")",
+    "test": "node_modules/.bin/mocha $(find test -name \"*.spec.js\")",
     "test-all": "mocha --timeout 8000 --reporter spec test/**/*.spec.js"
   },
   "dependencies": {

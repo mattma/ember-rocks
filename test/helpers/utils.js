@@ -43,3 +43,36 @@ exports.genCommandTester = function(command, pathExist, done) {
     assertPathExist(fullPath, done);
   });
 };
+
+exports.assertFolderExist = function(folderPath, done) {
+    // Query the entry
+    fs.lstat(folderPath, function(err, stats) {
+      (!err).should.equal(true);
+      // Is it a directory?
+      stats.isDirectory().should.equal(true);
+      done();
+    });
+};
+
+exports.assertFoldersExist = function(folderPathArray, done) {
+  var count, totalFileNum, isFinished;
+
+  isFinished = function() {
+    count++;
+    if (count === totalFileNum) {
+      done();
+    }
+  };
+
+  totalFileNum = folderPathArray.length;
+  count = 0;
+
+  folderPathArray.forEach(function(path) {
+    fs.lstat(path, function(err, stats) {
+      (!err).should.equal(true);
+      // Is it a directory?
+      stats.isDirectory().should.equal(true);
+      isFinished();
+    });
+  });
+};

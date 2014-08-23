@@ -31,7 +31,28 @@ describe("Created directory", function() {
     });
   });
 
-  it("should scaffold a bunch of files and directories", function(done) {
+  it("should scaffold a bunch of directories", function(done) {
+    exec("./bin/em new test-app --test", function() {
+      helpers.assertFoldersExist([
+        // server folder
+        "test-app/server",
+        "test-app/server/mocks",
+        "test-app/server/routes",
+        "test-app/server/views",
+
+        // client folder
+        "test-app/client",
+        "test-app/client/assets",
+        "test-app/client/assets/images",
+        "test-app/client/assets/images/touch",
+        "test-app/client/assets/styles",
+        "test-app/client/assets/styles/sass",
+        "test-app/client/assets/vendors"
+      ], done);
+    });
+  });
+
+  it("should scaffold a bunch of files", function(done) {
     exec("./bin/em new test-app --test", function() {
       helpers.assertPathsExist([
         "test-app/.bowerrc",
