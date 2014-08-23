@@ -34,14 +34,37 @@ describe("Created directory", function() {
   it("should scaffold a bunch of files and directories", function(done) {
     exec("./bin/em new test-app --test", function() {
       helpers.assertPathsExist([
+        "test-app/.bowerrc",
+        "test-app/.editorconfig",
+        "test-app/.gitattributes",
         "test-app/.gitignore",
         "test-app/.jshintrc",
-        "test-app/.bowerrc",
-        "test-app/config.rb",
-        "test-app/package.json",
+        "test-app/.npmignore",
         "test-app/bower.json",
-        //"test-app/gulpfile.js",
-        "test-app/server/app.js"
+        "test-app/config.rb",
+        "test-app/gulpfile.js",
+        "test-app/package.json",
+        //"test-app/karma.conf.js",
+        "test-app/README.md",
+        "test-app/README.md",
+
+        // Server Folder
+        "test-app/server/app.js",
+        "test-app/server/index.js",
+        "test-app/server/views/base.jade",
+        "test-app/server/views/error.jade",
+        "test-app/server/routes/index.js",
+        "test-app/server/routes/mock_users.js",
+        "test-app/server/mocks/users.json",
+
+        // Client Folder
+        "test-app/client/index.html",
+        "test-app/client/assets/images/touch/chrome-touch-icon-196x196.png",
+        "test-app/client/assets/images/touch/icon-128x128.png",
+        "test-app/client/assets/styles/reset.css",
+        "test-app/client/assets/styles/sass/base.sass",
+        "test-app/client/assets/vendors/almond.js",
+        "test-app/client/assets/vendors/globalizer.js"
       ], done);
     });
   });
