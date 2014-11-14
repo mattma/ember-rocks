@@ -154,9 +154,22 @@ gulp.task('buildjs', function () {
 // @describe pre-compile handlebars templates
 gulp.task('buildhbs', function () {
   return gulp.src(clientFolder + '/app/templates/**/*.hbs')
-    .pipe($.emberHandlebars({
-      outputType: 'amd',
-      templateRoot: modulePrefix + '/templates'
+    .pipe($.handlebars({
+      handlebars: require('ember-handlebars')
+    }))
+    // Wrap each template function in a call to Ember.Handlebars.template
+    .pipe($.wrap('Ember.Handlebars.template(<%= contents %>)'))
+    // Declare template functions with Ember.TEMPLATES according to their path and filename
+    .pipe($.declare({
+      namespace: 'Ember.TEMPLATES',
+      noRedeclare: true, // Avoid duplicate declarations
+      processName: function(filePath) {
+        // Allow nesting based on path using this format ["Ember"]["TEMPLATES"]["users/index"]
+        // ["Ember"]["TEMPLATES"]["users"]["index"] won't work, cannot be resolved.
+        var fp = filePath.split(/app\/templates\//)[1],
+          pName = p.substr(0, fp.lastIndexOf('.'));
+        return pName;
+      }
     }))
     .pipe($.concat('templates.js'))
     .pipe(gulp.dest(clientFolder + '/assets/build/'));
