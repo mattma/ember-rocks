@@ -135,6 +135,10 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 #### 0.1.11  (8/20/14)  
 
+- Replace the deprecated module "gulp-ember-handlebars" with the recommended module "gulp-handlebars"
+
+#### 0.1.11  (8/20/14)  
+
 - Add command for building a Cordova application ( `em mobile` | `em m`) 
 
 #### 0.1.9  (8/13/14)  
