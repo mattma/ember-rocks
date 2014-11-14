@@ -167,7 +167,7 @@ gulp.task('buildhbs', function () {
         // Allow nesting based on path using this format ["Ember"]["TEMPLATES"]["users/index"]
         // ["Ember"]["TEMPLATES"]["users"]["index"] won't work, cannot be resolved.
         var fp = filePath.split(/app\/templates\//)[1],
-          pName = p.substr(0, fp.lastIndexOf('.'));
+          pName = fp.substr(0, fp.lastIndexOf('.'));
         return pName;
       }
     }))
