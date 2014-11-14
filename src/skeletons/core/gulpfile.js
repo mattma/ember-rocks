@@ -104,18 +104,20 @@ gulp.task('sass', function() {
 
   var destPath = clientFolder + '/assets/styles' + ( ( nestedFolder ) ? nestedFolder : '' );
 
-  return gulp.src( compileFiles )
+  return gulp.src( compileFiles, { base: 'client/assets/styles/sass' } )
     .pipe($.rubySass({
       // compass: false,  // default value
       // debugInfo: false,  // default value
       // lineNumbers: false,  // default value
-      sourcemap: true,
+      sourcemapPath: './sass',
       style: 'expanded',
-      precision: 10,
+      precision: 3,
       loadPath: ['/assets/styles/sass']
     }))
-    .on('error', console.error.bind(console))
+    .on('error', function (err) { console.log(err.message); })
+    .pipe($.sourcemaps.init({loadMaps: true}))
     .pipe($.autoprefixer.apply( this, AutoPrefixerConfig ))
+    .pipe($.sourcemaps.write())
     .pipe(gulp.dest( destPath ))
     .pipe($.size({title: 'compiled css'}))
     .pipe($.notify({ message: 'Compiled <%= file.relative %>' }));

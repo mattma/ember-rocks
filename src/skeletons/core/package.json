@@ -25,7 +25,8 @@
   },
   "devDependencies": {
     "gulp": "^3.8.6",
-    "gulp-autoprefixer": "^0.0.8",
+    "gulp-autoprefixer": "^1.0.1",
+    "gulp-sourcemaps": "^1.2.8",
     "gulp-cache": "^0.2.0",
     "gulp-changed": "^0.4.0",
     "gulp-if": "^1.2.4",
