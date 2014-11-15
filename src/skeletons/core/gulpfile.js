@@ -56,9 +56,10 @@ gulp.task('lint', function() {
 // task: stripLRScript
 // @describe  Strip out the LiveReload Script tag in HTML
 gulp.task('stripLRScript', function() {
-  return gulp.src(path.join(__dirname, clientFolder, 'index.html'))
+  return gulp.src([ clientFolder + '/index.html' ])
   .pipe(
-    $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g, '')
+    $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
+      '')
   )
   .pipe(gulp.dest(path.join(__dirname, clientFolder)));
 });
@@ -66,12 +67,14 @@ gulp.task('stripLRScript', function() {
 // task: injectLRScript
 // @describe  inject livereload script into index.html
 gulp.task('injectLRScript', function() {
-  return gulp.src(path.join(__dirname, clientFolder, 'index.html'))
+  return gulp.src([ clientFolder + '/index.html' ])
   .pipe(
-    $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g, '')
+    $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
+      '')
   )
   .pipe(
-    $.replace(/<\/body>/, '<script src="http://localhost:35729/livereload.js?snipver=1"></script>\n</body>')
+    $.replace(/<\/body>/,
+      '<script src="http://localhost:35729/livereload.js?snipver=1"></script>\n</body>')
   )
   .pipe(gulp.dest(path.join(__dirname, clientFolder)));
 });
@@ -260,31 +263,35 @@ gulp.task('releaseMobile', [ 'release' ],
 
 // copy all the core files and release to production
 gulp.task('releaseClient',
-  [ 'clean', 'sass', 'lint', 'build', 'stripLRScript', 'envProd'],
+  [ 'clean', 'sass', 'lint', 'build', 'envProd'],
   function(){
     var src = 'client/index.html',
       dest = 'build/client';
 
-    // clean task has to be done
-    // imagemin will minify all images and copy into build
-    gulp.start('imagemin');
+  // clean task has to be done
+  // imagemin will minify all images and copy into build
+  gulp.start('imagemin');
 
-    return gulp.src(src)
-      .pipe($.useref.assets({searchPath: 'client'}))
-      // Concatenate And Minify JavaScript
-      .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
-      // Remove Any Unused CSS, Used as needed
-      // .pipe($.if('*.css', $.uncss({
-      //   html: src,
-      //   ignore: [ ] // CSS Selectors for UnCSS to ignore
-      // })))
-      // Concatenate And Minify Styles
-      .pipe($.if('*.css', $.csso()))
-      .pipe($.useref.restore())
-      .pipe($.useref())
-      .pipe($.if('*.html', $.minifyHtml()))
-      .pipe(gulp.dest(dest))
-      .pipe($.size({title: '[-log:] client folder'}));
+  return gulp.src(src)
+    .pipe(
+    $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
+      '')
+    )
+    .pipe($.useref.assets({searchPath: 'client'}))
+    // Concatenate And Minify JavaScript
+    .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
+    // Remove Any Unused CSS, Used as needed
+    // .pipe($.if('*.css', $.uncss({
+    //   html: src,
+    //   ignore: [ ] // CSS Selectors for UnCSS to ignore
+    // })))
+    // Concatenate And Minify Styles
+    .pipe($.if('*.css', $.csso()))
+    .pipe($.useref.restore())
+    .pipe($.useref())
+    .pipe($.if('*.html', $.minifyHtml()))
+    .pipe(gulp.dest(dest))
+    .pipe($.size({title: '[-log:] client folder'}));
   });
 
 gulp.task('releaseServer', [ 'releaseClient' ], function(){
