@@ -133,7 +133,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### 0.1.11  (8/20/14)  
+#### 0.2.0  (11/14/14)  
 
 - Bump up to the latest version for ember#1.8.1, ember-data#1.0.0-beta.11, and ember-resolver#0.1.10
 - Replace the deprecated module "gulp-ember-handlebars" with the recommended module "gulp-handlebars"
