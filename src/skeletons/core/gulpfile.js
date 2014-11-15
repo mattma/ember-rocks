@@ -133,14 +133,14 @@ gulp.task('imagemin', function() {
     imgDst = 'build/client/assets/images/';
 
   return gulp.src(imgSrc)
-  .pipe($.cache(
-    $.imagemin({
-      progressive: true,
-      interlaced: true
-    })
-  ))
-  .pipe(gulp.dest(imgDst))
-  .pipe($.size({title: '[-log:] images folder'}));
+    .pipe(
+      $.imagemin({
+        progressive: true,
+        interlaced: true
+      })
+    )
+    .pipe(gulp.dest(imgDst))
+    .pipe($.size({title: '[-log:] images folder'}));
 });
 
 // @describe compile es6 modules into amd modules
