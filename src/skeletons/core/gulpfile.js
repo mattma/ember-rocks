@@ -30,7 +30,6 @@ var AutoPrefixerConfig = [
   clientFolder = 'client',
   path = require('path'),
   server = require('tiny-lr')(),
-  modulePrefix = 'rocks',
   compileAllSrc, // Compile all src if filename start with _, or single without leading _
   sassFilePath, // Used to dynamicially set sass path, default to all sass
   // Local Variable
@@ -298,18 +297,22 @@ gulp.task('releaseClient',
     .pipe($.size({title: '[-log:] client folder'}));
   });
 
-gulp.task('releaseServer', [ 'releaseClient' ], function(){
-  var src = 'server/**/*',
-    dest = 'build',
-    destServer = dest + '/server';
+gulp.task('copyServer', function(){
+  var src = [
+      'server/**/*.*'
+    ],
+    dest = 'build/server';
 
-  gulp.src(src)
-    .pipe(gulp.dest(destServer))
+  return gulp.src(src, {base: 'server/.'})
+    .pipe(gulp.dest(dest))
     .pipe($.size({title: '[-log:] server folder'}));
+});
 
+gulp.task('releaseServer', [ 'releaseClient' ], function(){
+  gulp.start('copyServer');
   return gulp.src('package.json')
     .pipe( $.replace( /"devDependencies"[\S\s]+?},/, ''))
-    .pipe(gulp.dest(dest));
+    .pipe(gulp.dest('build'));
 });
 
 gulp.task('release', [ 'releaseServer' ], function(){

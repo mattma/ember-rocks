@@ -1,7 +1,7 @@
 {
   "name": "ember-rocks",
   "description": "An Em(ber) command line utility to help you build an ambitious web application",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "homepage": "https://github.com/mattma/ember-rocks",
   "author": {
     "name": "Matt Ma",
@@ -37,7 +37,8 @@
     "kit",
     "app-kit",
     "ember-app-kit",
-    "rocks"
+    "rocks",
+    "gulp"
   ],
   "scripts": {
     "test": "node_modules/.bin/mocha $(find test -name \"*.spec.js\")",

@@ -147,6 +147,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 #### 0.3.0 (11/19/14)
 
 - Replace Traceur ES6 compiler with 6to5 compiler. Now, the compiled ember code is clean and readable. In addition, it has a javascript sourcemap support so that it could trace back to the definition of original ES6 source code. 
+- [BugFix] In the build process, recursive copy server directory issue has been fixed. 
 
 #### 0.2.0  (11/14/14)  
 
