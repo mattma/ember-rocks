@@ -4,6 +4,7 @@ var gulp = require('gulp'),
   gutil = require('gulp-util'),
   fs = require('fs'),
   $ = require('gulp-load-plugins')(),
+  to5 = require('gulp-6to5'),
   del = require('del'),
   opn = require('opn'),
   pagespeed = require('psi');
@@ -146,13 +147,16 @@ gulp.task('imagemin', function() {
 // @describe compile es6 modules into amd modules
 gulp.task('buildjs', function () {
   return gulp.src(clientFolder + '/app/**/*.js')
-    .pipe($.es6ModuleTranspiler({
-      type: 'amd',
-      moduleName: function(path) {
-        return modulePrefix + '/' + path;
-      }
+    .pipe($.sourcemaps.init())
+    .pipe(to5({
+      modules: 'amd',
+      sourceRoot: __dirname + '/client/app',
+      moduleRoot: 'rocks',
+      amdModuleIds: true,
+      sourceMap: true
     }))
     .pipe($.concat('application.js'))
+    .pipe($.sourcemaps.write())
     .pipe(gulp.dest(clientFolder + '/assets/build/'));
 });
 
