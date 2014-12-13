@@ -49,7 +49,7 @@
     "gulp-notify": "^1.4.0",
     "gulp-6to5": "^1.0.2",
     "gulp-util": "^3.0.0",
-    "ember-rocks": "^0.3.0",
+    "ember-rocks": "^0.3.1",
     "ember-handlebars": "^1.2.0",
     "opn": "^0.1.2",
     "tiny-lr": "^0.0.5",

@@ -144,6 +144,11 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+#### 0.3.1 (12/13/14)
+
+- [ENHENCEMENT] Replace the old `gulp-ember-handlebars`(deprecated module) with the recommended module `gulp-handlebars` with Ember-Rocks custom `gulp-defined-module` to handle AMD module dependencies. 
+- [BugFix] With the newest Ember#1.9.0 ( Released on 12/8/14 ), it required the new hard dependencies of `handlebars#2.0.0`, so that `bower install` dependency will confuse with the right version to install, it breaks the `em new` command in some sort. 
+
 #### 0.3.0 (11/19/14)
 
 - Replace Traceur ES6 compiler with 6to5 compiler. Now, the compiled ember code is clean and readable. In addition, it has a javascript sourcemap support so that it could trace back to the definition of original ES6 source code. 
