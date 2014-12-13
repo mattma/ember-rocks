@@ -165,18 +165,19 @@ gulp.task('buildhbs', function () {
     .pipe($.handlebars({
       handlebars: require('ember-handlebars')
     }))
-    // Wrap each template function in a call to Ember.Handlebars.template
-    .pipe($.wrap('Ember.Handlebars.template(<%= contents %>)'))
-    // Declare template functions with Ember.TEMPLATES according to their path and filename
-    .pipe($.declare({
-      namespace: 'Ember.TEMPLATES',
-      noRedeclare: true, // Avoid duplicate declarations
-      processName: function(filePath) {
-        // Allow nesting based on path using this format ["Ember"]["TEMPLATES"]["users/index"]
-        // ["Ember"]["TEMPLATES"]["users"]["index"] won't work, cannot be resolved.
-        var fp = filePath.split(/app\/templates\//)[1],
-          pName = fp.substr(0, fp.lastIndexOf('.'));
-        return pName;
+    .pipe($.defineModule('amd', {
+      moduleName: '<%= moduleName %>',
+      wrapper: 'Ember.TEMPLATES["<%= templateName %>"] = <%= contents %>',
+      context: function(context) {
+        var filename = context.name,
+          compiled = 'Ember.Handlebars.template('.concat(context.contents, ')'),
+          moduleName = 'rocks/templates/' + filename;
+
+        return {
+          moduleName: moduleName,
+          templateName: filename,
+          contents: compiled
+        };
       }
     }))
     .pipe($.concat('templates.js'))
