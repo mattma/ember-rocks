@@ -169,13 +169,19 @@ gulp.task('buildhbs', function () {
       moduleName: '<%= moduleName %>',
       wrapper: 'Ember.TEMPLATES["<%= templateName %>"] = <%= contents %>',
       context: function(context) {
-        var filename = context.name,
-          compiled = 'Ember.Handlebars.template('.concat(context.contents, ')'),
-          moduleName = 'rocks/templates/' + filename;
+        var file = context.file,
+          // Get the full path of the file without its extension(ex: .js or .hbs)
+          filepath = path.relative(file.cwd, file.path).slice(0, -path.extname(file.path).length),
+          // split the string into array, remove ['client', 'app', 'templates'] from the array
+          realFilePath = filepath.split(path.sep).slice(3).join('/'),
+          // finally build up the moduleName.  ex: rocks/templates/application
+          moduleName = 'rocks/templates/' + realFilePath,
+          // return the main Handlebars logic to be renedered inside template compiler
+          compiled = 'Ember.Handlebars.template('.concat(context.contents, ')');
 
         return {
           moduleName: moduleName,
-          templateName: filename,
+          templateName: context.name,
           contents: compiled
         };
       }
