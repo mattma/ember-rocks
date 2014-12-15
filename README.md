@@ -144,9 +144,10 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### 0.4.0 (12/14/14)
+#### 0.4.1 (12/14/14)
 
 - [Major/Breakage] Bump up versions - Ember#1.9.0, Handlebars#2.0.0. This is a major update and it will breaks the previous builds. Due to [Handerbars#2.0.0 changelogs](https://github.com/wycats/handlebars.js/blob/master/release-notes.md). Read [here](http://emberjs.com/blog/2014/10/16/handlebars-update.html) and [here](http://emberjs.com/blog/2014/12/08/ember-1-9-0-released.html) to see why it is not backward compatible.
+- 0.4.0 has an missing typo and fixed in the new release v0.4.1
 
 #### 0.3.1 (12/13/14)
 
