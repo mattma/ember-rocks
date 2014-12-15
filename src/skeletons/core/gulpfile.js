@@ -163,11 +163,15 @@ gulp.task('buildjs', function () {
 gulp.task('buildhbs', function () {
   return gulp.src(clientFolder + '/app/templates/**/*.hbs')
     .pipe($.handlebars({
-      handlebars: require('ember-handlebars')
+      handlebars: require('ember-handlebars'),
+      compiler: require('ember-cli-htmlbars')
     }))
     .pipe($.defineModule('amd', {
+      require: {
+        __exports__ : 'exports'
+      },
       moduleName: '<%= moduleName %>',
-      wrapper: 'Ember.TEMPLATES["<%= templateName %>"] = <%= contents %>',
+      wrapper: '<%= moduleContent %>',
       context: function(context) {
         var file = context.file,
           // Get the full path of the file without its extension(ex: .js or .hbs)
@@ -176,13 +180,14 @@ gulp.task('buildhbs', function () {
           realFilePath = filepath.split(path.sep).slice(3).join('/'),
           // finally build up the moduleName.  ex: rocks/templates/application
           moduleName = 'rocks/templates/' + realFilePath,
+          // slice out `export default` statement from the contents
+          contents = context.contents.substr(14),
           // return the main Handlebars logic to be renedered inside template compiler
-          compiled = 'Ember.Handlebars.template('.concat(context.contents, ')');
+          compiled = '__exports__["default"] ='.concat(contents);
 
         return {
           moduleName: moduleName,
-          templateName: context.name,
-          contents: compiled
+          moduleContent: compiled
         };
       }
     }))
