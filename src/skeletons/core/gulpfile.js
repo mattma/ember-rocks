@@ -7,7 +7,10 @@ var gulp = require('gulp'),
   to5 = require('gulp-6to5'),
   del = require('del'),
   opn = require('opn'),
-  pagespeed = require('psi');
+  pagespeed = require('psi'),
+
+  Htmlbars = require('ember-cli-htmlbars'),
+  compiler = new Htmlbars();
 
 // https://github.com/ai/autoprefixer. Default: > 1%, last 2 versions, Firefox ESR, Opera 12.1
 // Android, BlackBerry or bb, iOS
@@ -164,7 +167,7 @@ gulp.task('buildhbs', function () {
   return gulp.src(clientFolder + '/app/templates/**/*.hbs')
     .pipe($.handlebars({
       handlebars: require('ember-handlebars'),
-      compiler: require('ember-cli-htmlbars')
+      compiler: compiler.processString
     }))
     .pipe($.defineModule('amd', {
       require: {
