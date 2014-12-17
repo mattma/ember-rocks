@@ -24,7 +24,7 @@ module.exports = function(options) {
   app.use(favicon());
   app.use(logger('dev'));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded());
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(cookieParser());
   //app.use(express.methodOverride());
   app.use(express.static(PUBLIC_PATH));
