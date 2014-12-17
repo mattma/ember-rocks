@@ -416,7 +416,7 @@ function rebuildProject(event) {
 
 gulp.task('serve', [ 'express', 'sass', 'build', 'injectLRScript' ], function() {
   gulp.start('open');
-  gulp.watch( clientFolder + '/assets/styles/sass/**/*.{scss,sass}', function(event) {
+  $.watch( clientFolder + '/assets/styles/sass/**/*.{scss,sass}', function(event) {
     sassFilePath = event.path; // Only pass changed file to the sass task
     var basename = path.basename(sassFilePath);
     compileAllSrc = ( basename.indexOf('_') > -1 ) ? true : false;
@@ -435,12 +435,12 @@ gulp.task('serve', [ 'express', 'sass', 'build', 'injectLRScript' ], function() 
   server.listen(35729, function(err) {
     if (err) { return gutil.log('\n[-log]', gutil.colors.red(err)); }
 
-    gulp.watch(clientFolder + '/app/**/*.js', rebuildProject);
-    gulp.watch(clientFolder + '/app/**/*.hbs', rebuildProject);
-    gulp.watch(clientFolder + '/index.html', notifyLivereload);
-    gulp.watch(clientFolder + '/assets/build/*.js', notifyLivereload);
-    gulp.watch(clientFolder + '/assets/images/**/*', notifyLivereload);
-    gulp.watch(clientFolder + '/assets/styles/**/*.css', notifyLivereload);
+    $.watch(clientFolder + '/app/**/*.js', rebuildProject);
+    $.watch(clientFolder + '/app/**/*.hbs', rebuildProject);
+    $.watch(clientFolder + '/index.html', notifyLivereload);
+    $.watch(clientFolder + '/assets/build/*.js', notifyLivereload);
+    $.watch(clientFolder + '/assets/images/**/*', notifyLivereload);
+    $.watch(clientFolder + '/assets/styles/**/*.css', notifyLivereload);
   });
 });
 
