@@ -15,13 +15,13 @@
     "serve": "em serve"
   },
   "dependencies": {
-    "express": "*",
-    "static-favicon": "~1.0.0",
-    "morgan": "~1.0.0",
-    "cookie-parser": "~1.0.1",
-    "body-parser": "~1.0.0",
-    "debug": "~0.7.4",
-    "jade": "*"
+    "express": "^4.10.6",
+    "static-favicon": "^1.0.2",
+    "morgan": "^1.5.0",
+    "cookie-parser": "^1.3.3",
+    "body-parser": "^1.10.0",
+    "debug": "^2.1.0",
+    "jade": "^1.8.2"
   },
   "devDependencies": {
     "gulp": "^3.8.6",
