@@ -110,22 +110,29 @@ gulp.task('sass', function() {
 
   var destPath = clientFolder + '/assets/styles' + ( ( nestedFolder ) ? nestedFolder : '' );
 
-  return gulp.src( compileFiles, { base: 'client/assets/styles/sass' } )
-    .pipe($.rubySass({
-      // compass: false,  // default value
-      // debugInfo: false,  // default value
-      // lineNumbers: false,  // default value
-      sourcemapPath: './sass',
+  // return gulp.src( compileFiles, { base: 'client/assets/styles/sass' } )
+  //   .pipe($.rubySass({
+  //     // compass: false,  // default value
+  //     // debugInfo: false,  // default value
+  //     // lineNumbers: false,  // default value
+  //     sourcemapPath: './sass',
+  //     style: 'expanded',
+  //     precision: 3,
+  //     loadPath: ['/assets/styles/sass']
+  //   }))
+    return $.rubySass('client/assets/styles/sass', {
+      sourcemap: true,
       style: 'expanded',
-      precision: 3,
       loadPath: ['/assets/styles/sass']
-    }))
+    })
     .on('error', function (err) { console.log(err.message); })
-    .pipe($.sourcemaps.init({loadMaps: true}))
     .pipe($.autoprefixer({
       browsers: AutoPrefixerConfig
     }))
-    .pipe($.sourcemaps.write())
+    .pipe($.sourcemaps.write('maps', {
+      includeContent: false,
+      sourceRoot: destPath
+    }))
     .pipe(gulp.dest( destPath ))
     .pipe($.size({title: 'compiled css'}))
     .pipe($.notify({ message: 'Compiled <%= file.relative %>' }));
