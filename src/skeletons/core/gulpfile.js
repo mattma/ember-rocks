@@ -122,7 +122,9 @@ gulp.task('sass', function() {
     }))
     .on('error', function (err) { console.log(err.message); })
     .pipe($.sourcemaps.init({loadMaps: true}))
-    .pipe($.autoprefixer.apply( this, AutoPrefixerConfig ))
+    .pipe($.autoprefixer({
+      browsers: AutoPrefixerConfig
+    }))
     .pipe($.sourcemaps.write())
     .pipe(gulp.dest( destPath ))
     .pipe($.size({title: 'compiled css'}))
