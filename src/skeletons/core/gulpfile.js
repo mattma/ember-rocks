@@ -293,7 +293,8 @@ gulp.task('releaseClient',
   [ 'clean', 'sass', 'lint', 'build', 'envProd'],
   function(){
     var src = 'client/index.html',
-      dest = 'build/client';
+      dest = 'build/client',
+      assets = $.useref.assets({searchPath: 'client'});
 
   // clean task has to be done
   // imagemin will minify all images and copy into build
@@ -304,7 +305,9 @@ gulp.task('releaseClient',
     $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
       '')
     )
-    .pipe($.useref.assets({searchPath: 'client'}))
+    // handle file concatenation but not minification.
+    // usage: <!-- build:js scripts/combined.js --><!-- endbuild -->
+    .pipe(assets)
     // Concatenate And Minify JavaScript
     .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
     // Remove Any Unused CSS, Used as needed
@@ -314,7 +317,7 @@ gulp.task('releaseClient',
     // })))
     // Concatenate And Minify Styles
     .pipe($.if('*.css', $.csso()))
-    .pipe($.useref.restore())
+    .pipe(assets.restore())
     .pipe($.useref())
     .pipe($.if('*.html', $.minifyHtml()))
     .pipe(gulp.dest(dest))
