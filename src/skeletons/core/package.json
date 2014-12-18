@@ -37,7 +37,7 @@
     "gulp-ruby-sass": "^1.0.0-alpha",
     "gulp-size": "^1.1.0",
     "gulp-uglify": "^1.0.2",
-    "gulp-define-module": "https://github.com/mattma/gulp-define-module/tarball/master",
+    "gulp-wrap-amd": "https://github.com/mattma/gulp-wrap-amd/tarball/master",
     "gulp-handlebars": "https://github.com/mattma/gulp-handlebars/tarball/master",
     "ember-cli-htmlbars": "^0.5.3",
     "jshint-stylish": "^0.4.0",
