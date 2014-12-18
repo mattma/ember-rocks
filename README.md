@@ -144,6 +144,12 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+#### 0.5.0 (12/18/14)
+
+- Simplified the way of compiling Handlebars's Htmlbars by forking two modules. [gulp-handlebars](https://github.com/lazd/gulp-handlebars/pull/44) and [gulp-wrap-amd](https://github.com/phated/gulp-wrap-amd/pull/10)
+- Used the official **ember-cli-htmlbars** repo instead of the fork version
+- Update packages' version of 'dependencies' and 'devDependencies', patches and fixes applied on the newer version requirements
+
 #### 0.4.1 (12/14/14)
 
 - [Major/Breakage] Bump up versions - Ember#1.9.0, Handlebars#2.0.0. This is a major update and it will breaks the previous builds. Due to [Handerbars#2.0.0 changelogs](https://github.com/wycats/handlebars.js/blob/master/release-notes.md). Read [here](http://emberjs.com/blog/2014/10/16/handlebars-update.html) and [here](http://emberjs.com/blog/2014/12/08/ember-1-9-0-released.html) to see why it is not backward compatible.
