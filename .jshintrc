@@ -26,6 +26,8 @@
   "eqnull": true,
   "plusplus": false,
   "noempty": true,
+  "laxbreak": true,
+  "laxcomma": true,
 
   "globals": {
     "global": false,

@@ -18,6 +18,8 @@
   "smarttabs": true,
   "maxdepth": 4,
   "maxlen": 100,
+  "laxbreak": true,
+  "laxcomma": true,
 
   "predef": {
     "document": true,
