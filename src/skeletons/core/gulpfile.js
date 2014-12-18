@@ -181,7 +181,7 @@ gulp.task('buildhbs', function () {
     .pipe($.wrapAmd({
       deps: ['exports'],          // dependency array
       params: ['__exports__'],        // params for callback
-      moduleRoot: 'client/app/', // include a module name in the define() call, relative to moduleRoot
+      moduleRoot: 'client/app/',
       modulePrefix: 'rocks/'
     }))
     .pipe( $.replace(
