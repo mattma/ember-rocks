@@ -120,7 +120,7 @@ gulp.task('sass', function() {
   //     precision: 3,
   //     loadPath: ['/assets/styles/sass']
   //   }))
-    return $.rubySass('client/assets/styles/sass', {
+    return $.rubySass(compileFiles, {
       sourcemap: true,
       style: 'expanded',
       loadPath: ['/assets/styles/sass']
