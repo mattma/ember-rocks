@@ -100,7 +100,6 @@ describe("Created directory", function() {
         "test-app/client/assets/images/touch/icon-128x128.png",
         "test-app/client/assets/styles/reset.css",
         "test-app/client/assets/styles/sass/base.sass",
-        "test-app/client/assets/vendors/almond.js",
         "test-app/client/assets/vendors/globalizer.js"
       ], done);
     });
