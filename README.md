@@ -144,11 +144,12 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### 0.5.0 (12/18/14)
+#### 0.5.1 (12/18/14)
 
 - Simplified the way of compiling Handlebars's Htmlbars by forking two modules. [gulp-handlebars](https://github.com/lazd/gulp-handlebars/pull/44) and [gulp-wrap-amd](https://github.com/phated/gulp-wrap-amd/pull/10)
 - Used the official **ember-cli-htmlbars** repo instead of the fork version
 - Update packages' version of 'dependencies' and 'devDependencies', patches and fixes applied on the newer version requirements
+- Address/Apply the previous [PR](https://github.com/mattma/ember-rocks/pull/6) by an awesome contributor
 
 #### 0.4.1 (12/14/14)
 
