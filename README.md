@@ -144,6 +144,12 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+#### 0.5.2 (12/19/14)
+
+- Using the official [gulp-wrap-amd](https://github.com/phated/gulp-wrap-amd/pull/10) module instead of my fork which has been successfully merged and released to v0.4.0
+- Using bower to install `almond` dependency and remove the custom almond.js script, add shim to support new feature
+- `Handlebars` exists in the global scope and also can be imported as an AMD module 
+
 #### 0.5.1 (12/18/14)
 
 - Simplified the way of compiling Handlebars's Htmlbars by forking two modules. [gulp-handlebars](https://github.com/lazd/gulp-handlebars/pull/44) and [gulp-wrap-amd](https://github.com/phated/gulp-wrap-amd/pull/10)
