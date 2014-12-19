@@ -27,4 +27,12 @@
       'default': DS
     };
   });
+
+  define('handlebars', [], function() {
+    "use strict";
+
+    return {
+      'default': Handlebars
+    };
+  });
 })();
