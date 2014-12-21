@@ -351,11 +351,19 @@ gulp.task('release', [ 'releaseServer' ], function(){
 gulp.task('test', ['clean', 'build', 'sass'], function(){
   var assets = $.useref.assets({searchPath: 'client'}),
     testsRoot = ['client/tests/*.{html,json}'],
-    testsLibs = ['client/tests/assets/scripts/*.{js,css}'],
 
     dest = 'build',
     testsDest = dest + '/tests',
     testsScriptsDest = testsDest + '/assets/scripts',
+
+    // loading test-support scripts and stylesheet
+    testsLibs = [
+      'client/tests/assets/scripts/*.{js,css}',
+      'client/assets/vendors/ember-mocha/ember-mocha.amd.js',
+      'client/assets/vendors/mocha/mocha.{js,css}',
+      'client/assets/vendors/should/should.js',
+      'client/assets/vendors/ember-mocha-adapter/adapter.js'
+    ],
 
     tests = ['client/tests/assets/helpers/**/*.js',
       'client/tests/unit/**/*.js',
@@ -367,7 +375,7 @@ gulp.task('test', ['clean', 'build', 'sass'], function(){
   gulp.src(testsRoot)
     .pipe(gulp.dest(dest));
 
-  // Copy library scripts into the scripts folder
+  // Copy library scripts/css into the scripts folder
   gulp.src(testsLibs)
     .pipe(gulp.dest(testsScriptsDest));
 

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="description" content="Build an ambitious web application with Ember.js and Node.js.">
+  <meta name="description" content="Test an ambitious Ember.js web application.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Ember Rocks Tests</title>
 
@@ -33,18 +33,25 @@
 <div id="mocha"></div>
 <div id="mocha-fixture"></div>
 
-<script src='tests/assets/scripts/should.js'></script>
-<script src='tests/assets/scripts/mocha.js'></script>
-
 <script src="tests/assets/scripts/vendor.min.js"></script>
 <script src="tests/assets/scripts/main.min.js"></script>
 
-<script src='tests/assets/scripts/test-support.js'></script>
+<!-- test-support scripts - load ember custom mocha testing components-->
+<script src="tests/assets/scripts/ember-mocha.amd.js"></script>
+<script src="tests/assets/scripts/mocha.js"></script>
+<script src="tests/assets/scripts/should.js"></script>
+<script>
+  mocha.setup('bdd');
+</script>
+<script src="tests/assets/scripts/adapter.js"></script>
+
+<!-- test-helpers scripts and actual integration/unit tests -->
 <script src='tests/tests.js'></script>
 
 <!--testem.js is loaded directly from `testem` server, not in file system-->
 <script src='/testem.js'></script>
 
+<!-- load up the acutal AMD module tests by reading requirejs registry -->
 <script src='tests/assets/scripts/test-loader.js'></script>
 
 <script>
