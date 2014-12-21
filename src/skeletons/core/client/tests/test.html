@@ -33,13 +33,16 @@
 <div id="mocha"></div>
 <div id="mocha-fixture"></div>
 
+<!-- assertion library - should-->
+<script src="tests/assets/scripts/should.js"></script>
+
+<!-- application dependency library & app logic, app templates-->
 <script src="tests/assets/scripts/vendor.min.js"></script>
 <script src="tests/assets/scripts/main.min.js"></script>
 
 <!-- test-support scripts - load ember custom mocha testing components-->
 <script src="tests/assets/scripts/ember-mocha.amd.js"></script>
 <script src="tests/assets/scripts/mocha.js"></script>
-<script src="tests/assets/scripts/should.js"></script>
 <script>
   mocha.setup('bdd');
 </script>
