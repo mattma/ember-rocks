@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Build an ambitious web application with Ember.js and Node.js.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ember Rocks Tests</title>
+
+  <base href="/">
+
+  <link rel="stylesheet" href="tests/assets/scripts/mocha.css">
+  <link rel="stylesheet" href="tests/assets/scripts/test-support.css">
+  <style>
+    #ember-testing-container {
+      position: absolute;
+      background: white;
+      bottom: 0;
+      right: 0;
+      width: 640px;
+      height: 384px;
+      overflow: auto;
+      z-index: 9999;
+      border: 1px solid #ccc;
+    }
+    #ember-testing {
+      zoom: 50%;
+    }
+  </style>
+</head>
+<body>
+
+<div id="mocha"></div>
+<div id="mocha-fixture"></div>
+
+<script src='tests/assets/scripts/should.js'></script>
+<script src='tests/assets/scripts/mocha.js'></script>
+
+<script src="tests/assets/scripts/vendor.min.js"></script>
+<script src="tests/assets/scripts/main.min.js"></script>
+
+<script src='tests/assets/scripts/test-support.js'></script>
+<script src='tests/tests.js'></script>
+
+<!--testem.js is loaded directly from `testem` server, not in file system-->
+<script src='/testem.js'></script>
+
+<script src='tests/assets/scripts/test-loader.js'></script>
+
+<script>
+  require('rocksTest/start-app')['default']();
+</script>
+</body>
+</html>

@@ -347,6 +347,69 @@ gulp.task('release', [ 'releaseServer' ], function(){
   );
 });
 
+// Clean up the build folder, generate the test files in build folder
+gulp.task('test', ['clean', 'build', 'sass'], function(){
+  var assets = $.useref.assets({searchPath: 'client'}),
+    testsRoot = ['client/tests/*.{html,json}'],
+    testsLibs = ['client/tests/assets/scripts/*.{js,css}'],
+
+    dest = 'build',
+    testsDest = dest + '/tests',
+    testsScriptsDest = testsDest + '/assets/scripts',
+
+    tests = ['client/tests/assets/helpers/**/*.js',
+      'client/tests/unit/**/*.js',
+      'client/tests/integration/**/*.js'
+    ];
+
+  // Copy the tests/ folder root file.
+  // 'test.html' & 'testem.json' configuration file
+  gulp.src(testsRoot)
+    .pipe(gulp.dest(dest));
+
+  // Copy library scripts into the scripts folder
+  gulp.src(testsLibs)
+    .pipe(gulp.dest(testsScriptsDest));
+
+  // Generate application logic and template script into scripts folder
+  gulp.src('client/index.html')
+    .pipe(assets)
+    .pipe($.if('*.js', $.uglify()))
+    .pipe(assets.restore())
+    .pipe($.useref())
+    .pipe(gulp.dest(testsDest));
+
+  // Rebuild ES6 tests, generate a test file at `build/tests/tests.js`
+  function buildTests(reminder) {
+    if(reminder) {
+      gutil.log(
+        gutil.colors.green(reminder.successInfo)
+      );
+      gutil.log(
+        gutil.colors.magenta(reminder.watchingInfo)
+      );
+    }
+    return gulp.src(tests)
+      .pipe(to5({
+        modules: 'amd',
+        sourceRoot: __dirname + '/client/app',
+        moduleRoot: 'rocksTest',
+        amdModuleIds: true
+      }))
+      .pipe($.concat('tests.js'))
+      .pipe(gulp.dest(testsDest));
+  }
+
+  buildTests({
+    successInfo: '[-done:] Ready to run tests? `cd build && testem`',
+    watchingInfo: '[-info:] Watching test file changes at folders `tests/unit & tests/integration`'
+  });
+
+  return $.watch(tests, function(event) {
+    return buildTests();
+  });
+});
+
 // task: express
 gulp.task('express', function() {
   require('./server/app')(options);
