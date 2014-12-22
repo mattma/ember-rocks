@@ -93,6 +93,12 @@ program
   .description('Release your app and places it into the output path \'~/build\'')
   .action(commands);
 
+program
+  .command('t')
+  .alias('test')
+  .description('Run client side integration and unit tests, rerun tests on file changes')
+  .action(commands);
+
 // must be before .parse() since node's emit() is immediate
 program.on('--help', function(){
   console.log('  Examples:');
@@ -116,6 +122,8 @@ program.on('--help', function(){
   console.log('    $ em serve' );
   console.log('');
   console.log('    $ em build' );
+  console.log('');
+  console.log('    $ em test' );
   console.log('');
   console.log('    $ em mobile' +
     '\n\n      @description Builds an Cordova application, and ready to' +

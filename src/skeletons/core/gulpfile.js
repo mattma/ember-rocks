@@ -8,6 +8,7 @@ var gulp = require('gulp'),
   del = require('del'),
   opn = require('opn'),
   pagespeed = require('psi'),
+  testem = new (require('testem'))(),
 
   Htmlbars = require('ember-cli-htmlbars'),
   compiler = new Htmlbars();
@@ -345,6 +346,109 @@ gulp.task('release', [ 'releaseServer' ], function(){
     gutil.colors.bold('[-copy:] => node server '),
     gutil.colors.gray('# running your application in production mode')
   );
+});
+
+function rerunTest() {
+  gulp.start('testem');
+}
+
+gulp.task('test', ['prepareTests'], function() {
+  $.watch('build/tests/*.js', rerunTest);
+  return rerunTest();
+});
+
+gulp.task('testem', function(){
+  var options = {
+    file: 'build/testem.json',  // configFile
+    port: 7357,  // testem default port
+    cwd: 'build',  // testem rootpath
+    // timeout: 10000,
+    reporter: 'tap',
+    parallel: 1
+  };
+  testem.startCI(options, function(exitCode) {
+    if (!testem.app.reporter.total) {
+      console.log(
+        'No tests were run, ensure that you have a test launcher (e.g. PhantomJS) enabled.'
+      );
+    }
+    // All tests has been finished. Do something here.
+    // console.log('exitCode: ', exitCode);
+  });
+});
+
+// Clean up the build folder, generate the test files in build folder
+// if express server has started, use the existing server for testing
+gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function(){
+  var assets = $.useref.assets({searchPath: 'client'}),
+    testsRoot = ['client/tests/*.{html,json}'],
+
+    dest = 'build',
+    testsDest = dest + '/tests',
+    testsScriptsDest = testsDest + '/assets/scripts',
+
+    // loading test-support scripts and stylesheet
+    testsLibs = [
+      'client/tests/assets/scripts/*.js',
+      'client/assets/vendors/ember-mocha/ember-mocha.amd.js',
+      'client/assets/vendors/mocha/mocha.{js,css}',
+      'client/assets/vendors/should/should.js',
+      'client/assets/vendors/ember-mocha-adapter/adapter.js'
+    ],
+
+    tests = ['client/tests/assets/helpers/**/*.js',
+      'client/tests/unit/**/*.js',
+      'client/tests/integration/**/*.js'
+    ];
+
+  // Copy the tests/ folder root file.
+  // 'test.html' & 'testem.json' configuration file
+  gulp.src(testsRoot)
+    .pipe(gulp.dest(dest));
+
+  // Copy library scripts/css into the scripts folder
+  gulp.src(testsLibs)
+    .pipe(gulp.dest(testsScriptsDest));
+
+  // Generate application logic and template script into scripts folder
+  gulp.src('client/index.html')
+    .pipe(assets)
+    .pipe($.if('*.js', $.uglify()))
+    .pipe(assets.restore())
+    .pipe($.useref())
+    .pipe(gulp.dest(testsDest));
+
+  // Rebuild ES6 tests, generate a test file at `build/tests/tests.js`
+  function buildTests(reminder) {
+    return gulp.src(tests)
+      .pipe(to5({
+        modules: 'amd',
+        sourceRoot: __dirname + '/client/app',
+        moduleRoot: 'rocksTest',
+        amdModuleIds: true
+      }))
+      .pipe($.concat('tests.js'))
+      .on('end', function(){
+        if(reminder) {
+          gutil.log(
+            gutil.colors.green(reminder.successInfo)
+          );
+          gutil.log(
+            gutil.colors.magenta(reminder.watchingInfo)
+          );
+        }
+      })
+      .pipe(gulp.dest(testsDest));
+  }
+
+  $.watch(tests, function(event) {
+    return buildTests();
+  });
+
+  return buildTests({
+    successInfo: '[-done:] Using `testem` UI by executing `cd build && testem`',
+    watchingInfo: '[-info:] Watching test file changes at folders `tests/unit & tests/integration`'
+  });
 });
 
 // task: express

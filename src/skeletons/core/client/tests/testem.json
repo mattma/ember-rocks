@@ -1,0 +1,18 @@
+{
+  "framework": "mocha",
+  "test_page": "test.html",
+  "launch_in_ci": [
+    "PhantomJS"
+  ],
+  "launch_in_dev": [
+    "PhantomJS",
+    "Chrome"
+  ],
+  "timeout": 20000,
+  "proxies": {
+    "/api": {
+      "port": 3001,
+      "host": "localhost"
+    }
+  }
+}

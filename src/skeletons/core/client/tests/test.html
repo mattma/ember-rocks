@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="description" content="Test an ambitious Ember.js web application.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ember Rocks Tests</title>
+
+  <base href="/">
+
+  <link rel="stylesheet" href="tests/assets/scripts/mocha.css">
+  <style>
+    #ember-testing-container {
+      position: absolute;
+      background: white;
+      bottom: 0;
+      right: 0;
+      width: 640px;
+      height: 384px;
+      overflow: auto;
+      z-index: 9999;
+      /* border: 1px solid #ccc;*/
+    }
+    #ember-testing {
+      zoom: 50%;
+    }
+  </style>
+</head>
+<body>
+
+<div id="mocha"></div>
+<div id="mocha-fixture"></div>
+
+<!-- assertion library - should-->
+<script src="tests/assets/scripts/should.js"></script>
+
+<!-- application dependency library & app logic, app templates-->
+<script src="tests/assets/scripts/vendor.min.js"></script>
+<script src="tests/assets/scripts/main.min.js"></script>
+
+<!-- test-support scripts - load ember custom mocha testing components-->
+<script src="tests/assets/scripts/ember-mocha.amd.js"></script>
+<script src="tests/assets/scripts/mocha.js"></script>
+<script>
+  mocha.setup('bdd');
+</script>
+<script src="tests/assets/scripts/adapter.js"></script>
+
+<!-- test-helpers scripts and actual integration/unit tests -->
+<script src='tests/tests.js'></script>
+
+<!--testem.js is loaded directly from `testem` server, not in file system-->
+<script src='/testem.js'></script>
+
+<!-- load up the acutal AMD module tests by reading requirejs registry -->
+<script src='tests/assets/scripts/test-loader.js'></script>
+
+<script>
+  require('rocksTest/test-helper');
+</script>
+</body>
+</html>
