@@ -129,7 +129,7 @@ If you have to manually create a test file, name test file anything you want, su
 
 You could use future **ES6** syntax in tests, and they would be pre-compiled into vanilla javascript before serving in the browsers or phantomjs headless browsers.
 
-- #### Easiest way, the recommended way to run your test
+#### Easiest way, the recommended way to run your test
 
 By simply running `em test` or `em t`, it would compile your testing files, build the project, launch an express server to take any requests, watch any test file changes and rerun the test again, show the result of the tests.
 
@@ -137,7 +137,7 @@ By simply running `em test` or `em t`, it would compile your testing files, buil
   em test
 ```
 
-- #### Easy way, but requires two different processes and `testem` installed globally in your system. ( `npm install testem -g` )
+#### Easy way, but requires two different processes and `testem` installed globally in your system. ( `npm install testem -g` )
 
 By executing `testem` command, you get pretty UI in terminal to see exactly what is going on with your tests. `testem` should automatically launch **chrome** and **phantomjs** to run all of your tests.
 
