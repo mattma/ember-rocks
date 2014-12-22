@@ -358,7 +358,7 @@ gulp.task('test', ['clean', 'build', 'sass'], function(){
 
     // loading test-support scripts and stylesheet
     testsLibs = [
-      'client/tests/assets/scripts/*.{js,css}',
+      'client/tests/assets/scripts/*.js',
       'client/assets/vendors/ember-mocha/ember-mocha.amd.js',
       'client/assets/vendors/mocha/mocha.{js,css}',
       'client/assets/vendors/should/should.js',
