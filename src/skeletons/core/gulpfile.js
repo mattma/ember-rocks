@@ -8,6 +8,7 @@ var gulp = require('gulp'),
   del = require('del'),
   opn = require('opn'),
   pagespeed = require('psi'),
+  testem = new (require('testem'))(),
 
   Htmlbars = require('ember-cli-htmlbars'),
   compiler = new Htmlbars();
@@ -347,8 +348,38 @@ gulp.task('release', [ 'releaseServer' ], function(){
   );
 });
 
+function rerunTest() {
+  gulp.start('testem');
+}
+
+gulp.task('test', ['prepareTests'], function() {
+  $.watch('build/tests/*.js', rerunTest);
+  return rerunTest();
+});
+
+gulp.task('testem', function(){
+  var options = {
+    file: 'build/testem.json',  // configFile
+    port: 7357,  // testem default port
+    cwd: 'build',  // testem rootpath
+    // timeout: 10000,
+    reporter: 'tap',
+    parallel: 1
+  };
+  testem.startCI(options, function(exitCode) {
+    if (!testem.app.reporter.total) {
+      console.log(
+        'No tests were run, ensure that you have a test launcher (e.g. PhantomJS) enabled.'
+      );
+    }
+    // All tests has been finished. Do something here.
+    // console.log('exitCode: ', exitCode);
+  });
+});
+
 // Clean up the build folder, generate the test files in build folder
-gulp.task('test', ['clean', 'build', 'sass', 'express'], function(){
+// if express server has started, use the existing server for testing
+gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function(){
   var assets = $.useref.assets({searchPath: 'client'}),
     testsRoot = ['client/tests/*.{html,json}'],
 
@@ -415,7 +446,7 @@ gulp.task('test', ['clean', 'build', 'sass', 'express'], function(){
   });
 
   return buildTests({
-    successInfo: '[-done:] Ready to run tests? `cd build && testem`',
+    successInfo: '[-done:] Using `testem` UI by executing `cd build && testem`',
     watchingInfo: '[-info:] Watching test file changes at folders `tests/unit & tests/integration`'
   });
 });
