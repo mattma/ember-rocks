@@ -389,14 +389,6 @@ gulp.task('test', ['clean', 'build', 'sass'], function(){
 
   // Rebuild ES6 tests, generate a test file at `build/tests/tests.js`
   function buildTests(reminder) {
-    if(reminder) {
-      gutil.log(
-        gutil.colors.green(reminder.successInfo)
-      );
-      gutil.log(
-        gutil.colors.magenta(reminder.watchingInfo)
-      );
-    }
     return gulp.src(tests)
       .pipe(to5({
         modules: 'amd',
@@ -405,16 +397,26 @@ gulp.task('test', ['clean', 'build', 'sass'], function(){
         amdModuleIds: true
       }))
       .pipe($.concat('tests.js'))
+      .on('end', function(){
+        if(reminder) {
+          gutil.log(
+            gutil.colors.green(reminder.successInfo)
+          );
+          gutil.log(
+            gutil.colors.magenta(reminder.watchingInfo)
+          );
+        }
+      })
       .pipe(gulp.dest(testsDest));
   }
 
-  buildTests({
-    successInfo: '[-done:] Ready to run tests? `cd build && testem`',
-    watchingInfo: '[-info:] Watching test file changes at folders `tests/unit & tests/integration`'
+  $.watch(tests, function(event) {
+    return buildTests();
   });
 
-  return $.watch(tests, function(event) {
-    return buildTests();
+  return buildTests({
+    successInfo: '[-done:] Ready to run tests? `cd build && testem`',
+    watchingInfo: '[-info:] Watching test file changes at folders `tests/unit & tests/integration`'
   });
 });
 
