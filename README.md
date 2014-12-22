@@ -5,7 +5,7 @@
 [![NPM version][npm-image]][npm-url]   [![Build Status][travis-image]][travis-url]   [![Dependency Status][dependency-image]][dependency-url]
 
 
-> An Em(ber) command line utility to help developer(s) build an ambitious web application. It is highly inspired by other open source projects, [ember-cli](https://github.com/stefanpenner/ember-cli), [ember-tools](https://github.com/rpflorence/ember-tools), [Web Starter Kit](https://github.com/google/web-starter-kit), [Gulp](https://github.com/gulpjs/gulp/).
+> An Em(ber) command line utility to help developer(s) build an ambitious web application. It is highly inspired by some awesome open source projects, [ember-cli](https://github.com/stefanpenner/ember-cli), [ember-tools](https://github.com/rpflorence/ember-tools), [Web Starter Kit](https://github.com/google/web-starter-kit), [Gulp](https://github.com/gulpjs/gulp/).
 
 
 ## Getting Started
@@ -14,7 +14,7 @@
     npm install -g ember-rocks
 ```
 
-After it is done, you should have a global command `em` available. 
+After the installation, you should have a global command `em` available. 
 Try `em --help`, you should see a list of helper information. 
 Try `em generate --help` to see a specific command helper information.
 
@@ -22,12 +22,12 @@ Try `em generate --help` to see a specific command helper information.
 ## Features
 
 - well align with Ember-Cli project
-- gulp ( a build tool of choice ) build insanely fast via node stream api
+- gulp ( build tool of choice ) build insanely fast via node stream api
 - lighting fast development rebuild system
 - live reload on all resources
 - super powerful generator system
 - Sass language support with CSS sourcemap, trace back to original Sass defination
-- ES6 ( Next Version of javascript ) with JS sourcemap, tace back to origional ES6 defination
+- ES6 ( Next Version of javascript ) with JS sourcemap, trace back to origional ES6 defination
 - hackable express server as back end
 - simple command to build a production ready application and ready to be deployed
 - tablet and touch device support out of box. Responsive Web Design supported.
@@ -44,7 +44,21 @@ The fully stylish application works on touch and tablet devices out of box. Try 
 
 ## Ember-cli is the official **Ember** app CLI tool (Ember#2.0 and forward). Why am I building another em(ber)-cli?
 
-**Ember** is an opinionated framework, and **Ember-cli** has chosen [broccoli](https://github.com/broccolijs/broccoli) as its build tool and [Qunit](https://github.com/jquery/qunit) as its testing tool. **Ember-cli** project is trying to be an universal toolset to fit most of use cases for majority of **Ember** developers. **Ember-Cli** is awesome. 
+**Ember-Cli** is awesome and it is supported by [Ember core team](https://github.com/emberjs/rfcs/pull/15). If **Ember-Cli** is working for you, stick with it; otherwise, you can try `Ember-Rocks` and continue reading below,
+
+`TL;DR`
+
+There are a few reasons that I started with this project. 
+
+1. There was no official build tool for Ember project when I started in the middle of 2014. But now, Ember core team has announced that [**Ember-cli**](https://github.com/emberjs/rfcs/pull/15) is the official build tool to move forward. 
+
+2. **Ember-cli** has chosen [broccoli](https://github.com/broccolijs/broccoli) as its build tool. Do not get me wrong, **Broccoli** is an awesome build tool. I have even chatted with its creator, [Jo Liss](https://github.com/joliss). She is an awesome engineer. But to me, after I switched from **Grunt** to **Gulp** in the end of 2013, I have learned in and out about **Gulp** and its ecosystem. I do not want to follow the same path again from **Gulp** to **Broccoli**. Essentially, they are the same thing with different approach but solving the same set of problems. 
+
+3. **Ember-cli** has chosen [Qunit](https://github.com/jquery/qunit) as its testing tool. I was never a fan of TDD and Qunit. BDD and Mocha framework are always there to cheer me up. This is almost No-Brainer question for me since there is no addon for Mocha adapter. But now, [Ember-Mocha](https://github.com/switchfly/ember-mocha/) has released to change the game. In fact, **Ember-Mocha** also powers **Ember-Rocks** Ember testing use cases.
+
+4. **Ember-cli** project is trying to be an universal toolset to fit most of use cases for majority of **Ember** developers. I guess it is a good thing for the wide range of audience. I have a set of tools that works well for me. I will stick with it and have a full control over it if I could. Well, if **Ember-cli** works for you, great, you should stick with it since it supports by Ember core team. 
+
+5. **Ember-cli** has hided lots of complex system scripts and build logics into CLI core. For example, express server is built in so that it is hard to roll in any homebrew middlewares. Exposing Express server is becoming a necessary problem that need to be addressed.  
 
 After built a large Backbone application (>15000 LOC), I developed a set of developer toolings which fit my customized workflow very well. **Ember Rocks** approach is my opinionated toolset on building a large scaled Node.js modern web application with Ember.js framework on the client side.
 
@@ -83,6 +97,8 @@ What is on my road map? Ember Add-ons, custom components, frequent updates along
         m|mobile           # Builds an Cordova application, and ready to deploy to phone or tablet
            
         b|build            # Release your app and places it into the output path '~/build'
+
+        t|test            # Run client side integration and unit tests, rerun tests on file changes
        
     Options:
 
@@ -94,20 +110,44 @@ What is on my road map? Ember Add-ons, custom components, frequent updates along
         em [command] --help
 ```
 
-## TODO
-
-- Add ember testing support with Mocha adapter
-   ( It should work with the existing ember rocks architecture )
-
-
 ## Guide
 
-Since the project is highly inspired by [Ember-Cli](http://www.ember-cli.com/), ( both projects even share the same commands but completely different implementation under the hook, i.e. `em(ber) new`, `em(ber) generate`, `em(ber) g`, `em(ber) serve`, `em(ber) build`, etc ), **Ember Rocks** uses the same modules -- [ember resolver](https://github.com/stefanpenner/ember-jj-abrams-resolver), and [ember load initializers](https://github.com/stefanpenner/ember-load-initializers). Ember Modules system ( *client/app/* ) and the resolver guide will apply to **Ember Rocks** modules and the resolver as well.
+Since the project is highly inspired by [Ember-Cli](http://www.ember-cli.com/), ( both projects even share the same commands but completely different implementation under the hook, i.e. `em(ber) new`, `em(ber) generate`, `em(ber) g`, `em(ber) serve`, `em(ber) build`, `em(ber) test`, etc ), **Ember Rocks** uses the same modules -- [ember resolver](https://github.com/stefanpenner/ember-jj-abrams-resolver), and [ember load initializers](https://github.com/stefanpenner/ember-load-initializers). Ember Modules system ( *client/app/* ) and the resolver guide will apply to **Ember Rocks** modules and the resolver as well.
 
 * Modules and the Resolver [Documentation](http://www.ember-cli.com/#using-modules)
 
 _( More Coming Soon )_
 
+
+## Testing your app
+
+Your integration tests should be located in the folder `client/tests/integration`, and your unit tests should be located in the folder `client/test/unit`. You do not have to manually create any new test files since you could simplly use `em generate` to generate any new tests with boilerplate. If you do not know how, try `em g --help` for more details. 
+
+If you have to manually create a test file, name test file anything you want and suffix with `-test` or `_test` with file extension `.js`.
+
+You could use future **ES6** syntax in tests, and they would be pre-compiled into vanilla javascript before serving in the browsers or phantom.js.
+
+- Easiest way, the recommended way to run your test
+
+By simply running `em test` or `em t`, it would compile your testing files, build the project, launch an express server to take any requests, watch any test file changes and rerun the test again, show the result of the tests.
+
+```bash
+  em test
+```
+
+- Easy way, but requires two different processes and `testem` installed globally in your system. ( `npm install testem -g` )
+
+By executing `testem` command, you get pretty UI in terminal to see exactly what is going on with your tests. `testem` should automatically launch **chrome** and **phantomjs** to run all of your tests.
+
+```bash
+  # process 1
+  em test
+  
+  # process 2
+  cd path/to/root...
+  cd build
+  testem
+```
 
 ## Building a web app (desktop and browsers)
 
@@ -139,7 +179,7 @@ As a mobile application developer, you should be in the `~/build/cordova` folder
 
 
 ## Contributing
-Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md).
+Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md). 
 
 
 ## Release History
