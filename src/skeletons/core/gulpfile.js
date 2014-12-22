@@ -348,7 +348,7 @@ gulp.task('release', [ 'releaseServer' ], function(){
 });
 
 // Clean up the build folder, generate the test files in build folder
-gulp.task('test', ['clean', 'build', 'sass'], function(){
+gulp.task('test', ['clean', 'build', 'sass', 'express'], function(){
   var assets = $.useref.assets({searchPath: 'client'}),
     testsRoot = ['client/tests/*.{html,json}'],
 
