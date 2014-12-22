@@ -8,6 +8,7 @@
     "PhantomJS",
     "Chrome"
   ],
+  "timeout": 20000,
   "proxies": {
     "/api": {
       "port": 3001,

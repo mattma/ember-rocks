@@ -20,7 +20,6 @@ define("ember-rocks/test-loader",
 
         for (moduleName in requirejs.entries) {
           if (this.shouldLoadModule(moduleName)) {
-            console.log('required this moduleName: ', moduleName);
             require(moduleName);
           }
         }

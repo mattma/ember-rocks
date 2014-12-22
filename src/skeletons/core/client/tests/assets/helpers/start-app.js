@@ -1,31 +1,27 @@
-/* global require */
-
-// help to set the custom resolver for testing app
-import helper from './test-helper';
-
+import Ember from 'ember';
 import Application from "rocks/app";
 import Router from "rocks/router";
-import Ember from 'ember';
 
 function startApp(attrs) {
   var App;
 
   var attributes = Ember.merge({
-    rootElement: '#ember-testing',
-    LOG_ACTIVE_GENERATION:false,
-    LOG_VIEW_LOOKUPS: false,
-    LOG_MODULE_RESOLVER: false,
-    LOG_TRANSITIONS: false,
+    rootElement:              '#ember-testing',
+    LOG_ACTIVE_GENERATION:    false,
+    LOG_VIEW_LOOKUPS:         false,
+    LOG_MODULE_RESOLVER:      false,
+    LOG_TRANSITIONS:          false,
     LOG_TRANSITIONS_INTERNAL: false
   }, attrs);
 
+  // It won't update the URL, Not leak the app state
   Router.reopen({
     location: 'none'
   });
 
-  Ember.run(function(){
+  Ember.run(function () {
     App = Application.create(attributes);
-    //App.setupForTesting();
+    App.setupForTesting();
     App.injectTestHelpers();
   });
 
@@ -33,6 +29,6 @@ function startApp(attrs) {
   App.reset();
 
   return App;
-}
+};
 
 export default startApp;
