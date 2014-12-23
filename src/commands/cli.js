@@ -75,14 +75,14 @@ program
       '\n             See @arg type (above): controller and view sections for details' +
 
       '\n\n  @description Generate a new Integration Test located tests/integration/[name]-test.js' +
-      '\n\n     test        ex: em g test(s):home' +
+      '\n\n     test                ex: em g test(s):home' +
       '\n                    Generated: tests/integration/home-test.js'+
 
       '\n\n  @description Generate a new Unit Test located tests/unit/[type]/[name]-test.js' +
-      '\n\n  @arg  ex: route-test:user  [type]: route; [name]: user' +
-      '\n\n     adapter-test      ex: em g adapter-test(s):my-post' +
+      '\n\n  @arg  ex: route-test:user    [type]: route; [name]: user;' +
+      '\n\n     adapter-test        ex: em g adapter-test(s):my-post' +
       '\n                    Generated: tests/unit/adapters/my-post-test.js'+
-      '\n\n     component-test     ex: em g component-test(s):blog/post' +
+      '\n\n     component-test      ex: em g component-test(s):blog/post' +
       '\n                    Generated: tests/unit/components/blog/post-test.js'+
       '\n\n     controller-test     ex: em g controller-test(s):blog/post' +
       '\n                    Generated: tests/unit/controllers/blog/post-test.js'+
