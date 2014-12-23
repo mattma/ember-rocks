@@ -72,7 +72,38 @@ program
 
       '\n\n  @arg name: any valid string' +
       ' \n             or use \'/\'separated string to create a nested folder structure' +
-      '\n             See @arg type (above): controller and view sections for details')
+      '\n             See @arg type (above): controller and view sections for details' +
+
+      '\n\n  @description Generate a new Integration Test located tests/integration/[name]-test.js' +
+      '\n\n     test        ex: em g test(s):home' +
+      '\n                    Generated: tests/integration/home-test.js'+
+
+      '\n\n  @description Generate a new Unit Test located tests/unit/[type]/[name]-test.js' +
+      '\n\n  @arg  ex: route-test:user  [type]: route; [name]: user' +
+      '\n\n     adapter-test      ex: em g adapter-test(s):my-post' +
+      '\n                    Generated: tests/unit/adapters/my-post-test.js'+
+      '\n\n     component-test     ex: em g component-test(s):blog/post' +
+      '\n                    Generated: tests/unit/components/blog/post-test.js'+
+      '\n\n     controller-test     ex: em g controller-test(s):blog/post' +
+      '\n                    Generated: tests/unit/controllers/blog/post-test.js'+
+      '\n\n     helper-test         ex: em g helper-test(s):post' +
+      '\n                    Generated: tests/unit/helpers/post-test.js'+
+      '\n\n     initializer-test    ex: em g initializer-test(s):post' +
+      '\n                    Generated: tests/unit/initializers/post-test.js'+
+      '\n\n     mixin-test          ex: em g mixin-test(s):post' +
+      '\n                    Generated: tests/unit/mixins/post-test.js'+
+      '\n\n     model-test          ex: em g model-test(s):post' +
+      '\n                    Generated: tests/unit/models/post-test.js'+
+      '\n\n     route-test          ex: em g route-test(s):post' +
+      '\n                    Generated: tests/unit/routes/post-test.js'+
+      '\n\n     serializer-test     ex: em g serializer-test(s):post' +
+      '\n                    Generated: tests/unit/serializers/post-test.js'+
+      '\n\n     transform-test      ex: em g transform-test(s):post' +
+      '\n                    Generated: tests/unit/transforms/post-test.js'+
+      '\n\n     util-test           ex: em g util-test(s):post' +
+      '\n                    Generated: tests/unit/utils/post-test.js'+
+      '\n\n     view-test           ex: em g view-test(s):long/folder/name/post' +
+      '\n                    Generated: tests/unit/views/long/folder/name/post-test.js')
   .action(generate);
 
 program
