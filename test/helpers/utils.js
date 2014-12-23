@@ -44,6 +44,22 @@ exports.genCommandTester = function(command, pathExist, done) {
   });
 };
 
+exports.genIntegrationTestsCommandTester = function(command, fileName, done) {
+  exec(command, function(error, stdout, stderr) {
+    var fullPath = 'client/tests/integration/' + fileName;
+    stdout.should.include('[-done:]');
+    assertPathExist(fullPath, done);
+  });
+};
+
+exports.genUnitTestsCommandTester = function(command, pathExist, done) {
+  exec(command, function(error, stdout, stderr) {
+    var fullPath = 'client/tests/unit/' + pathExist;
+    stdout.should.include('[-done:]');
+    assertPathExist(fullPath, done);
+  });
+};
+
 exports.assertFolderExist = function(folderPath, done) {
     // Query the entry
     fs.lstat(folderPath, function(err, stats) {

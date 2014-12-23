@@ -127,7 +127,7 @@ describe('Command `em generate` - Wrong Argument(s)', function() {
 });
 
 
-describe('Command `em generate` - Generated and Done', function() {
+describe('Command `em generate [type](s):[name]` - File Generated and Done', function() {
     beforeEach(function(done) {
       mkdirp('client/app', done);
     });
@@ -251,3 +251,85 @@ describe('Command `em generate` - Generated and Done', function() {
     });
 
   });
+
+describe('Command `em generate test(s):[name]` - Integration Test Generated and Done', function() {
+  beforeEach(function(done) {
+    mkdirp('client/app', function(){
+      mkdirp('client/tests/integration', done);
+    });
+  });
+
+  afterEach(function(done) {
+    rm('./client', done);
+  });
+
+  it('should generate an integration test <home-test.js> when type is \'test:home\'', function(done){
+    helpers.genIntegrationTestsCommandTester('./bin/em generate test:home', 'home-test.js', done);
+  });
+
+  it('should generate an integration test <home-test.js> when type is \'tests:home\'', function(done){
+    helpers.genIntegrationTestsCommandTester('./bin/em generate tests:home', 'home-test.js', done);
+  });
+
+});
+
+describe('Command `em generate [type]-test(s):[name]` - Unit Test Generated and Done', function() {
+  beforeEach(function(done) {
+    mkdirp('client/app', function(){
+      mkdirp('client/tests/unit', done);
+    });
+  });
+
+  afterEach(function(done) {
+    rm('./client', done);
+  });
+
+  it('should generate an unit adapter test when type is \'adapter-test(s):my-post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate adapter-test:my-post', 'adapters/my-post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'component-test(s):blog/post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate component-test:blog/post', 'components/blog/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'controller-test(s):blog/post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate controller-test:blog/post', 'controllers/blog/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'helper-test:post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate helper-test:post', 'helpers/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'initializer-test:post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate initializer-test:post', 'initializers/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'mixin-test(s):post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate mixin-test:post', 'mixins/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'model-test:post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate model-test:post', 'models/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'route-test:post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate route-test:post', 'routes/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'serializer-test:post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate serializer-test:post', 'serializers/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'transform-test:post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate transform-test:post', 'transforms/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'util-test:post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate util-test:post', 'utils/post-test.js', done);
+  });
+
+  it('should generate an unit component test when type is \'view-test:long/folder/name/post\'', function(done){
+    helpers.genUnitTestsCommandTester('./bin/em generate view-test:long/folder/name/post', 'views/long/folder/name/post-test.js', done);
+  });
+
+});
