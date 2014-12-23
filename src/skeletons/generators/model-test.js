@@ -16,7 +16,7 @@ describeModel(
     it('exists', function() {
       var model = this.subject();
       // var store = this.store();
-      expect(model).to.be.ok;
+      model.should.be.ok;
     });
   }
 );

@@ -15,7 +15,7 @@ describeModule(
     // Replace this with your real tests.
     it('exists', function() {
       var controller = this.subject();
-      expect(controller).to.be.ok;
+      controller.should.be.ok;
     });
   }
 );

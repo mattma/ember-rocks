@@ -18,6 +18,6 @@ describe('<%= classifiedModuleName %>Initializer', function() {
     initialize(container, application);
 
     // you would normally confirm the results of the initializer here
-    expect(true).to.be.ok;
+    true.should.be.ok;
   });
 });

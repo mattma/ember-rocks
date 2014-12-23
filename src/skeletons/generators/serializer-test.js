@@ -15,7 +15,7 @@ describeModule(
     // Replace this with your real tests.
     it('exists', function() {
       var serializer = this.subject();
-      expect(serializer).to.be.ok;
+      serializer.should.be.ok;
     });
   }
 );

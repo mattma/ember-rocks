@@ -15,7 +15,7 @@ describeModule(
     // Replace this with your real tests.
     it('exists', function() {
       var view = this.subject();
-      expect(view).to.be.ok;
+      view.should.be.ok;
     });
   }
 );

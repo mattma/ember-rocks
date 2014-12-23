@@ -7,6 +7,6 @@ describe('<%= classifiedModuleName %>Mixin', function() {
   it('works', function() {
     var <%= classifiedModuleName %>Object = Ember.Object.extend(<%= classifiedModuleName %>Mixin);
     var subject = <%= classifiedModuleName %>Object.create();
-    expect(subject).to.be.ok;
+    subject.should.be.ok;
   });
 });
