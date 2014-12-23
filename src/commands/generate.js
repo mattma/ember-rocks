@@ -159,15 +159,32 @@ function setupTask( generator ) {
               }]
             : path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
 
-      var dirName, finalPath, destPath;
+      var dirName, finalDirName, finalPath, destPath;
+
+      // if type is test, or route-test or any sorts, it should append `-test` to the filename
+      fileName = (type.indexOf('test') > -1) ? fileName+'-test' : fileName;
 
       // if it is a string, simple call generatorEngine once
       // else it is an object(array), repeat the generatorEngine call
       if ( typeof srcPath === 'string' ) {
 
         dirName = (type === 'store') ? type : ( type.slice(-1) === 's' ) ? type : type +'s';
-        finalPath = pathNested ? dirName + pathName : dirName;
-        destPath =  path.resolve('client/app') + '/' + finalPath;
+
+        if (type.indexOf('test') > -1) {
+          if(type.indexOf('-test') > -1) {
+            var typeArray = type.split('-');
+            finalDirName = 'tests/' + typeArray[0] + 's/unit';
+          } else {
+            finalDirName = dirName + '/integration';
+          }
+        } else {
+          finalDirName = dirName;
+        }
+
+        finalPath = pathNested ? finalDirName + pathName : finalDirName;
+        destPath =  (type.indexOf('test') > -1) ?
+          path.resolve('client') + '/' + finalPath
+          : path.resolve('client/app') + '/' + finalPath;
 
         generatorEngine( type, srcPath, moduleName, fileName, finalPath, destPath );
       } else {
@@ -220,7 +237,8 @@ var generate = function(options) {
     validTypes = [
       'adapter', 'component', 'controller', 'helper', 'initializer',
       'mixin', 'model', 'route', 'serializer', 'template',
-      'transform', 'util', 'view'
+      'transform', 'util', 'view',
+      'test', 'route-test'
     ],
     gen;
 
