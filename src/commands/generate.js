@@ -173,7 +173,7 @@ function setupTask( generator ) {
         if (type.indexOf('test') > -1) {
           if(type.indexOf('-test') > -1) {
             var typeArray = type.split('-');
-            finalDirName = 'tests/' + typeArray[0] + 's/unit';
+            finalDirName = 'tests/unit/' + typeArray[0] + 's';
           } else {
             finalDirName = dirName + '/integration';
           }
