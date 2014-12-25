@@ -13,13 +13,13 @@ describe('Integration Test', function () {
     Ember.run(App, App.destroy);
   });
 
-  describe('Acceptance: <%= classifiedModuleName %>', () => {
+  describe('Acceptance: __NAMESPACE__', () => {
 
-    it('can visit /<%= dasherizedModuleName %>',  () => {
-      visit('/<%= dasherizedModuleName %>');
+    it('can visit /__DASHERIZE_NAMESPACE__',  () => {
+      visit('/__DASHERIZE_NAMESPACE__');
 
       andThen( () => {
-        currentPath().should.equal('<%= dasherizedModuleName %>');
+        currentPath().should.equal('__DASHERIZE_NAMESPACE__');
       });
     });
 

@@ -50,7 +50,7 @@ function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPat
     var dasherizeName = '';
 
     // if generating any testing files, need to clean up moduleName without "Test"
-    if( type.indexOf('-test') > -1 ) {
+    if( type.indexOf('test') > -1 ) {
       if(type.indexOf('model-test') > -1 ) {
         moduleName = moduleName.replace(/ModelTest(\s+)?$/,'');
         dasherizeName = stringUtils.dasherize(moduleName);
@@ -143,7 +143,7 @@ function setupTask( generator ) {
       var typeFolder = path.resolve('client/app', type+'s');
 
       // if client/app/[type](s) is not existed and it is not a test generator, simply create one
-      if (!fs.existsSync(typeFolder) && type.indexOf('-test') === -1 ) {
+      if (!fs.existsSync(typeFolder) && type.indexOf('test') === -1 ) {
         fs.mkdirSync(typeFolder);
         gutil.log(
           gutil.colors.gray('[-log:] Created a new folder at '),
@@ -176,7 +176,9 @@ function setupTask( generator ) {
 
         dirName = (type === 'store') ? type : ( type.slice(-1) === 's' ) ? type : type +'s';
 
+        // Figure out the type is testing generator
         if (type.indexOf('test') > -1) {
+          // Is it an Unit Test generator or Integration Test generator
           if(type.indexOf('-test') > -1) {
             var typeArray = type.split('-');
             finalDirName = 'tests/unit/' + typeArray[0] + 's';
