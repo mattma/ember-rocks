@@ -142,8 +142,8 @@ function setupTask( generator ) {
       // ignore the 'store' case, since it is already created
       var typeFolder = path.resolve('client/app', type+'s');
 
-      // if client/app/[type](s) is not existed, simply create one
-      if (!fs.existsSync(typeFolder)) {
+      // if client/app/[type](s) is not existed and it is not a test generator, simply create one
+      if (!fs.existsSync(typeFolder) && type.indexOf('-test') === -1 ) {
         fs.mkdirSync(typeFolder);
         gutil.log(
           gutil.colors.gray('[-log:] Created a new folder at '),
