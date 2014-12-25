@@ -353,7 +353,7 @@ function rerunTest() {
 }
 
 gulp.task('test', ['prepareTests'], function() {
-  $.watch('build/tests/**/*.js', rerunTest);
+  $.watch('build/tests/*.js', rerunTest);
   return rerunTest();
 });
 
