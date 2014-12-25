@@ -1,7 +1,7 @@
 import Ember from 'ember';
 import startApp from 'rocksTest/start-app';
 
-describe('Integration Test', function () {
+describe('Integration -', function () {
 
   let App;
 
@@ -13,13 +13,15 @@ describe('Integration Test', function () {
     Ember.run(App, App.destroy);
   });
 
-  describe('Acceptance: __NAMESPACE__', () => {
+  describe('__NAMESPACE__ - \'/__DASHERIZE_NAMESPACE__\' -', () => {
 
     it('can visit /__DASHERIZE_NAMESPACE__',  () => {
       visit('/__DASHERIZE_NAMESPACE__');
 
       andThen( () => {
-        currentPath().should.equal('__DASHERIZE_NAMESPACE__');
+        console.log('/__DASHERIZE_NAMESPACE__ currentPath is : ', currentPath());
+        // Replace this with your real tests.
+        currentPath().should.be.ok;
       });
     });
 

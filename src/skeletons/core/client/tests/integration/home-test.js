@@ -1,38 +1,39 @@
 import Ember from 'ember';
-// import {test} from 'ember-mocha';
 import startApp from 'rocksTest/start-app';
 
-describe('Integration Test', function () {
+describe('Integration -', function () {
 
   let App;
 
-  before(() => {
+  beforeEach(() => {
     App = startApp();
   });
 
-  after(() => {
+  afterEach(() => {
     Ember.run(App, App.destroy);
   });
 
-  describe('Homepage', function () {
+  describe('Home - \'/\' -', function () {
 
     it('should have a page title', function () {
-      visit('/')
-        .then(function () {
-          find('h2').text().should.equal(' Home Page ');
-          find('h1 a').text().should.equal(' Ember Rocks ');
-        });
+      visit('/');
+
+      andThen( () => {
+        find('h2').text().should.equal(' Home Page ');
+        find('h1 a').text().should.equal(' Ember Rocks ');
+      });
     });
 
   });
 
-  describe('User Page', function () {
+  describe('Users - \'/users\' -', function () {
 
     it('should have a page title', function () {
-      visit('/users')
-        .then(() => {
-          find('.users h2').text().should.equal(' Users Page ');
-        });
+      visit('/users');
+
+      andThen( () => {
+        find('.users h2').text().should.equal(' Users Page ');
+      });
     });
 
   });
