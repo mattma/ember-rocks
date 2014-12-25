@@ -7,22 +7,11 @@ var path = require('path'),
     gulp = require('gulp'),
     gutil = require('gulp-util'),
     replace = require('gulp-replace'),
-    rename = require('gulp-rename');
-
-function capitaliseFirstLetter(string) {
-  return string.charAt(0).toUpperCase() + string.slice(1);
-}
+    rename = require('gulp-rename'),
+    stringUtils = require('../utils/string');
 
 function isArray ( obj ) {
   return Object.prototype.toString.call(obj) === '[object Array]';
-}
-
-var STRING_CAMELIZE_REGEXP = (/(\-|_|\.|\s)+(.)?/g);
-
-function camelize(str) {
-  return str.replace(STRING_CAMELIZE_REGEXP, function(match, separator, chr) {
-    return chr ? chr.toUpperCase() : '';
-  });
 }
 
 function dashizeNameError ( filename ) {
@@ -58,11 +47,28 @@ function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPat
       process.exit(0);
     }
 
+    var dasherizeName = '';
+
+    // if generating any testing files, need to clean up moduleName without "Test"
+    if( type.indexOf('-test') > -1 ) {
+      if(type.indexOf('model-test') > -1 ) {
+        moduleName = moduleName.replace(/ModelTest(\s+)?$/,'');
+        dasherizeName = stringUtils.dasherize(moduleName);
+      } else {
+        var matcher = stringUtils.classify(type),
+          dasherizeModuleName = moduleName.replace(new RegExp(matcher), '');
+
+        moduleName = moduleName.replace(/Test(\s+)?$/,'');
+        dasherizeName = stringUtils.dasherize(dasherizeModuleName);
+      }
+    }
+
     // @TODO when generate multiple files on certain type
     // moduleName is not being defined correctly.
     // fine for now, since multiple file generation are only template file
     return gulp.src( srcPath )
       .pipe(replace(/__NAMESPACE__/g, moduleName))
+      .pipe(replace(/__DASHERIZE_NAMESPACE__/g, dasherizeName))
       .pipe(rename({
         basename : fileName,
         extname: ext
@@ -119,19 +125,19 @@ function setupTask( generator ) {
             name[i] = 'components';
           }
           pathName += '/' + name[i];
-          moduleName += capitaliseFirstLetter(name[i]);
+          moduleName += stringUtils.capitalize(name[i]);
         }
         // append fileName to the moduleName string
-        moduleName += capitaliseFirstLetter(fileName);
+        moduleName += stringUtils.capitalize(fileName);
       } else {
         pathName += name;
-        moduleName += capitaliseFirstLetter(name);
+        moduleName += stringUtils.capitalize(name);
       }
 
-      moduleName += capitaliseFirstLetter(type);
+      moduleName += stringUtils.capitalize(type);
 
       // if it has dashized moduleName, it will camelize
-      moduleName = camelize(moduleName);
+      moduleName = stringUtils.classify(moduleName);
 
       // ignore the 'store' case, since it is already created
       var typeFolder = path.resolve('client/app', type+'s');

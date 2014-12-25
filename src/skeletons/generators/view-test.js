@@ -5,8 +5,8 @@ import {
 } from 'ember-mocha';
 
 describeModule(
-  'view:<%= dasherizedModuleName %>',
-  '<%= classifiedModuleName %>View',
+  'view:__DASHERIZE_NAMESPACE__',
+  '__NAMESPACE__',
   {
     // Specify the other units that are required for this test.
     // needs: ['controller:foo']

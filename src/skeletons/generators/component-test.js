@@ -5,8 +5,8 @@ import {
 } from 'ember-mocha';
 
 describeComponent(
-  '<%= dasherizedModuleName %>',
-  '<%= classifiedModuleName %>Component',
+  '__DASHERIZE_NAMESPACE__',
+  '__NAMESPACE__',
   {
     // specify the other units that are required for this test
     // needs: ['component:foo', 'helper:bar']

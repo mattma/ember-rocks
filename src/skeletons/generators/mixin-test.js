@@ -1,12 +1,12 @@
 /* jshint expr:true */
 import Ember from 'ember';
-import <%= classifiedModuleName %>Mixin from '<%= dasherizedPackageName %>/mixins/<%= dasherizedModuleName %>';
+import __NAMESPACE__ from 'rocks/mixins/__DASHERIZE_NAMESPACE__';
 
-describe('<%= classifiedModuleName %>Mixin', function() {
+describe('__NAMESPACE__', function() {
   // Replace this with your real tests.
   it('works', function() {
-    var <%= classifiedModuleName %>Object = Ember.Object.extend(<%= classifiedModuleName %>Mixin);
-    var subject = <%= classifiedModuleName %>Object.create();
+    var __NAMESPACE__Object = Ember.Object.extend(__NAMESPACE__);
+    var subject = __NAMESPACE__Object.create();
     subject.should.be.ok;
   });
 });

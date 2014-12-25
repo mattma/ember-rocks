@@ -1,12 +1,12 @@
 /* jshint expr:true */
 import {
-  <%= camelizedModuleName %>
-} from '<%= dasherizedPackageName %>/helpers/<%= dasherizedModuleName %>';
+  __NAMESPACE__
+} from 'rocks/helpers/__DASHERIZE_NAMESPACE__';
 
-describe('<%= classifiedModuleName %>Helper', function() {
+describe('__NAMESPACE__', function() {
   // Replace this with your real tests.
   it('works', function() {
-    var result = <%= camelizedModuleName %>(42);
+    var result = __NAMESPACE__(42);
     result.should.be.ok;
   });
 });

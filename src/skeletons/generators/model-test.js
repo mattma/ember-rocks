@@ -5,11 +5,11 @@ import {
 } from 'ember-mocha';
 
 describeModel(
-  '<%= dasherizedModuleName %>',
-  '<%= classifiedModuleName %>',
+  '__DASHERIZE_NAMESPACE__',
+  '__NAMESPACE__',
   {
     // Specify the other units that are required for this test.
-    <%= needs %>
+    needs: [ ]
   },
   function() {
     // Replace this with your real tests.

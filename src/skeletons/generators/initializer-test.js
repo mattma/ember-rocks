@@ -1,8 +1,8 @@
 /* jshint expr:true */
 import Ember from 'ember';
-import { initialize } from '<%= dasherizedPackageName %>/initializers/<%= dasherizedModuleName %>';
+import { initialize } from 'rocks/initializers/__DASHERIZE_NAMESPACE__';
 
-describe('<%= classifiedModuleName %>Initializer', function() {
+describe('__NAMESPACE__', function() {
   var container, application;
 
   beforeEach(function() {

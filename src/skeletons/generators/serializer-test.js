@@ -5,8 +5,8 @@ import {
 } from 'ember-mocha';
 
 describeModule(
-  'serializer:<%= dasherizedModuleName %>',
-  '<%= classifiedModuleName %>Serializer',
+  'serializer:__DASHERIZE_NAMESPACE__',
+  '__NAMESPACE__',
   {
     // Specify the other units that are required for this test.
     // needs: ['serializer:foo']

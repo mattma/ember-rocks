@@ -1,10 +1,10 @@
 /* jshint expr:true */
-import <%= camelizedModuleName %> from '<%= dasherizedPackageName %>/utils/<%= dasherizedModuleName %>';
+import __NAMESPACE__ from 'rocks/utils/__DASHERIZE_NAMESPACE__';
 
-describe('<%= camelizedModuleName %>', function() {
+describe('__NAMESPACE__', function() {
   // Replace this with your real tests.
   it('works', function() {
-    var result = <%= camelizedModuleName %>();
+    var result = __NAMESPACE__();
     result.should.be.ok;
   });
 });
