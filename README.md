@@ -29,6 +29,7 @@ Try `em generate --help` to see a specific command helper information.
 - Sass language support with CSS sourcemap, trace back to original Sass defination
 - ES6 ( Next Version of javascript ) with JS sourcemap, trace back to origional ES6 defination
 - hackable express server as back end
+- Mocha testing framework and BDD should.js style supported by default
 - simple command to build a production ready application and ready to be deployed
 - tablet and touch device support out of box. Responsive Web Design supported.
 - hybird web app on native phone and tablet via Cordova package. For iOS, Andriod, Blackberry, and more
@@ -141,6 +142,10 @@ By simply running `em test` or `em t`, it would compile your testing files, buil
 
 By executing `testem` command, you get pretty UI in terminal to see exactly what is going on with your tests. `testem` should automatically launch **chrome** and **phantomjs** to run all of your tests.
 
+Note: After `em test` run, the current processer continues running and watching any existing test files change, and it will rebuild the whole test suite and rerun all the tests. 
+
+GotCha: Any new/delete file won't rerun the tests or add to the current test run loop. You need to stop the current processer and rerun the command `em test` to pick up the new/delete testing files.
+
 ```bash
   # process 1
   em test
@@ -185,6 +190,15 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 
 ## Release History
+
+#### 0.6.0 (Christmas Day, 2014)
+
+- [Major/New Command] `em test`|`em t` has been added into the project. It will auto watch/compile/run/rerun all existing integration/unit tests. See `em --help` from CLI or [Testing your app](#testing-your-app) for more details.
+- [Major/New Generators] A whole suite of testing generators (integration & unit) have been added into `em generate`|`em g` command and followed the existing generator syntax. ex: `em g [*-]test(s):[name]`. See `em g -h` in CLI for usage and description. Here is a list of new generators: 'test', 'adapter-test', 'component-test', 'controller-test', 'helper-test', 'initializer-test', 'mixin-test', 'model-test', 'route-test', 'serializer-test', 'transform-test', 'util-test', 'view-test'
+- New set of unit tests on generating integration/unit test files have been added for testing the behavior of `em g [*-]test:[name]` command
+- Prepare a sample integration test inside `client/tests/integration` with two passing tests when run `em t` at first time
+- Global string utility to handle project-wide string transformation
+- Update testing documentation in Readme
 
 #### 0.5.2 (12/19/14)
 

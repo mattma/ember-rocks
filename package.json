@@ -1,7 +1,7 @@
 {
   "name": "ember-rocks",
   "description": "An Em(ber) command line utility to help you build an ambitious web application",
-  "version": "0.5.2",
+  "version": "0.6.0",
   "homepage": "https://github.com/mattma/ember-rocks",
   "author": {
     "name": "Matt Ma",

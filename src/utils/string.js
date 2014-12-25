@@ -1,4 +1,4 @@
-// Credits to Ember-Cli with some changes
+// Credits/Thanks to Ember-Cli/Ember.js project
 // https://github.com/ember-cli/ember-cli/blob/master/lib/utilities/string.js
 
 'use strict';
