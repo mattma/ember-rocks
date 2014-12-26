@@ -81,8 +81,6 @@ describe("Created directory", function() {
         "test-app/config.rb",
         "test-app/gulpfile.js",
         "test-app/package.json",
-        //"test-app/karma.conf.js",
-        "test-app/README.md",
         "test-app/README.md",
 
         // Server Folder
