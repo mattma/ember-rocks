@@ -124,6 +124,8 @@ _( More Coming Soon )_
 
 ## Testing your app
 
+**Ember-Rocks** testing story is 100% based on [Ember Testing Guide](http://emberjs.com/guides/testing/) so that **Guide's methods, properties** would apply to your testing story just like **Ember** default testing framework - QUnit. With a couple of variations, first, it uses [Mocha testing framework](http://mochajs.org/) with the assetion library [should.js](https://github.com/shouldjs/should.js) in BDD style; Second, you could optionally use ES6 syntax inside your tests and it would be transpiled into vanilla javascript in the development phase. 
+
 Integration tests are located in the folder `client/tests/integration`, and Unit tests are located in the folder `client/test/unit`. You do not have to manually create any new test files since you could simplly use `em generate` to generate any new tests with pre-defined boilerplate. If you do not know how, use `em g --help` for more details. 
 
 If you have to manually create a test file, name test file anything you want, suffix `-test` or `_test` with file extension `.js`.
