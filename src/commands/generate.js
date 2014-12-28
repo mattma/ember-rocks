@@ -47,7 +47,8 @@ function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPat
       process.exit(0);
     }
 
-    var dasherizeName = '';
+    var dasherizeName = '',
+      classifyName= '';
 
     // if generating any testing files, need to clean up moduleName without "Test"
     if( type.indexOf('test') > -1 ) {
@@ -61,6 +62,12 @@ function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPat
         moduleName = moduleName.replace(/Test(\s+)?$/,'');
         dasherizeName = stringUtils.dasherize(dasherizeModuleName);
       }
+    } else {
+      var matcher = stringUtils.capitalize(type),
+        localModuleName = moduleName.replace(new RegExp(matcher),'');
+
+      dasherizeName = stringUtils.dasherize(localModuleName);
+      classifyName = stringUtils.classify(localModuleName);
     }
 
     // @TODO when generate multiple files on certain type
@@ -68,7 +75,10 @@ function generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPat
     // fine for now, since multiple file generation are only template file
     return gulp.src( srcPath )
       .pipe(replace(/__NAMESPACE__/g, moduleName))
+      // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
       .pipe(replace(/__DASHERIZE_NAMESPACE__/g, dasherizeName))
+      // __CLASSIFY_NAMESPACE__ mainly used in regular generator
+      .pipe(replace(/__CLASSIFY_NAMESPACE__/g, classifyName))
       .pipe(rename({
         basename : fileName,
         extname: ext
