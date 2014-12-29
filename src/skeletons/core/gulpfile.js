@@ -1,17 +1,17 @@
 'use strict';
 
-var gulp = require('gulp'),
-  gutil = require('gulp-util'),
-  fs = require('fs'),
-  $ = require('gulp-load-plugins')(),
-  to5 = require('gulp-6to5'),
-  del = require('del'),
-  opn = require('opn'),
-  pagespeed = require('psi'),
-  testem = new (require('testem'))(),
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var fs = require('fs');
+var $ = require('gulp-load-plugins')();
+var to5 = require('gulp-6to5');
+var del = require('del');
+var opn = require('opn');
+var pagespeed = require('psi');
+var testem = new (require('testem'))();
 
-  Htmlbars = require('ember-cli-htmlbars'),
-  compiler = new Htmlbars();
+var Htmlbars = require('ember-cli-htmlbars');
+var compiler = new Htmlbars();
 
 // https://github.com/ai/autoprefixer. Default: > 1%, last 2 versions, Firefox ESR, Opera 12.1
 // Android, BlackBerry or bb, iOS
@@ -21,71 +21,95 @@ var gulp = require('gulp'),
 // Blackberry and stock Android browsers will not be used in last n versions. Add them by name:
 // autoprefixer("last 1 version", "BlackBerry 10", "Android 4")
 var AutoPrefixerConfig = [
-    'ie >= 9',
-    'ie_mob >= 10',
-    'ff >= 30',
-    'chrome >= 34',
-    'safari >= 7',
-    'opera >= 23',
-    'ios >= 7',
-    'android >= 4.4',
-    'bb >= 10'
-  ],
-  clientFolder = 'client',
-  path = require('path'),
-  server = require('tiny-lr')(),
-  compileAllSrc, // Compile all src if filename start with _, or single without leading _
-  sassFilePath, // Used to dynamicially set sass path, default to all sass
-  // Local Variable
-  options = {
-    hostname: 'localhost',
-    port: 3001
-  };
+  'ie >= 9',
+  'ie_mob >= 10',
+  'ff >= 30',
+  'chrome >= 34',
+  'safari >= 7',
+  'opera >= 23',
+  'ios >= 7',
+  'android >= 4.4',
+  'bb >= 10'
+];
+var clientFolder = 'client';
+var path = require('path');
+var server = require('tiny-lr')();
+var compileAllSrc; // Compile all src if filename start with _, or single without leading _
+var sassFilePath; // Used to dynamically set sass path, default to all sass
+// Local Variable
+var options = {
+  hostname: 'localhost',
+  port:     3001
+};
 
 // task: jshint
 // @describe need to be passed to be able to build the project
-gulp.task('lint', function() {
+gulp.task('jshint', function (callback) {
   var src = [
     'gulpfile.js',
     'client/app/**/*.js',
+    'client/tests/**/*.js',
     '!client/app/utils/register-components.js',
     'server/**/*.js'
   ];
 
-  return gulp.src( src )
-      .pipe($.jshint())
-      .pipe($.jshint.reporter('jshint-stylish'));
+  return gulp.src(src)
+    .pipe($.jshint())
+    .pipe($.jshint.reporter('jshint-stylish'));
+});
+
+// task: jscs
+// @describe need to be passed to be able to build the project
+gulp.task('jscs', function () {
+  var src = [
+    '*.js',
+    'client/**/*.js',
+    'server/**/*.js'
+  ];
+
+  return gulp.src(src)
+    .pipe($.jscs());
+});
+
+gulp.task('lint', ['jscs', 'jshint'], function () {
+  gutil.log(
+    gutil.colors.green('[-done:] Awesome! Both'),
+    gutil.colors.bold('jscs'),
+    gutil.colors.green('and'),
+    gutil.colors.bold('jshint'),
+    gutil.colors.green('have been satisfied!')
+  );
 });
 
 // task: stripLRScript
 // @describe  Strip out the LiveReload Script tag in HTML
-gulp.task('stripLRScript', function() {
-  return gulp.src([ clientFolder + '/index.html' ])
-  .pipe(
+gulp.task('stripLRScript', function () {
+  return gulp.src([clientFolder + '/index.html'])
+    .pipe(
     $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
       '')
   )
-  .pipe(gulp.dest(path.join(__dirname, clientFolder)));
+    .pipe(gulp.dest(path.join(__dirname, clientFolder)));
 });
 
 // task: injectLRScript
 // @describe  inject livereload script into index.html
-gulp.task('injectLRScript', function() {
-  return gulp.src([ clientFolder + '/index.html' ])
-  .pipe(
+gulp.task('injectLRScript', function () {
+  return gulp.src([clientFolder + '/index.html'])
+    .pipe(
     $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
       '')
   )
-  .pipe(
+    .pipe(
     $.replace(/<\/body>/,
       '<script src="http://localhost:35729/livereload.js?snipver=1"></script>\n</body>')
   )
-  .pipe(gulp.dest(path.join(__dirname, clientFolder)));
+    .pipe(gulp.dest(path.join(__dirname, clientFolder)));
 });
 
 // Smart compile: if filename start with _, when save it will compile the whole project.
 // if filename is all text without _, when save it will only compile changed file
-gulp.task('sass', function() {
+gulp.task('sass', function () {
   // var allSrc = clientFolder + '/assets/styles/sass/**/*.{scss,sass}';
   // var compileFiles = ( compileAllSrc ) ? allSrc : ( sassFilePath ) ? sassFilePath : allSrc;
   var nestedFolder = void 0;
@@ -93,17 +117,17 @@ gulp.task('sass', function() {
   // When it is single file for compiling, it needs to render it in the right folder path.
   // default it is   appName +'/resources/css',
   // If it is nested folder inside sass/path/to/compileFilename, it will alert the dest folder path
-  if ( !compileAllSrc ) {
-    var basepathArr = path.dirname(sassFilePath).split('/'),
-      len = basepathArr.length,
-      lastPos = len -1,
-      sassPos = basepathArr.indexOf('sass');
+  if (!compileAllSrc) {
+    var basepathArr = path.dirname(sassFilePath).split('/');
+    var len = basepathArr.length;
+    var lastPos = len - 1;
+    var sassPos = basepathArr.indexOf('sass');
 
-    if ( len > sassPos ) {
+    if (len > sassPos) {
       nestedFolder = '';
       var diff = lastPos - sassPos;
-      for ( var i = 0 ; i < diff; i++ ) {
-        var foldername = '/' + basepathArr[ lastPos - i ];
+      for (var i = 0; i < diff; i++) {
+        var foldername = '/' + basepathArr[lastPos - i];
         nestedFolder = foldername.concat(nestedFolder);
       }
     }
@@ -121,37 +145,39 @@ gulp.task('sass', function() {
   //     precision: 3,
   //     loadPath: ['/assets/styles/sass']
   //   }))
-    return $.rubySass('client/assets/styles/sass', {
-      sourcemap: true,
-      style: 'expanded',
-      loadPath: ['/assets/styles/sass']
+  return $.rubySass('client/assets/styles/sass', {
+    sourcemap: true,
+    style:     'expanded',
+    loadPath:  ['/assets/styles/sass']
+  })
+    .on('error', function (err) {
+      console.log(err.message);
     })
-    .on('error', function (err) { console.log(err.message); })
     .pipe($.autoprefixer({
       browsers: AutoPrefixerConfig
     }))
     .pipe($.sourcemaps.write('maps', {
       includeContent: false,
-      sourceRoot: destPath
+      sourceRoot:     destPath
     }))
-    .pipe(gulp.dest( destPath ))
+    .pipe(gulp.dest(destPath))
     .pipe($.size({title: 'compiled css'}))
-    .pipe($.notify({ message: 'Compiled <%= file.relative %>' }));
+    .pipe($.notify({message: 'Compiled <%= file.relative %>'}));
 });
 
 // https://github.com/sindresorhus/gulp-imagemin
 // @describe remove extra pixels out of images
-gulp.task('imagemin', function() {
-  var imgSrc = clientFolder + '/assets/images/**/*',
-    imgDst = 'build/client/assets/images/';
+gulp.task('imagemin', function () {
+  var imgSrc = clientFolder + '/assets/images/**/*';
+  var imgDst = 'build/client/assets/images/';
 
   return gulp.src(imgSrc)
     .pipe(
-      $.imagemin({
-        progressive: true,
-        interlaced: true
-      })
-    )
+    $.imagemin({
+      progressive: true,
+      interlaced:  true
+    })
+  )
     .pipe(gulp.dest(imgDst))
     .pipe($.size({title: '[-log:] images folder'}));
 });
@@ -161,11 +187,11 @@ gulp.task('buildjs', function () {
   return gulp.src(clientFolder + '/app/**/*.js')
     .pipe($.sourcemaps.init())
     .pipe(to5({
-      modules: 'amd',
-      sourceRoot: __dirname + '/client/app',
-      moduleRoot: 'rocks',
+      modules:      'amd',
+      sourceRoot:   __dirname + '/client/app',
+      moduleRoot:   'rocks',
       amdModuleIds: true,
-      sourceMap: true
+      sourceMap:    true
     }))
     .pipe($.concat('application.js'))
     .pipe($.sourcemaps.write())
@@ -177,66 +203,66 @@ gulp.task('buildhbs', function () {
   return gulp.src(clientFolder + '/app/templates/**/*.hbs')
     .pipe($.handlebars({
       handlebars: require('ember-handlebars'),
-      compiler: compiler.processString
+      compiler:   compiler.processString
     }))
     .pipe($.wrapAmd({
-      deps: ['exports'],          // dependency array
-      params: ['__exports__'],        // params for callback
-      moduleRoot: 'client/app/',
+      deps:         ['exports'],          // dependency array
+      params:       ['__exports__'],        // params for callback
+      moduleRoot:   'client/app/',
       modulePrefix: 'rocks/'
     }))
-    .pipe( $.replace(
-        /return export default/, 'return __exports__["default"] ='
+    .pipe($.replace(
+      /return export default/, 'return __exports__["default"] ='
     ))
     .pipe($.concat('templates.js'))
     .pipe(gulp.dest(clientFolder + '/assets/build/'));
 });
 
 // @describe build front end code base
-gulp.task('build', ['buildjs', 'buildhbs'], function(){
+gulp.task('build', ['buildjs', 'buildhbs'], function () {
   gutil.log(
     gutil.colors.green('[-done:] application.js and templates.js has been generated!')
   );
 });
 
 // @describe Remove the 'build/' folder, start from a clean slate
-gulp.task('clean', del.bind(null, ['build'], {force : true} ));
+gulp.task('clean', del.bind(null, ['build'], {force: true}));
 
 // @describe In release step, use production ready libraries
-gulp.task('envProd', function(){
-  var src = 'client/index.html',
-    dest = 'client';
+gulp.task('envProd', function () {
+  var src = 'client/index.html';
+  var dest = 'client';
 
   return gulp.src(src)
-  //.pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.js/, '/vendors/jquery/dist/jquery.min.js'))
-      .pipe( $.replace(
-          /\/vendors\/handlebars\/handlebars.js/, '/vendors/handlebars/handlebars.min.js'
-      ))
-      .pipe( $.replace( /\/vendors\/ember\/ember.js/, '/vendors/ember/ember.prod.js'))
-      .pipe(gulp.dest(dest));
+    //.pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.js/, '/vendors/jquery/dist/jquery.min.js'))
+    .pipe($.replace(
+      /\/vendors\/handlebars\/handlebars.js/, '/vendors/handlebars/handlebars.min.js'
+    ))
+    .pipe($.replace(/\/vendors\/ember\/ember.js/, '/vendors/ember/ember.prod.js'))
+    .pipe(gulp.dest(dest));
 });
 
 // @describe In development step, use development libraries
-gulp.task('envDev', function(){
-  var src = 'client/index.html',
-    dest = 'client';
+gulp.task('envDev', function () {
+  var src = 'client/index.html';
+  var dest = 'client';
 
   return gulp.src(src)
-  //.pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.min.js/, '/vendors/jquery/dist/jquery.js'))
-      .pipe( $.replace(
-          /\/vendors\/handlebars\/handlebars.min.js/, '/vendors/handlebars/handlebars.js'
-      ))
-      .pipe( $.replace( /\/vendors\/ember\/ember.prod.js/, '/vendors/ember/ember.js'))
-      .pipe(gulp.dest(dest));
+    //.pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.min.js/, '/vendors/jquery/dist/jquery.js'))
+    .pipe($.replace(
+      /\/vendors\/handlebars\/handlebars.min.js/, '/vendors/handlebars/handlebars.js'
+    ))
+    .pipe($.replace(/\/vendors\/ember\/ember.prod.js/, '/vendors/ember/ember.js'))
+    .pipe(gulp.dest(dest));
 });
 
-function wireUpMobile(callback) {
-  var appPath = 'build/cordova/www/',
-    indexPath = appPath+ 'index.html',
-    mainAppPath = appPath + 'assets/scripts/main.min.js',
-    scriptPath = appPath + 'assets/scripts/',
-    serverAppPath = 'build/server/app.js',
-    serverPath = 'build/server';
+function wireUpMobile (callback) {
+  var appPath = 'build/cordova/www/';
+  var indexPath = appPath + 'index.html';
+  var mainAppPath = appPath + 'assets/scripts/main.min.js';
+  var scriptPath = appPath + 'assets/scripts/';
+  var serverAppPath = 'build/server/app.js';
+  var serverPath = 'build/server';
 
   gulp.src(indexPath)
     .pipe($.replace(/base(?:\s+)?href=\"\/\"/, 'base href=""'))
@@ -250,24 +276,24 @@ function wireUpMobile(callback) {
     .pipe($.replace(/emberApp(?:\s+)?=(?:\s+)?\'client\'/, 'emberApp = \'cordova/www\''))
     .pipe(gulp.dest(serverPath));
 
-  del(['build/client'], {force : true}, function() {
+  del(['build/client'], {force: true}, function () {
     callback();
   });
 }
 
 // copy all the core files and release to production
-gulp.task('releaseMobile', [ 'release' ],
-  function(callback){
-    var cordovaPath = 'node_modules/ember-rocks/src/skeletons/cordova/**/*',
-      clientPath = 'build/client/**/*',
-      cordovaAppPath = 'build/cordova/www',
-      dest = 'build/cordova/';
+gulp.task('releaseMobile', ['release'],
+  function (callback) {
+    var cordovaPath = 'node_modules/ember-rocks/src/skeletons/cordova/**/*';
+    var clientPath = 'build/client/**/*';
+    var cordovaAppPath = 'build/cordova/www';
+    var dest = 'build/cordova/';
 
     gulp.src(cordovaPath)
       .pipe(gulp.dest(dest));
 
     gulp.src(clientPath)
-      .on('end', function(){
+      .on('end', function () {
         wireUpMobile(callback);
       })
       .pipe(gulp.dest(cordovaAppPath));
@@ -275,59 +301,60 @@ gulp.task('releaseMobile', [ 'release' ],
 
 // copy all the core files and release to production
 gulp.task('releaseClient',
-  [ 'clean', 'sass', 'lint', 'build', 'envProd'],
-  function(){
-    var src = 'client/index.html',
-      dest = 'build/client',
-      assets = $.useref.assets({searchPath: 'client'});
+  ['clean', 'sass', 'lint', 'build', 'envProd'],
+  function () {
+    var src = 'client/index.html';
+    var dest = 'build/client';
+    var assets = $.useref.assets({searchPath: 'client'});
 
-  // clean task has to be done
-  // imagemin will minify all images and copy into build
-  gulp.start('imagemin');
+    // clean task has to be done
+    // imagemin will minify all images and copy into build
+    gulp.start('imagemin');
 
-  return gulp.src(src)
-    .pipe(
-    $.replace(/<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
-      '')
+    return gulp.src(src)
+      .pipe(
+      $.replace(
+        /<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
+        '')
     )
-    // handle file concatenation but not minification.
-    // usage: <!-- build:js scripts/combined.js --><!-- endbuild -->
-    .pipe(assets)
-    // Concatenate And Minify JavaScript
-    .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
-    // Remove Any Unused CSS, Used as needed
-    // .pipe($.if('*.css', $.uncss({
-    //   html: src,
-    //   ignore: [ ] // CSS Selectors for UnCSS to ignore
-    // })))
-    // Concatenate And Minify Styles
-    .pipe($.if('*.css', $.csso()))
-    .pipe(assets.restore())
-    .pipe($.useref())
-    .pipe($.if('*.html', $.minifyHtml()))
-    .pipe(gulp.dest(dest))
-    .pipe($.size({title: '[-log:] client folder'}));
+      // handle file concatenation but not minification.
+      // usage: <!-- build:js scripts/combined.js --><!-- endbuild -->
+      .pipe(assets)
+      // Concatenate And Minify JavaScript
+      .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
+      // Remove Any Unused CSS, Used as needed
+      // .pipe($.if('*.css', $.uncss({
+      //   html: src,
+      //   ignore: [ ] // CSS Selectors for UnCSS to ignore
+      // })))
+      // Concatenate And Minify Styles
+      .pipe($.if('*.css', $.csso()))
+      .pipe(assets.restore())
+      .pipe($.useref())
+      .pipe($.if('*.html', $.minifyHtml()))
+      .pipe(gulp.dest(dest))
+      .pipe($.size({title: '[-log:] client folder'}));
   });
 
-gulp.task('copyServer', function(){
+gulp.task('copyServer', function () {
   var src = [
-      'server/**/*.*'
-    ],
-    dest = 'build/server';
+    'server/**/*.*'
+  ];
+  var dest = 'build/server';
 
   return gulp.src(src, {base: 'server/.'})
     .pipe(gulp.dest(dest))
     .pipe($.size({title: '[-log:] server folder'}));
 });
 
-gulp.task('releaseServer', [ 'releaseClient' ], function(){
+gulp.task('releaseServer', ['releaseClient'], function () {
   gulp.start('copyServer');
   return gulp.src('package.json')
-    .pipe( $.replace( /"devDependencies"[\S\s]+?},/, ''))
+    .pipe($.replace(/"devDependencies"[\S\s]+?},/, ''))
     .pipe(gulp.dest('build'));
 });
 
-gulp.task('release', [ 'releaseServer' ], function(){
+gulp.task('release', ['releaseServer'], function () {
   // reset the development libraries
   gulp.start('envDev');
   gutil.log(
@@ -348,25 +375,25 @@ gulp.task('release', [ 'releaseServer' ], function(){
   );
 });
 
-function rerunTest() {
+function rerunTest () {
   gulp.start('testem');
 }
 
-gulp.task('test', ['prepareTests'], function() {
+gulp.task('test', ['prepareTests'], function () {
   $.watch('build/tests/*.js', rerunTest);
   return rerunTest();
 });
 
-gulp.task('testem', function(){
+gulp.task('testem', function () {
   var options = {
-    file: 'build/testem.json',  // configFile
-    port: 7357,  // testem default port
-    cwd: 'build',  // testem rootpath
+    file:     'build/testem.json',  // configFile
+    port:     7357,  // testem default port
+    cwd:      'build',  // testem rootpath
     // timeout: 10000,
     reporter: 'tap',
     parallel: 1
   };
-  testem.startCI(options, function(exitCode) {
+  testem.startCI(options, function (exitCode) {
     if (!testem.app.reporter.total) {
       console.log(
         'No tests were run, ensure that you have a test launcher (e.g. PhantomJS) enabled.'
@@ -379,27 +406,27 @@ gulp.task('testem', function(){
 
 // Clean up the build folder, generate the test files in build folder
 // if express server has started, use the existing server for testing
-gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function(){
-  var assets = $.useref.assets({searchPath: 'client'}),
-    testsRoot = ['client/tests/*.{html,json}'],
+gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function () {
+  var assets = $.useref.assets({searchPath: 'client'});
+  var testsRoot = ['client/tests/*.{html,json}'];
 
-    dest = 'build',
-    testsDest = dest + '/tests',
-    testsScriptsDest = testsDest + '/assets/scripts',
+  var dest = 'build';
+  var testsDest = dest + '/tests';
+  var testsScriptsDest = testsDest + '/assets/scripts';
 
-    // loading test-support scripts and stylesheet
-    testsLibs = [
-      'client/tests/assets/scripts/*.js',
-      'client/assets/vendors/ember-mocha/ember-mocha.amd.js',
-      'client/assets/vendors/mocha/mocha.{js,css}',
-      'client/assets/vendors/should/should.js',
-      'client/assets/vendors/ember-mocha-adapter/adapter.js'
-    ],
+  // loading test-support scripts and stylesheet
+  var testsLibs = [
+    'client/tests/assets/scripts/*.js',
+    'client/assets/vendors/ember-mocha/ember-mocha.amd.js',
+    'client/assets/vendors/mocha/mocha.{js,css}',
+    'client/assets/vendors/should/should.js',
+    'client/assets/vendors/ember-mocha-adapter/adapter.js'
+  ];
 
-    tests = ['client/tests/assets/helpers/**/*.js',
-      'client/tests/unit/**/*.js',
-      'client/tests/integration/**/*.js'
-    ];
+  var tests = ['client/tests/assets/helpers/**/*.js',
+    'client/tests/unit/**/*.js',
+    'client/tests/integration/**/*.js'
+  ];
 
   // Copy the tests/ folder root file.
   // 'test.html' & 'testem.json' configuration file
@@ -419,17 +446,17 @@ gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function(){
     .pipe(gulp.dest(testsDest));
 
   // Rebuild ES6 tests, generate a test file at `build/tests/tests.js`
-  function buildTests(reminder) {
+  function buildTests (reminder) {
     return gulp.src(tests)
       .pipe(to5({
-        modules: 'amd',
-        sourceRoot: __dirname + '/client/app',
-        moduleRoot: 'rocksTest',
+        modules:      'amd',
+        sourceRoot:   __dirname + '/client/app',
+        moduleRoot:   'rocksTest',
         amdModuleIds: true
       }))
       .pipe($.concat('tests.js'))
-      .on('end', function(){
-        if(reminder) {
+      .on('end', function () {
+        if (reminder) {
           gutil.log(
             gutil.colors.green(reminder.successInfo)
           );
@@ -441,18 +468,18 @@ gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function(){
       .pipe(gulp.dest(testsDest));
   }
 
-  $.watch(tests, function(event) {
+  $.watch(tests, function (event) {
     return buildTests();
   });
 
   return buildTests({
-    successInfo: '[-done:] Using `testem` UI by executing `cd build && testem`',
+    successInfo:  '[-done:] Using `testem` UI by executing `cd build && testem`',
     watchingInfo: '[-info:] Watching test file changes at folders `tests/unit & tests/integration`'
   });
 });
 
 // task: express
-gulp.task('express', function() {
+gulp.task('express', function () {
   require('./server/app')(options);
 });
 
@@ -467,16 +494,16 @@ gulp.task('open', function () {
 // More Info:  https://www.npmjs.org/package/psi
 gulp.task('pagespeed', pagespeed.bind(null, {
   // key: key
-  nokey: 'true',
+  nokey:    'true',
   // Update `url` below to the public URL for your site
-  url: 'http://mattmadesign.com',
+  url:      'http://mattmadesign.com',
   // default strategy: desktop. Values: mobile, desktop
   strategy: 'mobile',
-  locale: 'en_US'
+  locale:   'en_US'
 }));
 
 // Notifies livereload of changes detected by `gulp.watch()`
-function notifyLivereload(event) {
+function notifyLivereload (event) {
   // `gulp.watch()` events provide an absolute path
   //  make it relative path. Both relative and absolute should work
   var fileName = path.relative(__dirname, event.path);
@@ -488,8 +515,8 @@ function notifyLivereload(event) {
   });
 }
 
-function rebuildProject(event) {
-  switch( path.extname(event.path) ) {
+function rebuildProject (event) {
+  switch (path.extname(event.path)) {
     case '.hbs' :
       gulp.start('buildhbs');
       break;
@@ -502,26 +529,28 @@ function rebuildProject(event) {
   }
 }
 
-gulp.task('serve', [ 'express', 'sass', 'build', 'injectLRScript' ], function() {
+gulp.task('serve', ['express', 'sass', 'build', 'injectLRScript'], function () {
   gulp.start('open');
-  $.watch( clientFolder + '/assets/styles/sass/**/*.{scss,sass}', function(event) {
+  $.watch(clientFolder + '/assets/styles/sass/**/*.{scss,sass}', function (event) {
     sassFilePath = event.path; // Only pass changed file to the sass task
     var basename = path.basename(sassFilePath);
     compileAllSrc = ( basename.indexOf('_') > -1 ) ? true : false;
 
-    if ( sassFilePath && !compileAllSrc ) {
-      var contents = fs.readFileSync(sassFilePath, 'utf8'),
-        exist = contents.match(/[^\/\/| ]@import/gm);
+    if (sassFilePath && !compileAllSrc) {
+      var contents = fs.readFileSync(sassFilePath, 'utf8');
+      var exist = contents.match(/[^\/\/| ]@import/gm);
 
-      if ( exist && exist.length > 0 ) {
+      if (exist && exist.length > 0) {
         compileAllSrc = true;
       }
     }
     gulp.start('sass');
   });
 
-  server.listen(35729, function(err) {
-    if (err) { return gutil.log('\n[-log]', gutil.colors.red(err)); }
+  server.listen(35729, function (err) {
+    if (err) {
+      return gutil.log('\n[-log]', gutil.colors.red(err));
+    }
 
     $.watch(clientFolder + '/app/**/*.js', rebuildProject);
     $.watch(clientFolder + '/app/**/*.hbs', rebuildProject);
@@ -532,4 +561,4 @@ gulp.task('serve', [ 'express', 'sass', 'build', 'injectLRScript' ], function() 
   });
 });
 
-gulp.task('default', [ 'serve' ]);
+gulp.task('default', ['serve']);

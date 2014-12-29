@@ -191,6 +191,18 @@ As a mobile application developer, you should be in the `~/build/cordova` folder
 
 Following the coding standard from [Ember.js best practice](https://github.com/emberjs/ember.js/blob/master/.jscsrc), use coding quality project - [JSCS](https://github.com/jscs-dev/node-jscs) to assert code quality. To verify your own code, first, install **jscs** global via `npm install jscs -g`. Then run a test, 
 
+Running `jscs` in a easy way ( Bonus: running jshint and jscs in one shot ):
+
+```bash
+  # running jscs code quality assertion
+  gulp jscs
+
+  # running both jshint and jscs in one command
+  gulp lint
+```
+
+Running `jscs` in a hard way:
+
 ```bash
   # make sure that `jscs` installed globally
   jscs --version  
@@ -200,6 +212,9 @@ Following the coding standard from [Ember.js best practice](https://github.com/e
 
   # server side *.js code quality
   jscs server/**/*.js
+  
+  # gulpfile.js code quality
+  jscs *.js
 ```
 
 
