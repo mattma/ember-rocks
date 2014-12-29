@@ -1,7 +1,13 @@
 {
   "esnext": true,
-  "excludeFiles": ["node_modules/**"],
-  "additionalRules": [ "server/_utils/jscs-rules/*.js" ],
+  "excludeFiles": [
+    "node_modules/**",
+    "client/assets/build/*.js",
+    "client/assets/vendors/**"
+  ],
+  "additionalRules": [
+    "server/_utils/jscs-rules/*.js"
+  ],
   "disallowMultipleVarDeclWithAssignment": true,
   "requireCurlyBraces": [
     "if",
