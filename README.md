@@ -187,6 +187,22 @@ Originally, I want to have some commands in **ember-rocks** to symlink some comm
 As a mobile application developer, you should be in the `~/build/cordova` folder with [cordova](https://www.npmjs.org/package/cordova) installed in your computer globally. You could use `cordova` command primarily to do whatever you want to your *ember* powered web app. If you have any question with this decision, feel free to create an issue or feature requests so that we could discuss it further. 
 
 
+## Coding Styles
+
+Following the coding standard from [Ember.js best practice](https://github.com/emberjs/ember.js/blob/master/.jscsrc), use coding quality project - [JSCS](https://github.com/jscs-dev/node-jscs) to assert code quality. To verify your own code, first, install **jscs** global via `npm install jscs -g`. Then run a test, 
+
+```bash
+  # make sure that `jscs` installed globally
+  jscs --version  
+
+  # client side *.js code quality
+  jscs client/**/*.js
+
+  # server side *.js code quality
+  jscs server/**/*.js
+```
+
+
 ## Contributing
 Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md). 
 
