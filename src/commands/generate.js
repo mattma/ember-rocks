@@ -227,6 +227,27 @@ function setupTask( generator ) {
     });
 }
 
+// Check the fullname attribute is correct or not
+var VALID_FULL_NAME_REGEXP = /^[^:]+.+:[^:]+$/;
+
+function errorHandler(fullName) {
+  gutil.log(
+    gutil.colors.red('[-Error:] Invalid argument, expected: `type:name` got: '),
+    gutil.colors.bold(fullName)
+  );
+
+  gutil.log(
+    '[-Syntax:]',
+    gutil.colors.cyan('type:name'), ' ex: em generate route:post'
+  );
+
+  gutil.log(
+    gutil.colors.red('[-Error:]'),
+    'See \'em generate --help\''
+  );
+  process.exit(0);
+}
+
 var generate = function(options) {
 
   // if the folder 'client/app' is not existed
@@ -250,61 +271,53 @@ var generate = function(options) {
     process.exit(0);
   }
 
-  var typeAndName = argv._.slice()[1],
-    generatorAndTasks = typeAndName.length ? typeAndName.split(':') : undefined,
-    validTypes = [
+  var typeAndName = argv._.slice()[1];
+
+  if (!VALID_FULL_NAME_REGEXP.test(typeAndName)) {
+    errorHandler(typeAndName);
+  }
+
+  var validTypes = [
       'adapter', 'component', 'controller', 'helper', 'initializer', 'mixin', 'model',
       'route', 'serializer', 'template', 'transform', 'util', 'view',
       'test', 'adapter-test', 'component-test', 'controller-test', 'helper-test', 'initializer-test',
       'mixin-test', 'model-test', 'route-test', 'serializer-test', 'transform-test', 'util-test', 'view-test'
-    ],
-    gen;
+    ];
+  var gen;
 
-  // Arugments must be in this format: type:name
-  if( generatorAndTasks && generatorAndTasks.length > 1 ) {
-    var type = generatorAndTasks[0],
-        name = generatorAndTasks[1];
+  var generatorAndTasks = typeAndName.split(':', 2);
+  var type = generatorAndTasks[0];
+  var name = generatorAndTasks[1];
 
-    // type could be either route or routes
-    type = ( type.slice(-1) === 's' ) ? type.substring(0, type.length - 1) : type;
+  // type could be either route or routes
+  type = ( type.slice(-1) === 's' ) ? type.substring(0, type.length - 1) : type;
 
-    // Type must be in the `validTypes` array
-    if (validTypes.indexOf(type) > -1) {
-      // Name must be a valid string
-      if( name.length > 0 ) {
-        gen = {
-          type: type,
-          name: name
-        };
-      } else {
-        gutil.log(
-          gutil.colors.red('[-Error:] '),
-          gutil.colors.cyan( name ),
-          gutil.colors.red(' must be a valid string.')
-        );
-        gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
-        process.exit(0);
-      }
+  // Type must be in the `validTypes` array
+  if (validTypes.indexOf(type) > -1) {
+    // Name must be a valid string
+    if( name.length > 0 ) {
+      gen = {
+        type: type,
+        name: name
+      };
     } else {
       gutil.log(
         gutil.colors.red('[-Error:] '),
-        gutil.colors.cyan(type),
-        gutil.colors.red(' is not a valid type.')
+        gutil.colors.cyan( name ),
+        gutil.colors.red(' must be a valid string.')
       );
-      gutil.log(
-        gutil.colors.bold('[-note:] valid types are'),
-        gutil.colors.cyan( validTypes.join(', ') )
-      );
+      gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
       process.exit(0);
     }
   } else {
     gutil.log(
-      gutil.colors.red('[-Error:] Provide the wrong argument. It must be in this format '),
-      gutil.colors.cyan('type:name'), ' ex: em generate route:post'
+      gutil.colors.red('[-Error:] '),
+      gutil.colors.cyan(type),
+      gutil.colors.red(' is not a valid type.')
     );
     gutil.log(
-      gutil.colors.red('[-Error:]'),
-      'See \'em generate --help\''
+      gutil.colors.bold('[-note:] valid types are'),
+      gutil.colors.cyan( validTypes.join(', ') )
     );
     process.exit(0);
   }

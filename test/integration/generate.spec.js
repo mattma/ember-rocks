@@ -28,7 +28,8 @@ describe('Command `em generate` - Wrong Argument(s)', function() {
     exec('./bin/em generate route', function(error, stdout) {
       // need to test the program should successfully shut down
       stdout.should.include('[-Error:]');
-      stdout.should.include('Provide the wrong argument.');
+      stdout.should.include('Invalid argument, expected: `type:name` got:');
+      stdout.should.include('[-Syntax:]');
       stdout.should.include('type:name');
       stdout.should.include('See \'em generate --help\'');
       done();
@@ -39,10 +40,9 @@ describe('Command `em generate` - Wrong Argument(s)', function() {
     exec('./bin/em generate :post', function(error, stdout) {
       // need to test the program should successfully shut down
       stdout.should.include('[-Error:]');
-      stdout.should.include('  is not a valid type.');
-      stdout.should.include('[-note:]');
-      stdout.should.include('valid types are adapter, component, controller, helper, ' +
-                'initializer, mixin, model, route, serializer, template, transform, util, view' );
+      stdout.should.include('Invalid argument, expected: `type:name` got:');
+      stdout.should.include(' :post');
+      stdout.should.include('See \'em generate --help\'');
       done();
     });
   });
@@ -51,7 +51,8 @@ describe('Command `em generate` - Wrong Argument(s)', function() {
     exec('./bin/em generate route:', function(error, stdout) {
       // need to test the program should successfully shut down
       stdout.should.include('[-Error:]');
-      stdout.should.include('  must be a valid string');
+      stdout.should.include('Invalid argument, expected: `type:name` got:');
+      stdout.should.include('route:');
       stdout.should.include('See \'em generate --help\'');
       done();
     });
