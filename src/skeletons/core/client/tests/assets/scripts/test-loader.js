@@ -32,7 +32,7 @@
 
       return {
         'default': TestLoader
-      }
+      };
     }
   );
 })();

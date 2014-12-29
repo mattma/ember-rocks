@@ -1,44 +1,65 @@
 {
+  // http://jshint.com/docs/options/
+  // in flavor of emberjs jshint standard
+  "esnext": true,
   "node": true,
   "browser": true,
-  "esnext": true,
-  "bitwise": true,
-  "camelcase": false,
+  "boss": true,
   "curly": true,
+  "debug": false,
+  "devel": true,
   "eqeqeq": true,
+  "evil": true,
+  "forin": false,
   "immed": true,
-  "indent": 2,
+  // suppresses most of the warnings about possibly unsafe line breakings
+  "laxbreak": false,
   "newcap": true,
   "noarg": true,
-  "quotmark": "single",
+  "noempty": false,
+  "nonew": false,
+  "nomen": false,
+  "onevar": false,
+  "plusplus": false,
+  "regexp": false,
   "undef": true,
-  "unused": "vars",
+  "sub": true,
   "strict": false,
+  "white": false,
+  "eqnull": true,
   "trailing": true,
+  "unused": "vars",
+  // my custom prefer flavor
+  "bitwise": true,
+  "camelcase": false,
+  "indent": 2,
+  // optional using single or double quote
+  // "quotmark": "single",
   "smarttabs": true,
   "maxdepth": 4,
   "maxlen": 100,
-  "laxbreak": true,
+  // suppresses warnings about comma-first coding style
   "laxcomma": true,
-
-  "predef": {
-    "document": true,
-    "window": true
-  },
-
-  "globals": {
-    "global": false,
-    "process": false,
-    "console": false,
-    "Buffer": false,
-    "require": false,
-    "__filename": false,
-    "__dirname": false,
-    "module": false,
-    "exports": false,
-    "window": false,
-    "alert": false,
-    "jQuery": false,
-    "Ember": false
-  }
+  "predef": [
+    "document",
+    "window",
+    "console",
+    // avoid conflict with globals
+    // "-Promise",
+    // library global: requirejs
+    "define",
+    "require",
+    // mocha test framework globals
+    "describe",
+    "it",
+    "beforeEach",
+    "afterEach",
+    // ember testing globals
+    "visit",
+    "andThen",
+    "find",
+    "describeModule",
+    "describeModel",
+    "describeComponent"
+  ]
 }

@@ -86,9 +86,9 @@ gulp.task('injectLRScript', function() {
 // Smart compile: if filename start with _, when save it will compile the whole project.
 // if filename is all text without _, when save it will only compile changed file
 gulp.task('sass', function() {
-  var allSrc = clientFolder + '/assets/styles/sass/**/*.{scss,sass}',
-      compileFiles = ( compileAllSrc ) ? allSrc : ( sassFilePath ) ? sassFilePath : allSrc,
-      nestedFolder = void 0;
+  // var allSrc = clientFolder + '/assets/styles/sass/**/*.{scss,sass}';
+  // var compileFiles = ( compileAllSrc ) ? allSrc : ( sassFilePath ) ? sassFilePath : allSrc;
+  var nestedFolder = void 0;
 
   // When it is single file for compiling, it needs to render it in the right folder path.
   // default it is   appName +'/resources/css',

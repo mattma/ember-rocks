@@ -29,6 +29,6 @@ function startApp(attrs) {
   App.reset();
 
   return App;
-};
+}
 
 export default startApp;

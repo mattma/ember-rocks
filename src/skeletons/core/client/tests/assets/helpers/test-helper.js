@@ -1,4 +1,4 @@
-/* globals require, mocha */
+/* globals mocha, $ */
 import resolver from './resolver';
 import { setResolver } from 'ember-mocha';
 
