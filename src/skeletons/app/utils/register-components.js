@@ -1,28 +1,29 @@
 /* global requirejs */
 /* global require */
 
-function registerComponents(container) {
-  var seen = requirejs._eak_seen,
-    templates = seen,
-    match;
+function registerComponents (container) {
+  var seen = requirejs._eak_seen;
+  var templates = seen;
+  var match;
 
-  if (!templates) { return; }
+  if (!templates) {
+    return;
+  }
 
   for (var prop in templates) {
-    if ( match = prop.match(/templates\/components\/(.*)$/) ) {
+    if (match = prop.match(/templates\/components\/(.*)$/)) {
       require(prop, null, null, true);
       registerComponent(container, match[1]);
     }
   }
 }
 
-
-function registerComponent(container, name) {
+function registerComponent (container, name) {
   Ember.assert('You provided a template named \'components/' +
-    name + '\', but custom components must include a \'-\'', name.match(/-/));
+  name + '\', but custom components must include a \'-\'', name.match(/-/));
 
-  var fullName         = 'component:' + name,
-      templateFullName = 'template:components/' + name;
+  var fullName = 'component:' + name;
+  var templateFullName = 'template:components/' + name;
 
   container.injection(fullName, 'layout', templateFullName);
 
