@@ -1,9 +1,11 @@
 import Ember from 'ember';
 
-// ensure we don't share routes between all Router instances
+/**
+ * Handle URL between hash and history API automatically
+ * ensure we don't share routes between all Router instances
+ * @attr location: {string} // 'history', 'auto', 'hash'
+ */
 var Router = Ember.Router.extend({
-  // Create a clean URL, without the #/
-  // 'history', 'auto', 'hash'
   location: 'auto'
 });
 

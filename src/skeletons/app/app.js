@@ -1,7 +1,14 @@
 import Ember from 'ember';
 import Resolver from 'ember/resolver';
 import loadInitializers from 'ember/load-initializers';
-//import registerComponents from 'rocks/utils/register-components';
+
+/**
+ * Flag to enable/disable model factory injections (disabled by default)
+ * If model factory injections are enabled, models should not be
+ * accessed globally (only through `container.lookupFactory('model:modelName'))`);
+ * @type {Boolean}
+ */
+Ember.MODEL_FACTORY_INJECTIONS = true;
 
 var App = Ember.Application.extend({
     LOG_ACTIVE_GENERATION: true,
@@ -14,12 +21,5 @@ var App = Ember.Application.extend({
 });
 
 loadInitializers(App, 'rocks');
-
-// App.initializer({
-//  name: 'Register Components',
-//  initialize: function(container) {
-//    registerComponents(container);
-//  }
-// });
 
 export default App;

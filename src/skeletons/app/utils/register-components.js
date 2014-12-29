@@ -1,6 +1,16 @@
 /* global requirejs */
 /* global require */
 
+/*
+  // usage
+  App.initializer({
+   name: 'Register Components',
+   initialize: function(container) {
+     registerComponents(container);
+   }
+  });
+ */
+
 function registerComponents (container) {
   var seen = requirejs._eak_seen;
   var templates = seen;
