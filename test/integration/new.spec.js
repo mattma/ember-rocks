@@ -54,7 +54,6 @@ describe("Created directory", function() {
         "test-app/client/app/adapters",
         "test-app/client/app/components",
         "test-app/client/app/controllers",
-        "test-app/client/app/helpers",
         "test-app/client/app/models",
         "test-app/client/app/routes",
         "test-app/client/app/store",
