@@ -1,0 +1,18 @@
+{
+  "esnext": true,
+  "excludeFiles": ["node_modules/**"],
+  "additionalRules": [ "server/_utils/jscs-rules/*.js" ],
+  "disallowMultipleVarDeclWithAssignment": true,
+  "requireCurlyBraces": [
+    "if",
+    "else",
+    "for",
+    "while",
+    "do",
+    "try",
+    "catch"
+  ],
+  "disallowTrailingWhitespace": true,
+  "disallowTrailingComma": true,
+  "validateIndentation": 2
+}

@@ -1,4 +1,4 @@
-module.exports = function(options) {
+module.exports = function (options) {
   var PUBLIC_PATH, VIEWS_PATH, app, express, fs, emberApp,
     sysPath, env, logger, favicon, cookieParser, bodyParser;
 
@@ -24,7 +24,7 @@ module.exports = function(options) {
   app.use(favicon());
   app.use(logger('dev'));
   app.use(bodyParser.json());
-  app.use(bodyParser.urlencoded({ extended: true }));
+  app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
   //app.use(express.methodOverride());
   app.use(express.static(PUBLIC_PATH));
@@ -45,10 +45,10 @@ module.exports = function(options) {
   app.use('/', rootRoute);
 
   // catch 404 and forward to error handler
-  app.use(function(req, res, next) {
-      var err = new Error('Not Found');
-      err.status = 404;
-      next(err);
+  app.use(function (req, res, next) {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
   });
 
   // error handlers
@@ -67,30 +67,30 @@ module.exports = function(options) {
         port: 3001
       };
     }
-      app.use(function(err, req, res, next) {
-          res.status(err.status || 500);
-          res.render('error', {
-              message: err.message,
-              error: err
-          });
+    app.use(function (err, req, res, next) {
+      res.status(err.status || 500);
+      res.render('error', {
+        message: err.message,
+        error:   err
       });
+    });
   }
 
   // production error handler
   // no stacktraces leaked to user
-  app.use(function(err, req, res, next) {
-      res.status(err.status || 500);
-      res.render('error', {
-          message: err.message,
-          error: {}
-      });
+  app.use(function (err, req, res, next) {
+    res.status(err.status || 500);
+    res.render('error', {
+      message: err.message,
+      error:   {}
+    });
   });
 
-  return app.listen(options.port, function() {
-    return console.log (
+  return app.listen(options.port, function () {
+    return console.log(
       'Starting web server on port ' + options.port + ' in ' + app.locals.settings.env + ' mode'
     );
-  }).on('error', function(err) {
+  }).on('error', function (err) {
     if (err.code === 'EADDRINUSE') {
       return console.log('Port ' + options.port + '  is already in use by another process.');
     }
