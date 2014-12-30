@@ -52,6 +52,8 @@
     // mocha test framework globals
     "describe",
     "it",
+    "before",
+    "after",
     "beforeEach",
     "afterEach",
     // ember testing globals

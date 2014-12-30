@@ -44,7 +44,7 @@ var options = {
 
 // task: jshint
 // @describe need to be passed to be able to build the project
-gulp.task('jshint', function (callback) {
+gulp.task('jshint', function () {
   var src = [
     'gulpfile.js',
     'client/app/**/*.js',
