@@ -74,7 +74,7 @@ program
       ' \n             or use \'/\'separated string to create a nested folder structure' +
       '\n             See @arg type (above): controller and view sections for details' +
 
-      '\n\n  @description Generate a new Integration Test located tests/integration/[name]-test.js' +
+      '\n\n  @description Generate a new Integration Test located tests/integration/[name]-test.js'+
       '\n\n     test                ex: em g test(s):home' +
       '\n                    Generated: tests/integration/home-test.js'+
 
