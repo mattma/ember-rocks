@@ -55,6 +55,12 @@
     "visit",
     "andThen",
     "find",
+    "fillIn",
+    "click",
+    "currentPath",
+    "currentRouteName",
+    "currentURL",
+    // ember-mocha module
     "describeModule",
     "describeModel",
     "describeComponent"

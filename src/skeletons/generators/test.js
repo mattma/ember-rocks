@@ -1,3 +1,4 @@
+/*jshint -W030 */
 import Ember from 'ember';
 import startApp from 'rocksTest/start-app';
 

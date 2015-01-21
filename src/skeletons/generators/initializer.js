@@ -1,4 +1,3 @@
-import Ember from 'ember';
 // Setup module Factory logic at 'client/app/utils/__DASHERIZE_NAMESPACE__.js'
 import __CLASSIFY_NAMESPACE__ from 'rocks/utils/__DASHERIZE_NAMESPACE__';
 
