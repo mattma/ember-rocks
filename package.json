@@ -49,15 +49,15 @@
     "gulp": "^3.8.10",
     "gulp-jshint": "^1.9.0",
     "gulp-rename": "^1.2.0",
-    "gulp-replace": "^0.5.0",
-    "gulp-util": "^3.0.0",
+    "gulp-replace": "^0.5.2",
+    "gulp-util": "^3.0.2",
     "liftoff": "^2.0.0",
-    "minimist": "^0.2.0",
-    "pretty-hrtime": "^0.2.1",
-    "resolve": "^0.7.4",
+    "minimist": "^1.1.0",
+    "pretty-hrtime": "^1.0.0",
+    "resolve": "^1.0.0",
     "rimraf": "^2.2.8",
-    "semver": "^3.0.1",
-    "tildify": "^0.2.0"
+    "semver": "^4.2.0",
+    "tildify": "^1.0.0"
   },
   "devDependencies": {
     "mocha": "*",
