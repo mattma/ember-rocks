@@ -297,7 +297,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## License
 
-Copyright (c) 2014 [Matt Ma](http://mattmadesign.com)
+Copyright (c) 2015 [Matt Ma](http://mattmadesign.com)
 
 Ember Rocks is [MIT Licensed](./LICENSE.md).
 
