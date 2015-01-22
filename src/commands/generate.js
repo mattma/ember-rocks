@@ -1,14 +1,14 @@
 'use strict';
 
-var path = require('path'),
-  fs = require('fs'),
-  argv = require('minimist')(process.argv.slice(2)),
-  tildify = require('tildify'),
-  gulp = require('gulp'),
-  gutil = require('gulp-util'),
-  replace = require('gulp-replace'),
-  rename = require('gulp-rename'),
-  stringUtils = require('../utils/string');
+var path = require('path');
+var fs = require('fs');
+var argv = require('minimist')(process.argv.slice(2));
+var tildify = require('tildify');
+var gulp = require('gulp');
+var gutil = require('gulp-util');
+var replace = require('gulp-replace');
+var rename = require('gulp-rename');
+var stringUtils = require('../utils/string');
 
 function isArray (obj) {
   return Object.prototype.toString.call(obj) === '[object Array]';
@@ -29,9 +29,8 @@ function dashizeNameError (filename) {
 }
 
 function generatorEngine (type, srcPath, moduleName, fileName, finalPath, destPath) {
-
-  var ext = (type === 'template') ? '.hbs' : '.js',
-    fullFilePath = destPath + '/' + fileName + ext;
+  var ext = (type === 'template') ? '.hbs' : '.js';
+  var fullFilePath = destPath + '/' + fileName + ext;
 
   // if the file has existed, it will abort the task
   if (fs.existsSync(fullFilePath)) {
@@ -47,9 +46,9 @@ function generatorEngine (type, srcPath, moduleName, fileName, finalPath, destPa
     process.exit(0);
   }
 
-  var dasherizeName = '',
-    classifyName = '',
-    matcher;
+  var dasherizeName = '';
+  var classifyName = '';
+  var matcher;
 
   // if generating any testing files, need to clean up moduleName without "Test"
   if (type.indexOf('test') > -1) {
@@ -99,12 +98,12 @@ function setupTask (generator) {
   //   task: gen
   //   @describe	generate an model,view,store,controller from base template
   return gulp.task('gen', function () {
-    var type = generator.type,
-      name = generator.name,
-      pathName = '',
-      moduleName = '',
-      i = 0,
-      pathNested;
+    var type = generator.type;
+    var name = generator.name;
+    var pathName = '';
+    var moduleName = '';
+    var i = 0;
+    var pathNested;
 
     if (name.indexOf('/') > -1) {
       name = name.split('/');
@@ -184,7 +183,6 @@ function setupTask (generator) {
     // if it is a string, simple call generatorEngine once
     // else it is an object(array), repeat the generatorEngine call
     if (typeof srcPath === 'string') {
-
       dirName = (type === 'store') ? type : ( type.slice(-1) === 's' ) ? type : type + 's';
 
       // Figure out the type is testing generator
@@ -207,12 +205,11 @@ function setupTask (generator) {
 
       generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPath);
     } else {
-
       for (var j = 0, l = srcPath.length; j < l; j++) {
-        var _type = srcPath[j].type,
+        var _type = srcPath[j].type;
         // when original type is 'component'
         // it will create a template file at 'templates/components' folder
-          injection = srcPath[j].injection;
+        var injection = srcPath[j].injection;
 
         dirName = (_type === 'store') ? _type : ( _type.slice(-1) === 's' ) ? _type : _type + 's';
         dirName = ( injection ) ? dirName + '/' + injection : dirName;
@@ -250,7 +247,6 @@ function errorHandler (fullName) {
 }
 
 var generate = function (options) {
-
   // if the folder 'client/app' is not existed
   // can assume that the project may not be created by Ember Rocks
   if (!fs.existsSync('client') && !fs.existsSync('client/app')) {

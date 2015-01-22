@@ -1,10 +1,10 @@
 'use strict';
 
-var tildify = require('tildify'),
-    gutil = require('gulp-util'),
-    semver = require('semver'),
-    path = require('path'),
-    logEvents = require('./logEvents');
+var tildify = require('tildify');
+var gutil = require('gulp-util');
+var semver = require('semver');
+var path = require('path');
+var logEvents = require('./logEvents');
 
 function callback (env) {
   if (!env.modulePath && !env.configPath) {
@@ -19,8 +19,8 @@ function callback (env) {
     process.exit(1);
   }
 
-  var localGulpPackage = path.resolve( env.cwd, 'node_modules', 'gulp/package'),
-    cliPackage = require( localGulpPackage );
+  var localGulpPackage = path.resolve(env.cwd, 'node_modules', 'gulp/package');
+  var cliPackage = require(localGulpPackage);
 
   // check for semver difference between cli and local installation
   if (semver.gt(cliPackage.version, env.modulePackage.version)) {
@@ -41,7 +41,7 @@ function callback (env) {
   var gulpInst = require(env.modulePath);
 
   logEvents(gulpInst);
-  gutil.log('Using gulpfile', gutil.colors.magenta( tildify(env.configPath) ));
+  gutil.log('Using gulpfile', gutil.colors.magenta(tildify(env.configPath)));
 
   process.nextTick(function () {
     gulpInst.start.apply(gulpInst, [callback.command]);
