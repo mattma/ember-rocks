@@ -10,10 +10,6 @@ var replace = require('gulp-replace');
 var rename = require('gulp-rename');
 var stringUtils = require('../utils/string');
 
-function isArray (obj) {
-  return Object.prototype.toString.call(obj) === '[object Array]';
-}
-
 function validateComponentName (filename) {
   if (filename.indexOf('-') === -1) {
     gutil.log(
@@ -128,7 +124,7 @@ function setupTask (generator) {
       validateComponentName(fileName);
     }
 
-    if (isArray(name)) {
+    if (pathNested) {
       // build up the nested path
       for (; i < name.length; i++) {
         // 'component' and 'components' resolve as a 'app/templates/components/'
