@@ -24,11 +24,7 @@ function validateComponentName (filename) {
   }
 }
 
-function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
-  var ext = (type === 'template') ? '.hbs' : '.js';
-  var fullFilePath = destPath + '/' + fileName + ext;
-
-  // if the file has existed, it will abort the task
+function checkFileExisted (fullFilePath, fileName, ext, destPath) {
   if (fs.existsSync(fullFilePath)) {
     gutil.log(
       gutil.colors.red('[-Error:] '),
@@ -41,6 +37,14 @@ function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
     );
     process.exit(0);
   }
+}
+
+function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
+  var ext = (type === 'template') ? '.hbs' : '.js';
+  var fullFilePath = destPath + '/' + fileName + ext;
+
+  // if the file has existed, it will abort the task
+  checkFileExisted(fullFilePath, fileName, ext, destPath);
 
   var dasherizeName = '';
   var classifyName = '';
