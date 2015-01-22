@@ -18,7 +18,7 @@ exports.assertPathsExist = function(paths, done) {
 
   paths.forEach(function(path) {
     fs.exists(path, function(exists) {
-      ("" + path + ":" + exists).should.equal("" + path + ":true");
+      ('' + path + ':' + exists).should.equal('' + path + ':true');
       exists.should.equal(true);
       isFinished();
     });
@@ -28,7 +28,7 @@ exports.assertPathsExist = function(paths, done) {
 // check a file path is existed or not
 var assertPathExist = function(path, done) {
   fs.exists(path, function(exists) {
-    ("" + path + ":" + exists).should.equal("" + path + ":true");
+    ('' + path + ':' + exists).should.equal('' + path + ':true');
     exists.should.equal(true);
     done();
   });
