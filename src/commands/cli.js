@@ -38,6 +38,10 @@ program
   .command('g')
   .alias('generate')
   .description('Generate a new file with ES6 support in the ember app')
+  .option(
+    '-T, --test [path]',
+    '# also generate the unit test file in client/test/unit folder'
+  )
   .usage('[type:[name | /nested/folder/to/name]]' +
   '\n\n  @description Generate a new file located app/[type]/[name].js' +
   '\n\n  @arg type: ' +
@@ -147,7 +151,8 @@ program.on('--help', function () {
     '\n\n      @description Generate a new file ember app folder' +
     '\n\n      @info \'em generate --help\' for addtional helper information ' +
     '\n\n      @example  em generate route(s):posts/post' +
-    '\n      @example  em generate component(s)/x-foo'
+    '\n\n      @example  em generate component(s)/x-foo' +
+    '\n      @example  em generate route:posts/post --test'
   );
   console.log('');
   console.log('    $ em serve');

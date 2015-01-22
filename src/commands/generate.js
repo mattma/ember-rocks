@@ -2,7 +2,6 @@
 
 var path = require('path');
 var fs = require('fs');
-var argv = require('minimist')(process.argv.slice(2));
 var tildify = require('tildify');
 var gulp = require('gulp');
 var gutil = require('gulp-util');
@@ -113,7 +112,7 @@ function generatorEngine (type, srcPath, injection, moduleName, fileName, destPa
     .pipe(gulp.dest(destPath));
 }
 
-function setupTask (generator) {
+function setupTask (generator, isGeneratingTest) {
   // task: gen
   // @describe	generate an model,view,store,controller from base template
   return gulp.task('gen', function () {
@@ -268,7 +267,7 @@ function errorHandler (fullName) {
   process.exit(0);
 }
 
-var generate = function (options) {
+var generate = function (generator, options) {
   // if the folder 'client/app' is not existed
   // can assume that the project may not be created by Ember Rocks
   if (!fs.existsSync('client') && !fs.existsSync('client/app')) {
@@ -284,16 +283,14 @@ var generate = function (options) {
   }
 
   // Error out when user did not provide any argument
-  if (argv._.length < 2) {
+  if (!generator || typeof generator !== 'string') {
     gutil.log(gutil.colors.red('[-Error:] Missing type:name argument.'), 'ex: em new route:post');
     gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
     process.exit(0);
   }
 
-  var typeAndName = argv._.slice()[1];
-
-  if (!VALID_FULL_NAME_REGEXP.test(typeAndName)) {
-    errorHandler(typeAndName);
+  if (!VALID_FULL_NAME_REGEXP.test(generator)) {
+    errorHandler(generator);
   }
 
   var validTypes = [
@@ -304,9 +301,11 @@ var generate = function (options) {
     'transform-test', 'util-test', 'view-test'
   ];
   var gen;
-  var generatorAndTasks = typeAndName.split(':', 2);
+  var generatorAndTasks = generator.split(':', 2);
   var type = generatorAndTasks[0];
   var name = generatorAndTasks[1];
+  // check for the options mode, to generate an unit test file or not
+  var isGeneratingTest = options.test || false;
 
   // type could be either route or routes
   type = (type.slice(-1) === 's') ? type.substring(0, type.length - 1) : type;
@@ -341,7 +340,7 @@ var generate = function (options) {
     process.exit(0);
   }
 
-  setupTask(gen);
+  setupTask(gen, isGeneratingTest);
   // Trigger the generator task
   gulp.start('gen');
 };
