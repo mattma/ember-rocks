@@ -26,9 +26,9 @@ gulp.task('lint', function () {
 // @describe need to be passed to be able to build the project
 gulp.task('jscs', function () {
   var src = [
-    //'gulpfile.js',
-    'test/**/*.js'
-    //'src/**/*.js'
+    'gulpfile.js',
+    'test/**/*.js',
+    'src/**/*.js'
   ];
 
   return gulp.src(src)

@@ -1,10 +1,10 @@
 'use strict';
 
-var prettyTime = require('pretty-hrtime'),
-    gutil = require('gulp-util');
+var prettyTime = require('pretty-hrtime');
+var gutil = require('gulp-util');
 
 // format orchestrator errors
-function formatError(e) {
+function formatError (e) {
   if (!e.err) {
     return e.message;
   }
@@ -22,8 +22,7 @@ function formatError(e) {
 }
 
 // wire up logging events
-var logEvents = function logEvents(gulpInst) {
-
+function logEvents (gulpInst) {
   gulpInst.on('task_start', function (e) {
     // TODO: batch these
     // so when 5 tasks start at once it only logs one time with all 5
