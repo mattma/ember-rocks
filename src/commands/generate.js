@@ -261,7 +261,7 @@ var generate = function (options) {
     process.exit(1);
   }
 
-  // Error out when user did not provide any arugments
+  // Error out when user did not provide any argument
   if (argv._.length < 2) {
     gutil.log(gutil.colors.red('[-Error:] Missing type:name argument.'), 'ex: em new route:post');
     gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
@@ -282,13 +282,12 @@ var generate = function (options) {
     'transform-test', 'util-test', 'view-test'
   ];
   var gen;
-
   var generatorAndTasks = typeAndName.split(':', 2);
   var type = generatorAndTasks[0];
   var name = generatorAndTasks[1];
 
   // type could be either route or routes
-  type = ( type.slice(-1) === 's' ) ? type.substring(0, type.length - 1) : type;
+  type = (type.slice(-1) === 's') ? type.substring(0, type.length - 1) : type;
 
   // Type must be in the `validTypes` array
   if (validTypes.indexOf(type) > -1) {
