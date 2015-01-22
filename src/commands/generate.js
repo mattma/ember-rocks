@@ -102,6 +102,8 @@ function setupTask (generator) {
     var pathNested; // Boolean
     var fileName; // setup the fileName which used for rename module
 
+    // based on the passing name arguments, to determine it is an nested folder structure
+    // or it is a simple file generation. assign a var `fileName` for current file name
     if (name.indexOf('/') > -1) {
       name = name.split('/');
       pathNested = true;
