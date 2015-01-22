@@ -14,7 +14,7 @@ function isArray (obj) {
   return Object.prototype.toString.call(obj) === '[object Array]';
 }
 
-function dashizeNameError (filename) {
+function validateComponentName (filename) {
   if (filename.indexOf('-') === -1) {
     gutil.log(
       gutil.colors.red('[-Error:] '),
@@ -103,31 +103,32 @@ function setupTask (generator) {
     var pathName = '';
     var moduleName = '';
     var i = 0;
-    var pathNested;
+    var pathNested; // Boolean
+    var fileName; // setup the fileName which used for rename module
 
     if (name.indexOf('/') > -1) {
       name = name.split('/');
       pathNested = true;
+      fileName = name.pop();
     } else {
       pathNested = false;
+      fileName = name;
     }
 
-    // setup the fileName which used for rename module
-    var fileName = pathNested ? name.pop() : name;
-
-    // handle the error case when arg is  component:foo
-    // component name has to be dashized string
-    // here does not handle the nested path case
-    if (type === 'component' && !pathNested) {
-      dashizeNameError(fileName);
+    // handle the error case when arg is `component:foo`
+    // component name has to be dash separated string
+    // case 1: `em g component:name`         <= simple case
+    // case 2: `em g component:nested/name`  <= nested case
+    if (type === 'component') {
+      validateComponentName(fileName);
+    }
+    // when type is template, name[0] is component, name of nest path has to be dashized string
+    // case 3: `em g template:component/name`  <= nested case in template
+    if (type === 'template' && pathNested && name[0] === 'component') {
+      validateComponentName(fileName);
     }
 
     if (isArray(name)) {
-      // when type is component, name of nest path has to be dashized string
-      // when type is template, name[0] is component, name of nest path has to be dashized string
-      if (type === 'template' && name[0] === 'component' || type === 'component') {
-        dashizeNameError(fileName);
-      }
       // build up the nested path
       for (; i < name.length; i++) {
         // 'component' and 'components' resolve as a 'app/templates/components/'
