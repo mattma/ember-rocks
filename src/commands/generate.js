@@ -126,6 +126,8 @@ function setupTask (generator) {
       validateComponentName(fileName);
     }
 
+    // Setup `pathName`
+    // `moduleName` would be used inside replacement of template placeholder
     if (pathNested) {
       // build up the nested path
       for (; i < name.length; i++) {
@@ -134,19 +136,16 @@ function setupTask (generator) {
           name[i] = 'components';
         }
         pathName += '/' + name[i];
-        moduleName += stringUtils.capitalize(name[i]);
+        moduleName += name[i] + '_';
       }
       // append fileName to the moduleName string
-      moduleName += stringUtils.capitalize(fileName);
+      moduleName += fileName;
     } else {
       pathName += name;
-      moduleName += stringUtils.capitalize(name);
+      moduleName = name;
     }
-
-    moduleName += stringUtils.capitalize(type);
-
-    // if it has dashized moduleName, it will camelize
-    moduleName = stringUtils.classify(moduleName);
+    // Classify the moduleName in format of `MattMaController`
+    moduleName = stringUtils.classify(moduleName + '_' + type);
 
     // ignore the 'store' case, since it is already created
     var typeFolder = path.resolve('client/app', type + 's');
