@@ -62,7 +62,7 @@ describe('Created directory', function () {
         'test-app/client/app/templates/users',
         'test-app/client/app/utils',
         'test-app/client/app/views',
-        'test-app/client/app/views',
+        'test-app/client/app/views'
       ], done);
     });
   });
@@ -111,5 +111,4 @@ describe('Created directory', function () {
         done();
       });
   });
-
 });
