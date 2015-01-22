@@ -24,27 +24,46 @@ function validateComponentName (filename) {
   }
 }
 
-function checkFileExisted (fullFilePath, fileName, ext, destPath) {
+function checkFileExisted (fullFilePath, injection, fileName, ext, destPath) {
   if (fs.existsSync(fullFilePath)) {
-    gutil.log(
-      gutil.colors.red('[-Error:] '),
-      gutil.colors.cyan(fileName + ext),
-      gutil.colors.red('has existed at '),
-      gutil.colors.magenta(tildify(destPath))
-    );
-    gutil.log(
-      gutil.colors.red('[-Error:]  Generate task has been canceled')
-    );
-    process.exit(0);
+    if (!!injection) {
+      gutil.log(
+        gutil.colors.red('[-Warning:] '),
+        gutil.colors.cyan(fileName + ext),
+        gutil.colors.red('has existed at '),
+        gutil.colors.magenta(tildify(destPath))
+      );
+      // Does not continue to generate file, but won't stop the process
+      return true;
+    } else {
+      gutil.log(
+        gutil.colors.red('[-Error:] '),
+        gutil.colors.cyan(fileName + ext),
+        gutil.colors.red('has existed at '),
+        gutil.colors.magenta(tildify(destPath))
+      );
+      gutil.log(
+        gutil.colors.red('[-Error:]  Generate task has been canceled')
+      );
+      // File is existed in the system, kill the process
+      process.exit(0);
+    }
   }
 }
 
-function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
+function generatorEngine (type, srcPath, injection, moduleName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
   var fullFilePath = destPath + '/' + fileName + ext;
 
   // if the file has existed, it will abort the task
-  checkFileExisted(fullFilePath, fileName, ext, destPath);
+  // if return true, mean that it is an injection file, which already exist in the system
+  // handle the case in the next condition
+  var stopGenerateFile = checkFileExisted(fullFilePath, injection, fileName, ext, destPath);
+  // check if template is existed or not, not going to kill the process
+  // only stop the generator task on this operation
+  if(stopGenerateFile) {
+    return ;
+  }
 
   var dasherizeName = '';
   var classifyName = '';
@@ -172,8 +191,8 @@ function setupTask (generator) {
           generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '.js'
         }, {
           type:          'template',
-          injection:     ( type === 'component' ) ? 'components' : void 0,
-          generatorPath: path.join(__dirname, '..', 'skeletons/generators', 'template.js')
+          injection:     ( type === 'component' ) ? 'components' : true,
+          generatorPath: path.join(__dirname, '..', 'skeletons/generators/template.js')
         }]
         : path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
 
@@ -206,7 +225,7 @@ function setupTask (generator) {
       path.resolve('client') + '/' + finalPath :
       path.resolve('client/app') + '/' + finalPath;
 
-      generatorEngine(type, srcPath, moduleName, fileName, destPath);
+      generatorEngine(type, srcPath, null, moduleName, fileName, destPath);
     } else {
       for (var j = 0, l = srcPath.length; j < l; j++) {
         var _type = srcPath[j].type;
@@ -215,13 +234,13 @@ function setupTask (generator) {
         var injection = srcPath[j].injection;
 
         dirName = (_type === 'store') ? _type : (_type.slice(-1) === 's') ? _type : _type + 's';
-        dirName = ( injection ) ? dirName + '/' + injection : dirName;
+        dirName = (injection === 'components') ? dirName + '/' + injection : dirName;
 
         finalPath = pathNested ? dirName + pathName : dirName;
         destPath = path.resolve('client/app') + '/' + finalPath;
 
         generatorEngine(
-          _type, srcPath[j].generatorPath, moduleName, fileName, destPath
+          _type, srcPath[j].generatorPath, injection, moduleName, fileName, destPath
         );
       }
     }
