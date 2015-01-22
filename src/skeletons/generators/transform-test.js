@@ -1,8 +1,7 @@
-/* jshint expr:true */
 import {
   describeModule,
   it
-} from 'ember-mocha';
+  } from 'ember-mocha';
 
 describeModule(
   'transform:__DASHERIZE_NAMESPACE__',
@@ -11,9 +10,9 @@ describeModule(
     // Specify the other units that are required for this test.
     // needs: ['transform:foo']
   },
-  function() {
+  function () {
     // Replace this with your real tests.
-    it('exists', function() {
+    it('exists', function () {
       var transform = this.subject();
       transform.should.be.ok;
     });

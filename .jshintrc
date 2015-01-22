@@ -36,6 +36,7 @@
   "smarttabs": true,
   "maxdepth": 4,
   "maxlen": 100,
+  "expr": true,
   // suppresses warnings about comma-first coding style
   "laxcomma": true,
   "predef": [

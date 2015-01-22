@@ -8,8 +8,7 @@ var __NAMESPACE__ = {
   name: '__DASHERIZE_NAMESPACE__',
   // before: 'anyInitializerName',  //optional
 
-  initialize: function(container, application) {
-
+  initialize: function (container, application) {
     // container.optionsForType('route', { instantiate: false, singleton: true });
 
     application.register('__DASHERIZE_NAMESPACE__:main', __CLASSIFY_NAMESPACE__);

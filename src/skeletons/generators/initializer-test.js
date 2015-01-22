@@ -1,12 +1,11 @@
-/* jshint expr:true */
 import Ember from 'ember';
 import { initialize } from 'rocks/initializers/__DASHERIZE_NAMESPACE__';
 
-describe('__NAMESPACE__', function() {
+describe('__NAMESPACE__', function () {
   var container, application;
 
-  beforeEach(function() {
-    Ember.run(function() {
+  beforeEach(function () {
+    Ember.run(function () {
       container = new Ember.Container();
       application = Ember.Application.create();
       application.deferReadiness();
@@ -14,7 +13,7 @@ describe('__NAMESPACE__', function() {
   });
 
   // Replace this with your real tests.
-  it('works', function() {
+  it('works', function () {
     initialize(container, application);
 
     // you would normally confirm the results of the initializer here

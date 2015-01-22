@@ -1,11 +1,11 @@
 import DS from 'ember-data';
 
 var __NAMESPACE__ = DS.Transform.extend({
-  deserialize: function(serialized) {
+  deserialize: function (serialized) {
     return serialized;
   },
 
-  serialize: function(deserialized) {
+  serialize: function (deserialized) {
     return deserialized;
   }
 });

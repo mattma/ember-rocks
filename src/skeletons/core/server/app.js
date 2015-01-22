@@ -26,7 +26,7 @@ module.exports = function (options) {
   app.use(bodyParser.json());
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(cookieParser());
-  //app.use(express.methodOverride());
+  // app.use(express.methodOverride());
   app.use(express.static(PUBLIC_PATH));
 
   // Send cross-origin resource sharing enabling header.

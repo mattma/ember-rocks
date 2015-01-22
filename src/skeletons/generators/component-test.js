@@ -1,8 +1,7 @@
-/* jshint expr:true */
 import {
   describeComponent,
   it
-} from 'ember-mocha';
+  } from 'ember-mocha';
 
 describeComponent(
   '__DASHERIZE_NAMESPACE__',
@@ -11,8 +10,8 @@ describeComponent(
     // specify the other units that are required for this test
     // needs: ['component:foo', 'helper:bar']
   },
-  function() {
-    it('renders', function() {
+  function () {
+    it('renders', function () {
       // creates the component instance
       var component = this.subject();
       component._state.should.equal('preRender');

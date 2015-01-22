@@ -1,4 +1,5 @@
 /* globals mocha, $ */
+/* jscs: disable requireDotNotation */
 import resolver from './resolver';
 import { setResolver } from 'ember-mocha';
 

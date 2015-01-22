@@ -1,7 +1,7 @@
 import Ember from 'ember';
 
 var __NAMESPACE__ = Ember.Route.extend({
-  model: function() {
+  model: function () {
     // return a promise
   }
 });

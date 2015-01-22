@@ -47,6 +47,6 @@ function logEvents (gulpInst) {
     );
     gutil.log(msg);
   });
-};
+}
 
 module.exports = logEvents;

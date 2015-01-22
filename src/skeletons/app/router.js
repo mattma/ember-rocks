@@ -9,9 +9,9 @@ var Router = Ember.Router.extend({
   location: 'auto'
 });
 
-Router.map(function() {
-  this.resource('users', function() {
-    this.route('user', { path: '/:user_id' } );
+Router.map(function () {
+  this.resource('users', function () {
+    this.route('user', {path: '/:user_id'});
   });
 });
 

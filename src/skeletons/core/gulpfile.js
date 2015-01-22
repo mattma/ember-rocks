@@ -234,7 +234,7 @@ gulp.task('envProd', function () {
   var dest = 'client';
 
   return gulp.src(src)
-    //.pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.js/, '/vendors/jquery/dist/jquery.min.js'))
+  // .pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.js/, '/vendors/jquery/dist/jquery.min.js'))
     .pipe($.replace(
       /\/vendors\/handlebars\/handlebars.js/, '/vendors/handlebars/handlebars.min.js'
     ))
@@ -248,7 +248,7 @@ gulp.task('envDev', function () {
   var dest = 'client';
 
   return gulp.src(src)
-    //.pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.min.js/, '/vendors/jquery/dist/jquery.js'))
+  // .pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.min.js/, '/vendors/jquery/dist/jquery.js'))
     .pipe($.replace(
       /\/vendors\/handlebars\/handlebars.min.js/, '/vendors/handlebars/handlebars.js'
     ))
