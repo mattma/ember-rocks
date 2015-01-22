@@ -1,9 +1,10 @@
 var assert = require('assert');
 
-module.exports = function() {};
+module.exports = function () {
+};
 
 module.exports.prototype = {
-  configure: function(disallowMultipleVarDeclWithAssignment) {
+  configure: function (disallowMultipleVarDeclWithAssignment) {
     assert(
       typeof disallowMultipleVarDeclWithAssignment === 'boolean',
       'disallowMultipleVarDeclWithAssignment option requires boolean value'
@@ -14,21 +15,25 @@ module.exports.prototype = {
     );
   },
 
-  getOptionName: function() {
+  getOptionName: function () {
     return 'disallowMultipleVarDeclWithAssignment';
   },
 
-  check: function(file, errors) {
-    file.iterateNodesByType('VariableDeclaration', function(node) {
+  check: function (file, errors) {
+    file.iterateNodesByType('VariableDeclaration', function (node) {
       // allow multiple var declarations in for statement
       // for (var i = 0, j = myArray.length; i < j; i++) {}
-      if (node.parentNode.type === 'ForStatement') { return; }
+      if (node.parentNode.type === 'ForStatement') {
+        return;
+      }
 
       var hasAssignment = false;
       var multiDeclaration = node.declarations.length > 1;
 
-      node.declarations.forEach(function(declaration) {
-        if (declaration.init) { hasAssignment = true; }
+      node.declarations.forEach(function (declaration) {
+        if (declaration.init) {
+          hasAssignment = true;
+        }
       });
 
       if (hasAssignment && multiDeclaration) {

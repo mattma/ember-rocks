@@ -1,6 +1,6 @@
 import Ember from 'ember';
-import Application from "rocks/app";
-import Router from "rocks/router";
+import Application from 'rocks/app';
+import Router from 'rocks/router';
 
 function startApp(attrs) {
   var App;
@@ -25,7 +25,7 @@ function startApp(attrs) {
     App.injectTestHelpers();
   });
 
-  // this shouldn't be needed, i want to be able to "start an app at a specific URL"
+  // this shouldn't be needed, i want to be able to 'start an app at a specific URL'
   App.reset();
 
   return App;

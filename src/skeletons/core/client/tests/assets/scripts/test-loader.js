@@ -2,10 +2,10 @@
 
 /* globals requirejs, require */
 (function () {
-  define("ember-rocks/test-loader",
+  define('ember-rocks/test-loader',
     [],
     function () {
-      "use strict";
+      'use strict';
 
       var TestLoader = function () {
       };
