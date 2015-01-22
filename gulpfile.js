@@ -15,7 +15,7 @@ var lintFiles = [
   '!node_modules/**'
 ];
 
-gulp.task('lint', function() {
+gulp.task('lint', function () {
   log('Linting Files');
   return gulp.src(lintFiles)
     .pipe(jshint('.jshintrc'))
@@ -26,9 +26,9 @@ gulp.task('lint', function() {
 // @describe need to be passed to be able to build the project
 gulp.task('jscs', function () {
   var src = [
-    'gulpfile.js',
-    'test/**/*.js',
-    'src/**/*.js'
+    //'gulpfile.js',
+    'test/**/*.js'
+    //'src/**/*.js'
   ];
 
   return gulp.src(src)
@@ -37,7 +37,7 @@ gulp.task('jscs', function () {
     }));
 });
 
-gulp.task('watch', function() {
+gulp.task('watch', function () {
   log('Watching Files');
   gulp.watch(lintFiles, ['lint']);
 });
