@@ -95,8 +95,8 @@ function generatorEngine (type, srcPath, moduleName, fileName, finalPath, destPa
 }
 
 function setupTask (generator) {
-  //   task: gen
-  //   @describe	generate an model,view,store,controller from base template
+  // task: gen
+  // @describe	generate an model,view,store,controller from base template
   return gulp.task('gen', function () {
     var type = generator.type;
     var name = generator.name;
