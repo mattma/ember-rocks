@@ -24,7 +24,7 @@ function validateComponentName (filename) {
   }
 }
 
-function generatorEngine (type, srcPath, moduleName, fileName, finalPath, destPath) {
+function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
   var fullFilePath = destPath + '/' + fileName + ext;
 
@@ -181,7 +181,7 @@ function setupTask (generator) {
     // if it is a string, simple call generatorEngine once
     // else it is an object(array), repeat the generatorEngine call
     if (typeof srcPath === 'string') {
-      dirName = (type === 'store') ? type : ( type.slice(-1) === 's' ) ? type : type + 's';
+      dirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
 
       // Figure out the type is testing generator
       if (type.indexOf('test') > -1) {
@@ -197,11 +197,12 @@ function setupTask (generator) {
       }
 
       finalPath = pathNested ? finalDirName + pathName : finalDirName;
-      destPath = (type.indexOf('test') > -1) ?
-      path.resolve('client') + '/' + finalPath
-        : path.resolve('client/app') + '/' + finalPath;
 
-      generatorEngine(type, srcPath, moduleName, fileName, finalPath, destPath);
+      destPath = (type.indexOf('test') > -1) ?
+      path.resolve('client') + '/' + finalPath :
+      path.resolve('client/app') + '/' + finalPath;
+
+      generatorEngine(type, srcPath, moduleName, fileName, destPath);
     } else {
       for (var j = 0, l = srcPath.length; j < l; j++) {
         var _type = srcPath[j].type;
@@ -209,14 +210,14 @@ function setupTask (generator) {
         // it will create a template file at 'templates/components' folder
         var injection = srcPath[j].injection;
 
-        dirName = (_type === 'store') ? _type : ( _type.slice(-1) === 's' ) ? _type : _type + 's';
+        dirName = (_type === 'store') ? _type : (_type.slice(-1) === 's') ? _type : _type + 's';
         dirName = ( injection ) ? dirName + '/' + injection : dirName;
 
         finalPath = pathNested ? dirName + pathName : dirName;
         destPath = path.resolve('client/app') + '/' + finalPath;
 
         generatorEngine(
-          _type, srcPath[j].generatorPath, moduleName, fileName, finalPath, destPath
+          _type, srcPath[j].generatorPath, moduleName, fileName, destPath
         );
       }
     }
