@@ -6,6 +6,8 @@ var semver = require('semver');
 var path = require('path');
 var logEvents = require('./logEvents');
 
+// callback is loaded `env` which passed from `LiftOff` instance
+// you could tweak the `env` properties in `runner.js` `G.launch(opts, cb);`
 function callback (env) {
   if (!env.modulePath && !env.configPath) {
     gutil.log(
@@ -19,11 +21,11 @@ function callback (env) {
     process.exit(1);
   }
 
-  var localGulpPackage = path.resolve(env.cwd, 'node_modules', 'gulp/package');
-  var cliPackage = require(localGulpPackage);
+  var localGulpPackagePath = path.resolve(env.cwd, 'node_modules/gulp/package');
+  var localGulpPackage = require(localGulpPackagePath);
 
-  // check for semver difference between cli and local installation
-  if (semver.gt(cliPackage.version, env.modulePackage.version)) {
+  // check for semver difference between global and local installation
+  if (semver.gt(localGulpPackage.version, env.modulePackage.version)) {
     gutil.log(
       gutil.colors.red('[-Error:] gulp version mismatch!')
     );
@@ -32,8 +34,6 @@ function callback (env) {
         '[-Error:] Submit an issue @ https://github.com/mattma/ember-rocks/issues'
       )
     );
-    //     gutil.log(gutil.colors.red('Global gulp is', cliPackage.version));
-    //     gutil.log(gutil.colors.red('Local gulp is', env.modulePackage.version));
   }
 
   // this is what actually loads up the gulpfile

@@ -3,13 +3,12 @@
 
 'use strict';
 
-var argv = require('minimist')(process.argv.slice(2));
 var Liftoff = require('liftoff');
 var gutil = require('gulp-util');
 
-var runner = function (cb, command) {
+var runner = function (cb, command, opts) {
   var G = new Liftoff({
-    name:    'em',
+    name:    'gulp', // has to be `gulp` because searching of `gulpfile.js`
     v8flags: ['--harmony'] // to support all flags: require('v8flags');
   })
     .on('require', function (name) {
@@ -26,13 +25,7 @@ var runner = function (cb, command) {
   // it will be resolved during the run time
   cb.command = command;
 
-  G.launch({
-    cwd:        argv.cwd,
-    configPath: argv.gulpfile,
-    require:    argv.require,
-    completion: argv.completion,
-    verbose:    argv.verbose
-  }, cb);
+  G.launch(opts, cb);
 };
 
 module.exports = runner;
