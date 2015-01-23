@@ -227,6 +227,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 #### Unreleased
 
 - [New Feature] Generator command take an optional flag `-T` or `--test` to generate the its unit test file. ex: `em g route:post --test` 
+- [ENHENCEMENT] Calling any `em` commands at root level or anywhere in your project, it will execute the task(s) as you expected. 
 - Major refactoring generator command and generation process
 - [BugFix] When `type` is `route` or `component`, template file is already existed, it won't kill the process. simply output a warning.
 - [BugFix] Fixed all **jshint** errors in the project
