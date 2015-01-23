@@ -3,7 +3,6 @@
 var path = require('path');
 var fs = require('fs');
 var exec = require('child_process').exec;
-var argv = require('minimist')(process.argv.slice(2));
 var tildify = require('tildify');
 var gulp = require('gulp');
 var rimraf = require('rimraf');
@@ -11,7 +10,7 @@ var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 
 // installer plugins to handle the npm and bower packages installation
-function installer (rootPath, command, description, nextStepFn, callback) {
+function installer (rootPath, command, description, nextStepFn, newFolderName, callback) {
   rootPath = rootPath || process.cwd();
   gutil.log(gutil.colors.gray('[-log:]'), description);
   process.chdir(rootPath);
@@ -43,11 +42,11 @@ function installer (rootPath, command, description, nextStepFn, callback) {
       }
       return callback(log);
     }
-    nextStepFn(rootPath, callback);
+    nextStepFn(rootPath, newFolderName, callback);
   });
 }
 
-function gitInit (rootPath, callback) {
+function gitInit (rootPath, newFolderName, callback) {
   gutil.log(
     gutil.colors.gray('[-log:]'),
     gutil.colors.cyan('em-cli'),
@@ -79,7 +78,7 @@ function gitInit (rootPath, callback) {
     );
     gutil.log(
       gutil.colors.bold('[-copy:] =>'),
-      gutil.colors.cyan('cd ' + argv._[1]),
+      gutil.colors.cyan('cd ' + newFolderName),
       gutil.colors.gray('# navigate to the newly created application')
     );
     gutil.log(
@@ -92,22 +91,24 @@ function gitInit (rootPath, callback) {
   });
 }
 
-function installBower (rootPath, callback) {
+function installBower (rootPath, newFolderName, callback) {
   installer(
     rootPath,
     'bower install',
     'Bower is installing javascript packages...',
     gitInit,
+    newFolderName,
     callback
   );
 }
 
-function installNpm (rootPath, callback) {
+function installNpm (rootPath, newFolderName, callback) {
   installer(
     rootPath,
     'npm install',
     'NPM is installing node packages...',
     installBower,
+    newFolderName,
     callback
   );
 }
@@ -120,7 +121,7 @@ function simpleLogger () {
   );
 }
 
-function runningCallback (isRunningTest, dest, callback) {
+function runningCallback (isRunningTest, dest, newFolderName, callback) {
   // switch to the newly generated folder
   process.chdir(dest);
 
@@ -135,13 +136,13 @@ function runningCallback (isRunningTest, dest, callback) {
     .pipe(gulp.dest(dest));
 
   if (!isRunningTest) {
-    installNpm(dest, callback);
+    installNpm(dest, newFolderName, callback);
   } else {
     callback();
   }
 }
 
-function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
+function setupTask (coreSrcPath, appSrcPath, dest, newFolderName, isRunningTest) {
   gutil.log(
     gutil.colors.gray('[-log:]'),
     'Starting to generate an application at',
@@ -214,14 +215,14 @@ function setupTask (coreSrcPath, appSrcPath, dest, isRunningTest) {
             process.exit(0);
           }
           // running npm install callback
-          runningCallback(isRunningTest, dest, callback);
+          runningCallback(isRunningTest, dest, newFolderName, callback);
         });
       });
     } else {
       gulp.src(appSrc, {dot: true})
         .on('end', function () {
           simpleLogger();
-          runningCallback(isRunningTest, dest, callback);
+          runningCallback(isRunningTest, dest, newFolderName, callback);
         })
         .pipe(gulp.dest(dest + '/client/app'));
     }
@@ -243,7 +244,7 @@ function getSkeletonsAppPath () {
 }
 
 var create = function (generatorPath, options) {
-  if (argv._.length < 2) {
+  if (!generatorPath || typeof generatorPath !== 'string') {
     gutil.log(gutil.colors.red('[-Error:] Missing directory name.'), 'ex: em new my-app');
     gutil.log(gutil.colors.red('[-Error:]'), 'See \'em new --help\'');
     process.exit(0);
@@ -284,7 +285,7 @@ var create = function (generatorPath, options) {
 
   var currentAppPath = path.resolve(generatorPath);
   // Setup gulp task, copy the source files into the newly create folder
-  setupTask(skeletonsCorePath, skeletonsAppPath, currentAppPath, isRunningTest);
+  setupTask(skeletonsCorePath, skeletonsAppPath, currentAppPath, generatorPath, isRunningTest);
   // Trigger the generator task
   gulp.start('generator');
 };
