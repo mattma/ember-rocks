@@ -333,3 +333,42 @@ describe('Command `em generate [type]-test(s):[name]` - Unit Test Generated and 
     helpers.genUnitTestsCommandTester('./bin/em generate view-test:long/folder/name/post', 'views/long/folder/name/post-test.js', done);
   });
 });
+
+
+describe('Command `em generate [type]-test(s):[name] --test` - Generated original file and its tests with flag `-T` or `--test`', function () {
+  beforeEach(function (done) {
+    mkdirp('client/app', function () {
+      mkdirp('client/tests/unit', done);
+    });
+  });
+
+  afterEach(function (done) {
+    rm('./client', done);
+  });
+
+  it('should generate a controller js file at app/controllers/ folder along with test flag. total 2 files', function (done) {
+    var multiplePathsExist = [
+      'client/app/controllers/post.js',
+      'client/tests/unit/controllers/post-test.js'
+    ];
+    helpers.genCommandAndUnitTester('./bin/em generate controller:post --test', multiplePathsExist, done);
+  });
+
+  it('should generate a route js file at app/routes/ folder along with test flag, total 3 files', function (done) {
+    var multiplePathsExist = [
+      'client/app/routes/post.js',
+      'client/app/templates/post.hbs',
+      'client/tests/unit/routes/post-test.js'
+    ];
+    helpers.genCommandAndUnitTester('./bin/em generate route:post --test', multiplePathsExist, done);
+  });
+
+  it('should generate a component js file at app/components/ folder along with test flag, total 3 files', function (done) {
+    var multiplePathsExist = [
+      'client/app/components/post-awesome.js',
+      'client/app/templates/components/post-awesome.hbs',
+      'client/tests/unit/components/post-awesome-test.js'
+    ];
+    helpers.genCommandAndUnitTester('./bin/em generate component:post-awesome --test', multiplePathsExist, done);
+  });
+});

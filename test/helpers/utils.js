@@ -3,7 +3,7 @@ var exec = require('child_process').exec;
 var should = require('chai').should();
 
 // check an array of file path are existed or not
-exports.assertPathsExist = function (paths, done) {
+var assertPathsExist = exports.assertPathsExist = function (paths, done) {
   var count, totalFileNum, isFinished;
 
   isFinished = function () {
@@ -41,6 +41,13 @@ exports.genCommandTester = function (command, pathExist, done) {
     var fullPath = 'client/app/' + pathExist;
     stdout.should.include('[-done:]');
     assertPathExist(fullPath, done);
+  });
+};
+
+exports.genCommandAndUnitTester = function (command, multiplePathsExist, done) {
+  exec(command, function (error, stdout, stderr) {
+    stdout.should.include('[-done:]');
+    assertPathsExist(multiplePathsExist, done);
   });
 };
 
