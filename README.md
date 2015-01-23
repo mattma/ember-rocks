@@ -224,6 +224,16 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+#### Unreleased
+
+- [New Feature] Generator command take an optional flag `-T` or `--test` to generate the its unit test file. ex: `em g route:post --test` 
+- Major refactoring generator command and generation process
+- [BugFix] When `type` is `route` or `component`, template file is already existed, it won't kill the process. simply output a warning.
+- [BugFix] Fixed all **jshint** errors in the project
+- [New Feature] introduce code quality tool `jscs`, fixed all **jscs** issues in the project
+- [ENHENCEMENT] Update module dependencies and fixed the issue of [liftoff 2x / v8flags 2x release](https://github.com/mattma/ember-rocks/issues/10)
+- Updated the project and testing documentation
+
 #### 0.6.0 (Christmas Day, 2014)
 
 - [Major/New Command] `em test`|`em t` has been added into the project. It will auto watch/compile/run/rerun all existing integration/unit tests. See `em --help` from CLI or [Testing your app](#testing-your-app) for more details.
