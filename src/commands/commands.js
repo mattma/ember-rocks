@@ -10,8 +10,10 @@ var fs = require('fs');
 // so that setup the correct `cwd` in the `LiftOff` setting
 var walk = function (dir, done) {
   fs.readdir(dir, function (err, list) {
-    if (err) return done(err);
-    (function next (parent) {
+    if (err) {
+      return done(err);
+    }
+    (function next(parent) {
       // reaching to the root of the file system
       if (parent === '/') {
         return done(err, undefined);
@@ -49,7 +51,7 @@ var commands = function (options) {
         '[-Error:]  Or you are not in the project root directory. Try: `pwd`\n',
         '[-Helper:] To create an \'Ember-Rocks\' project. Try: `em new myApp`'
       );
-      return ;
+      return;
     }
     // based on the return value, root cwd assigned to `LiftOff` setting
     var cwd = rootCwd || currentPath;
