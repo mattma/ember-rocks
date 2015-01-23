@@ -50,7 +50,29 @@ function checkFileExisted (fullFilePath, injection, fileName, ext, destPath) {
   }
 }
 
-function generatorEngine (type, srcPath, injection, moduleName, fileName, destPath) {
+function injectSrcPath (srcPath, type) {
+  var injectTemplateGenerator;
+  // when `type` is `route` or `component`, will generate its template file
+  if (type === 'route' || type === 'component') {
+    injectTemplateGenerator = [{
+      type:          'template',
+      injection:     ( type === 'component' ) ? 'components' : true,
+      generatorPath: path.join(__dirname, '..', 'skeletons/generators/template.js')
+    }];
+    srcPath = srcPath.concat(injectTemplateGenerator);
+  }
+
+  // Default, it will generate whatever user inserts the `type`
+  srcPath = srcPath.concat([{
+    type:          type,
+    generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '.js'
+  }]);
+  // return the modified `srcPath` array
+  return srcPath;
+}
+
+function generatorEngine
+(type, srcPath, injection, moduleName, moduleDashedName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
   var fullFilePath = destPath + '/' + fileName + ext;
 
@@ -64,37 +86,13 @@ function generatorEngine (type, srcPath, injection, moduleName, fileName, destPa
     return;
   }
 
-  var dasherizeName = '';
-  var classifyName = '';
-  var matcher;
+  // Classify the plain module name without its type
+  var classifyName = stringUtils.classify(moduleDashedName);
 
-  // if generating any testing files, need to clean up moduleName without "Test"
-  if (type.indexOf('test') > -1) {
-    if (type.indexOf('model-test') > -1) {
-      moduleName = moduleName.replace(/ModelTest(\s+)?$/, '');
-      dasherizeName = stringUtils.dasherize(moduleName);
-    } else {
-      matcher = stringUtils.classify(type);
-      var dasherizeModuleName = moduleName.replace(new RegExp(matcher), '');
-
-      moduleName = moduleName.replace(/Test(\s+)?$/, '');
-      dasherizeName = stringUtils.dasherize(dasherizeModuleName);
-    }
-  } else {
-    matcher = stringUtils.capitalize(type);
-    var localModuleName = moduleName.replace(new RegExp(matcher), '');
-
-    dasherizeName = stringUtils.dasherize(localModuleName);
-    classifyName = stringUtils.classify(localModuleName);
-  }
-
-  // @TODO when generate multiple files on certain type
-  // moduleName is not being defined correctly.
-  // fine for now, since multiple file generation are only template file
   return gulp.src(srcPath)
     .pipe(replace(/__NAMESPACE__/g, moduleName))
     // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
-    .pipe(replace(/__DASHERIZE_NAMESPACE__/g, dasherizeName))
+    .pipe(replace(/__DASHERIZE_NAMESPACE__/g, moduleDashedName))
     // __CLASSIFY_NAMESPACE__ mainly used in regular generator
     .pipe(replace(/__CLASSIFY_NAMESPACE__/g, classifyName))
     .pipe(rename({
@@ -120,6 +118,7 @@ function setupTask (generator, isGeneratingTest) {
     var name = generator.name;
     var pathName = '';
     var moduleName = '';
+    var moduleDashedName = '';
     var i = 0;
     var pathNested; // Boolean
     var fileName; // setup the fileName which used for rename module
@@ -159,7 +158,7 @@ function setupTask (generator, isGeneratingTest) {
           name[i] = 'components';
         }
         pathName += '/' + name[i];
-        moduleName += name[i] + '_';
+        moduleName += name[i] + '-';
       }
       // append fileName to the moduleName string
       moduleName += fileName;
@@ -167,8 +166,11 @@ function setupTask (generator, isGeneratingTest) {
       pathName += name;
       moduleName = name;
     }
+
+    // dash separated moduleName used in template replacement
+    moduleDashedName += moduleName;
     // Classify the moduleName in format of `MattMaController`
-    moduleName = stringUtils.classify(moduleName + '_' + type);
+    moduleName = stringUtils.classify(moduleName + '-' + type);
 
     // ignore the 'store' case, since it is already created
     var typeFolder = path.resolve('client/app', type + 's');
@@ -180,27 +182,6 @@ function setupTask (generator, isGeneratingTest) {
         gutil.colors.gray('[-log:] Created a new folder at '),
         gutil.colors.cyan('~/client/app/' + type + 's')
       );
-    }
-
-    function injectSrcPath (srcPath, type) {
-      var injectTemplateGenerator;
-      // when `type` is `route` or `component`, will generate its template file
-      if (type === 'route' || type === 'component') {
-        injectTemplateGenerator = [{
-          type:          'template',
-          injection:     ( type === 'component' ) ? 'components' : true,
-          generatorPath: path.join(__dirname, '..', 'skeletons/generators/template.js')
-        }];
-        srcPath = srcPath.concat(injectTemplateGenerator);
-      }
-
-      // Default, it will generate whatever user inserts the `type`
-      srcPath = srcPath.concat([{
-        type:          type,
-        generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '.js'
-      }]);
-      // return the modified `srcPath` array
-      return srcPath;
     }
 
     // Handle `flag` of `--test` case, and other special case
@@ -254,7 +235,7 @@ function setupTask (generator, isGeneratingTest) {
       path.resolve('client') + '/' + finalPath :
       path.resolve('client/app') + '/' + finalPath;
 
-      generatorEngine(type, srcPath, null, moduleName, fileName, destPath);
+      generatorEngine(type, srcPath, null, moduleName, moduleDashedName, fileName, destPath);
     } else {
       for (var j = 0, l = srcPath.length; j < l; j++) {
         var _type = srcPath[j].type;
@@ -279,7 +260,8 @@ function setupTask (generator, isGeneratingTest) {
         }
 
         generatorEngine(
-          _type, srcPath[j].generatorPath, injection, moduleName, finalFileName, destPath
+          _type, srcPath[j].generatorPath, injection, moduleName,
+          moduleDashedName, finalFileName, destPath
         );
       }
     }
