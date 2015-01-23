@@ -60,8 +60,8 @@ function generatorEngine (type, srcPath, injection, moduleName, fileName, destPa
   var stopGenerateFile = checkFileExisted(fullFilePath, injection, fileName, ext, destPath);
   // check if template is existed or not, not going to kill the process
   // only stop the generator task on this operation
-  if(stopGenerateFile) {
-    return ;
+  if (stopGenerateFile) {
+    return;
   }
 
   var dasherizeName = '';
@@ -123,6 +123,7 @@ function setupTask (generator, isGeneratingTest) {
     var i = 0;
     var pathNested; // Boolean
     var fileName; // setup the fileName which used for rename module
+    var srcPath = []; // the filePath/srcPath would be used to generate files
 
     // based on the passing name arguments, to determine it is an nested folder structure
     // or it is a simple file generation. assign a var `fileName` for current file name
@@ -181,19 +182,48 @@ function setupTask (generator, isGeneratingTest) {
       );
     }
 
-    // when generator type is route or component
-    // it will also generate the template as well
-    var srcPath =
-      (type === 'route' || type === 'component') ?
-        [{
-          type:          type,
-          generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '.js'
-        }, {
+    function injectSrcPath (srcPath, type) {
+      var injectTemplateGenerator;
+      // when `type` is `route` or `component`, will generate its template file
+      if (type === 'route' || type === 'component') {
+        injectTemplateGenerator = [{
           type:          'template',
           injection:     ( type === 'component' ) ? 'components' : true,
           generatorPath: path.join(__dirname, '..', 'skeletons/generators/template.js')
-        }]
-        : path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
+        }];
+        srcPath = srcPath.concat(injectTemplateGenerator);
+      }
+
+      // Default, it will generate whatever user inserts the `type`
+      srcPath = srcPath.concat([{
+        type:          type,
+        generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '.js'
+      }]);
+      // return the modified `srcPath` array
+      return srcPath;
+    }
+
+    // Handle `flag` of `--test` case, and other special case
+    // like generate template when the type is route or component, etc
+    if (isGeneratingTest) {
+      var injectTestFile = [{
+        type:          type + '-test',
+        injection:     true,
+        generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '-test.js',
+        testGenerator: true
+      }];
+      // flag `-T` or `--test`, will generate the unit test file
+      srcPath = srcPath.concat(injectTestFile);
+
+      srcPath = injectSrcPath(srcPath, type);
+    } else {
+      if (type === 'route' || type === 'component') {
+        srcPath = injectSrcPath(srcPath, type);
+      } else {
+        // convert the array into string.
+        srcPath = path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
+      }
+    }
 
     var dirName, finalDirName, finalPath, destPath;
 
@@ -228,18 +258,28 @@ function setupTask (generator, isGeneratingTest) {
     } else {
       for (var j = 0, l = srcPath.length; j < l; j++) {
         var _type = srcPath[j].type;
+        var testDirName;
         // when original type is 'component'
         // it will create a template file at 'templates/components' folder
         var injection = srcPath[j].injection;
+        var finalFileName;
 
         dirName = (_type === 'store') ? _type : (_type.slice(-1) === 's') ? _type : _type + 's';
         dirName = (injection === 'components') ? dirName + '/' + injection : dirName;
+        testDirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
 
         finalPath = pathNested ? dirName + pathName : dirName;
-        destPath = path.resolve('client/app') + '/' + finalPath;
+
+        if (isGeneratingTest && srcPath[j].testGenerator) {
+          destPath = path.resolve('client/tests/unit') + '/' + testDirName;
+          finalFileName = fileName + '-test';
+        } else {
+          destPath = path.resolve('client/app') + '/' + finalPath;
+          finalFileName = fileName;
+        }
 
         generatorEngine(
-          _type, srcPath[j].generatorPath, injection, moduleName, fileName, destPath
+          _type, srcPath[j].generatorPath, injection, moduleName, finalFileName, destPath
         );
       }
     }
