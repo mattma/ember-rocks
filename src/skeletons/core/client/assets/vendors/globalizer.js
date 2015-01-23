@@ -1,10 +1,11 @@
+/* global define */
 (function () {
   // add supports for ember-resolver
   // Lightweight module loader for app and template codes
   var oldDefine = define;
   var seen = requirejs._eak_seen = {};
 
-  var define = function (name, deps, callback) {
+  define = function (name, deps, callback) {
     seen[name] = true;
     return oldDefine(name, deps, callback);
   };
