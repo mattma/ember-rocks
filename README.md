@@ -224,7 +224,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### Unreleased
+#### 0.7.0 (01/23/15)
 
 - [New Feature] Generator command take an optional flag `-T` or `--test` to generate the its unit test file. ex: `em g route:post --test` 
 - [ENHENCEMENT] Calling any `em` commands at root level or anywhere in your project, it will execute the task(s) as you expected. 
