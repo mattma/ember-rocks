@@ -10,9 +10,6 @@ var opn = require('opn');
 var pagespeed = require('psi');
 var testem = new (require('testem'))();
 
-var Htmlbars = require('ember-cli-htmlbars');
-var compiler = new Htmlbars();
-
 // https://github.com/ai/autoprefixer. Default: > 1%, last 2 versions, Firefox ESR, Opera 12.1
 // Android, BlackBerry or bb, iOS
 // Chrome, Firefox or ff, Explorer or ie, Opera, Safari
@@ -201,10 +198,7 @@ gulp.task('buildjs', function () {
 // @describe pre-compile handlebars templates
 gulp.task('buildhbs', function () {
   return gulp.src(clientFolder + '/app/templates/**/*.hbs')
-    .pipe($.handlebars({
-      handlebars: require('ember-handlebars'),
-      compiler:   compiler.processString
-    }))
+    .pipe($.htmlbars())
     .pipe($.wrapAmd({
       deps:         ['exports'],          // dependency array
       params:       ['__exports__'],        // params for callback
