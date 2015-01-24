@@ -224,6 +224,11 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+#### 0.8.0 (01/24/15)
+
+- [ENHENCEMENT] Used new module [`gulp-htmlbars`](https://www.npmjs.com/package/gulp-htmlbars) which is maintained by author(myself) of `ember-rocks`. Read [more details](https://github.com/mattma/gulp-htmlbars/blob/master/README.md).
+  By using `gulp-htmlbars`, successfully removed the dependency of those modules: `ember-cli-htmlbars`, `ember-handlebars`, `gulp-handlebars`
+
 #### 0.7.0 (01/23/15)
 
 - [New Feature] Generator command take an optional flag `-T` or `--test` to generate the its unit test file. ex: `em g route:post --test` 
