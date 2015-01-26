@@ -1,8 +1,15 @@
+'use strict';
+
+var describe = require('../helpers/test-helper').describe;
+var it = require('../helpers/test-helper').it;
+var expect = require('../helpers/test-helper').expect;
+var beforeEach = require('../helpers/test-helper').beforeEach;
+var afterEach = require('../helpers/test-helper').afterEach;
+
 var exec = require('child_process').exec;
 var mkdirp = require('mkdirp');
 var rm = require('rimraf');
 var helpers = require('../helpers/utils');
-var should = require('chai').should();
 
 describe('Command `em generate` - Wrong Argument(s)', function () {
   beforeEach(function (done) {
@@ -16,10 +23,10 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   it('should provide at least one argument', function (done) {
     exec('./bin/em generate', function (error, stdout) {
       // need to test the program should successfully shut down
-      stdout.should.include('[-Error:]');
-      stdout.should.include('Missing type:name argument');
-      stdout.should.include('ex: em new route:post');
-      stdout.should.include('See \'em generate --help\'');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('Missing type:name argument');
+      expect(stdout).to.include('ex: em new route:post');
+      expect(stdout).to.include('See \'em generate --help\'');
       done();
     });
   });
@@ -27,11 +34,11 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   it('should have an argument which contain a \':\'', function (done) {
     exec('./bin/em generate route', function (error, stdout) {
       // need to test the program should successfully shut down
-      stdout.should.include('[-Error:]');
-      stdout.should.include('Invalid argument, expected: `type:name` got:');
-      stdout.should.include('[-Syntax:]');
-      stdout.should.include('type:name');
-      stdout.should.include('See \'em generate --help\'');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('Invalid argument, expected: `type:name` got:');
+      expect(stdout).to.include('[-Syntax:]');
+      expect(stdout).to.include('type:name');
+      expect(stdout).to.include('See \'em generate --help\'');
       done();
     });
   });
@@ -39,10 +46,10 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   it('should have an argument (type:name), type must be a valid string', function (done) {
     exec('./bin/em generate :post', function (error, stdout) {
       // need to test the program should successfully shut down
-      stdout.should.include('[-Error:]');
-      stdout.should.include('Invalid argument, expected: `type:name` got:');
-      stdout.should.include(' :post');
-      stdout.should.include('See \'em generate --help\'');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('Invalid argument, expected: `type:name` got:');
+      expect(stdout).to.include(' :post');
+      expect(stdout).to.include('See \'em generate --help\'');
       done();
     });
   });
@@ -50,20 +57,20 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   it('should have an argument (type:name), name must be a valid string', function (done) {
     exec('./bin/em generate route:', function (error, stdout) {
       // need to test the program should successfully shut down
-      stdout.should.include('[-Error:]');
-      stdout.should.include('Invalid argument, expected: `type:name` got:');
-      stdout.should.include('route:');
-      stdout.should.include('See \'em generate --help\'');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('Invalid argument, expected: `type:name` got:');
+      expect(stdout).to.include('route:');
+      expect(stdout).to.include('See \'em generate --help\'');
       done();
     });
   });
 
   it('should have a right type. ex: route, controller, view, template', function (done) {
     exec('./bin/em generate temp:post', function (error, stdout) {
-      stdout.should.include('[-Error:]');
-      stdout.should.include('temp  is not a valid type.');
-      stdout.should.include('[-note:]');
-      stdout.should.include('valid types are adapter, component, controller, helper, ' +
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('temp  is not a valid type.');
+      expect(stdout).to.include('[-note:]');
+      expect(stdout).to.include('valid types are adapter, component, controller, helper, ' +
       'initializer, mixin, model, route, serializer, template, transform, util, view');
       done();
     });
@@ -72,9 +79,9 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   // when type is component, name has to be dashized string
   it('should have a dash separated name when type is component(s)', function (done) {
     exec('./bin/em generate component:post', function (error, stdout) {
-      stdout.should.include('[-Error:]');
-      stdout.should.include('post  must be a dashize string. ex: my-component');
-      stdout.should.include('Generate task has been canceled');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('post  must be a dashize string. ex: my-component');
+      expect(stdout).to.include('Generate task has been canceled');
       done();
     });
   });
@@ -82,9 +89,9 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   // when type is component, name of nest path has to be dashized string
   it('should have a dash separated name of nest path when type is component(s)', function (done) {
     exec('./bin/em generate component:awesome/post', function (error, stdout) {
-      stdout.should.include('[-Error:]');
-      stdout.should.include('post  must be a dashize string. ex: my-component');
-      stdout.should.include('Generate task has been canceled');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('post  must be a dashize string. ex: my-component');
+      expect(stdout).to.include('Generate task has been canceled');
       done();
     });
   });
@@ -92,9 +99,9 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   // when type is template, name[0] is component, name of nest path has to be dashized string
   it('should have a dash separated name when type is template(s) and name[0] is component(s)', function (done) {
     exec('./bin/em generate template:component/post', function (error, stdout) {
-      stdout.should.include('[-Error:]');
-      stdout.should.include('post  must be a dashize string. ex: my-component');
-      stdout.should.include('Generate task has been canceled');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('post  must be a dashize string. ex: my-component');
+      expect(stdout).to.include('Generate task has been canceled');
       done();
     });
   });
@@ -104,9 +111,9 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   it('should abort the task if the route file has existed', function (done) {
     mkdirp('client/app/routes/post.js', function () {
       exec('./bin/em generate route:post', function (error, stdout) {
-        stdout.should.include('[-Error:]');
-        stdout.should.include('post.js has existed');
-        stdout.should.include('Generate task has been canceled');
+        expect(stdout).to.include('[-Error:]');
+        expect(stdout).to.include('post.js has existed');
+        expect(stdout).to.include('Generate task has been canceled');
         done();
       });
     });
@@ -117,9 +124,9 @@ describe('Command `em generate` - Wrong Argument(s)', function () {
   it('should abort the task if the component file has existed', function (done) {
     mkdirp('client/app/components/my-post.js', function () {
       exec('./bin/em generate component:my-post', function (error, stdout) {
-        stdout.should.include('[-Error:]');
-        stdout.should.include('my-post.js has existed');
-        stdout.should.include('Generate task has been canceled');
+        expect(stdout).to.include('[-Error:]');
+        expect(stdout).to.include('my-post.js has existed');
+        expect(stdout).to.include('Generate task has been canceled');
         done();
       });
     });
