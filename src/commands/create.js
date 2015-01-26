@@ -122,6 +122,22 @@ function simpleLogger () {
   );
 }
 
+function coreGenerationLogger () {
+  gutil.log(
+    gutil.colors.green('[-done:] A new'),
+    gutil.colors.cyan('Node.js'),
+    gutil.colors.green('web server have been successfully created!')
+  );
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    gutil.colors.magenta('It may take up to 1 minute and half!')
+  );
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    gutil.colors.magenta('Be patient, fetching packages from internet ...')
+  );
+}
+
 function runningCallback (isRunningTest, dest, newFolderName, callback) {
   // switch to the newly generated folder
   process.chdir(dest);
@@ -168,21 +184,7 @@ function setupTask (newFolderName, options) {
 
   return gulp.task('generator', function (callback) {
     gulp.src(coreSrc, {dot: true})
-      .on('end', function () {
-        gutil.log(
-          gutil.colors.green('[-done:] A new'),
-          gutil.colors.cyan('Node.js'),
-          gutil.colors.green('web server have been successfully created!')
-        );
-        gutil.log(
-          gutil.colors.gray('[-log:]'),
-          gutil.colors.magenta('It may take up to 1 minute and half!')
-        );
-        gutil.log(
-          gutil.colors.gray('[-log:]'),
-          gutil.colors.magenta('Be patient, fetching packages from internet ...')
-        );
-      })
+      .on('end', coreGenerationLogger)
       .pipe(gulp.dest(dest));
 
     // if option.path exist and it is a git url, it will be fetched
