@@ -114,7 +114,7 @@ function installNpm (rootPath, newFolderName, callback) {
   );
 }
 
-function simpleLogger () {
+function appGenerationLogger () {
   gutil.log(
     gutil.colors.green('[-done:] A new'),
     gutil.colors.cyan('Ember.js'),
@@ -183,6 +183,7 @@ function setupTask (newFolderName, options) {
   var appSrc = ( appSrcPath.indexOf('http') !== -1 ) ? appSrcPath : [appSrcPath + '/**/*'];
 
   return gulp.task('generator', function (callback) {
+    // Scaffold the "core/" of the application. ( Server && Client )
     gulp.src(coreSrc, {dot: true})
       .on('end', coreGenerationLogger)
       .pipe(gulp.dest(dest));
@@ -221,7 +222,7 @@ function setupTask (newFolderName, options) {
           gutil.colors.green('[-done:] Successfully fetched and installed the app template ')
         );
 
-        simpleLogger();
+        appGenerationLogger();
 
         // After fetching a git repo, then remove the .git folder
         return rimraf(path.join(dest, 'client', 'app', '.git'), function (error) {
@@ -237,7 +238,7 @@ function setupTask (newFolderName, options) {
     } else {
       gulp.src(appSrc, {dot: true})
         .on('end', function () {
-          simpleLogger();
+          appGenerationLogger();
           runningCallback(isRunningTest, dest, newFolderName, callback);
         })
         .pipe(gulp.dest(dest + '/client/app'));
