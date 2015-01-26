@@ -2,7 +2,6 @@ var exec = require('child_process').exec;
 var mkdirp = require('mkdirp');
 var rm = require('rimraf');
 var helpers = require('../helpers/utils');
-var should = require('chai').should();
 
 describe('Command `em generate` - Wrong Argument(s)', function () {
   beforeEach(function (done) {

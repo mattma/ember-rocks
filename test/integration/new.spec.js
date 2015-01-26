@@ -1,16 +1,23 @@
+'use strict';
+
+exports.lab = require('../helpers/test-helper').lab;
+var describe = require('../helpers/test-helper').describe;
+var it = require('../helpers/test-helper').it;
+var expect = require('../helpers/test-helper').expect;
+var afterEach = require('../helpers/test-helper').afterEach;
+
 var exec = require('child_process').exec;
 var fs = require('fs');
 var rm = require('rimraf');
 var helpers = require('../helpers/utils');
-var should = require('chai').should();
 
 describe('Command `em new`', function () {
   it('should require a dirName argument', function (done) {
     exec('./bin/em new', function (error, stdout, stderr) {
       // need to test the program should successfully shut down
-      stdout.should.include('[-Error:]');
-      stdout.should.include('Missing directory name.');
-      stdout.should.include('See \'em new --help\'');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('Missing directory name.');
+      expect(stdout).to.include('See \'em new --help\'');
       done();
     });
   });
@@ -25,8 +32,8 @@ describe('Created directory', function () {
     fs.mkdirSync('test-app');
     exec('./bin/em new test-app', function (error, stdout, stderr) {
       // need to test the program should successfully shut down
-      stdout.should.include('[-Error:]');
-      stdout.should.include('The folder name test-app has existed in this directory tree!');
+      expect(stdout).to.include('[-Error:]');
+      expect(stdout).to.include('The folder name test-app has existed in this directory tree!');
       done();
     });
   });
@@ -105,9 +112,10 @@ describe('Created directory', function () {
   it('should have an path option for fetching a valid git repo', function (done) {
     exec('./bin/em new test-app --test --path github.com/mattma/Ember-Rocks-Template-Basic',
       function (error, stdout, stderr) {
-        stdout.should.include('Going to fetch the app template from');
-        stdout.should.include('github.com/mattma/Ember-Rocks-Template-Basic');
-        stdout.should.include('[-done:] Successfully fetched and installed the app template');
+        // console.log('stdout: ', stdout);
+        expect(stdout).to.include('Going to fetch the app template from');
+        expect(stdout).to.include('github.com/mattma/Ember-Rocks-Template-Basic');
+        expect(stdout).to.include('[-done:] Successfully fetched and installed the app template');
         done();
       });
   });

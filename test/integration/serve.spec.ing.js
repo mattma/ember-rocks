@@ -6,7 +6,6 @@ var exec = require('child_process').exec;
 var fs = require('fs');
 var rm = require('rimraf');
 var helpers = require('../helpers/utils');
-var should = require('chai').should();
 
 describe('Command `em serve`', function () {
   it('should build the application and generate those folders', function (done) {
