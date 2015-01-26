@@ -157,25 +157,13 @@ function setupTask (newFolderName, options) {
 
   // check for the mode, is running test or not
   var isRunningTest = options.test || false;
-  // Pass in a valid git url for installing ember-application-template
-  var re = /^http(?:s)?:\/\//;
-  var userInputPath = options.path;
-  // check for remote URL path
-  var remoteUrl = (userInputPath) ?
-    (re.test(userInputPath)) ?
-      userInputPath : ('http://' + userInputPath) : undefined;
-
-  // get the full path to the ember application or take the generator from github or an URL
-  // skeletonsAppPath = ( userInputPath ) ? remoteUrl : getSkeletonsAppPath();
-  var appSrcPath = getSkeletonsAppPath();
-
-  if (remoteUrl !== undefined) {
-    appSrcPath = remoteUrl;
-  }
 
   // get the full path to the core of application. ( Server && Client )
   var skeletonsCorePath = getSkeletonsCorePath();
   var coreSrc = [skeletonsCorePath + '/**/*'];
+
+  // get the full path to the ember application or take the generator from github or an URL
+  var appSrcPath = getSkeletonsAppPath(options);
   var appSrc = ( appSrcPath.indexOf('http') !== -1 ) ? appSrcPath : [appSrcPath + '/**/*'];
 
   return gulp.task('generator', function (callback) {
@@ -264,8 +252,16 @@ function getSkeletonsCorePath () {
   return skeletonsCorePath;
 }
 
-function getSkeletonsAppPath () {
-  var skeletonsAppPath = pathResolver('skeletons/app');
+function getSkeletonsAppPath (options) {
+  // Pass in a valid git url for installing ember-application-template
+  var re = /^http(?:s)?:\/\//;
+  var userInputPath = options.path;
+  // check for remote URL path
+  var remoteUrl = (userInputPath) ?
+    (re.test(userInputPath)) ?
+      userInputPath : ('http://' + userInputPath) : undefined;
+
+  var skeletonsAppPath = (remoteUrl !== undefined) ? remoteUrl : pathResolver('skeletons/app');
   return skeletonsAppPath;
 }
 
