@@ -68,15 +68,8 @@ gulp.task('jscs', function () {
     .pipe($.jscs());
 });
 
-gulp.task('lint', ['jscs', 'jshint'], function () {
-  gutil.log(
-    gutil.colors.green('[-done:] Awesome! Both'),
-    gutil.colors.bold('jscs'),
-    gutil.colors.green('and'),
-    gutil.colors.bold('jshint'),
-    gutil.colors.green('have been satisfied!')
-  );
-});
+// Lint will run code quality task: jscs and jshint
+gulp.task('lint', ['jscs', 'jshint']);
 
 // task: stripLRScript
 // @describe  Strip out the LiveReload Script tag in HTML
