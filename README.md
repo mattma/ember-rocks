@@ -1,6 +1,6 @@
 # Ember Rocks ( a.k.a em-cli ) 
 
-[![NPM][npm-badge-image]][npm-badge-url]
+[![NPM][npm-badge-image]][npm-badge-url] [![NPM download](http://img.shields.io/npm/dm/ember-rocks.svg?style=flat)](https://www.npmjs.org/package/ember-rocks)
 
 [![NPM version][npm-image]][npm-url]   [![Build Status][travis-image]][travis-url]   [![Dependency Status][dependency-image]][dependency-url]
 
@@ -223,6 +223,10 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 
 ## Release History
+
+#### Unreleased (xx/xx/15)
+
+- Update the module [`gulp-htmlbars`](https://www.npmjs.com/package/gulp-htmlbars) to latest v0.3.0
 
 #### 0.8.0 (01/24/15)
 
