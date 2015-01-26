@@ -147,13 +147,31 @@ function scaffoldFiles () {
 
 }
 
-function setupTask (appSrcPath, newFolderName, isRunningTest) {
+function setupTask (newFolderName, options) {
   var dest = path.resolve(newFolderName);
   gutil.log(
     gutil.colors.gray('[-log:]'),
     'Starting to generate an application at',
     gutil.colors.magenta(tildify(dest))
   );
+
+  // check for the mode, is running test or not
+  var isRunningTest = options.test || false;
+  // Pass in a valid git url for installing ember-application-template
+  var re = /^http(?:s)?:\/\//;
+  var userInputPath = options.path;
+  // check for remote URL path
+  var remoteUrl = (userInputPath) ?
+    (re.test(userInputPath)) ?
+      userInputPath : ('http://' + userInputPath) : undefined;
+
+  // get the full path to the ember application or take the generator from github or an URL
+  // skeletonsAppPath = ( userInputPath ) ? remoteUrl : getSkeletonsAppPath();
+  var appSrcPath = getSkeletonsAppPath();
+
+  if (remoteUrl !== undefined) {
+    appSrcPath = remoteUrl;
+  }
 
   // get the full path to the core of application. ( Server && Client )
   var skeletonsCorePath = getSkeletonsCorePath();
@@ -271,26 +289,8 @@ var create = function (generatorPath, options) {
     fs.mkdirSync(generatorPath);
   }
 
-  // check for the mode, is running test or not
-  var isRunningTest = options.test || false;
-  // Pass in a valid git url for installing ember-application-template
-  var re = /^http(?:s)?:\/\//;
-  var userInputPath = options.path;
-  // check for remote URL path
-  var remoteUrl = (userInputPath) ?
-    (re.test(userInputPath)) ?
-      userInputPath : ('http://' + userInputPath) : undefined;
-
-  // get the full path to the ember application or take the generator from github or an URL
-  // skeletonsAppPath = ( userInputPath ) ? remoteUrl : getSkeletonsAppPath();
-  var skeletonsAppPath = getSkeletonsAppPath();
-
-  if (remoteUrl !== undefined) {
-    skeletonsAppPath = remoteUrl;
-  }
-
   // Setup gulp task, copy the source files into the newly create folder
-  setupTask(skeletonsAppPath, generatorPath, isRunningTest);
+  setupTask(generatorPath, options);
   // Trigger the generator task
   gulp.start('generator');
 };
