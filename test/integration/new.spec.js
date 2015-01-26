@@ -1,6 +1,5 @@
 'use strict';
 
-exports.lab = require('../helpers/test-helper').lab;
 var describe = require('../helpers/test-helper').describe;
 var it = require('../helpers/test-helper').it;
 var expect = require('../helpers/test-helper').expect;
@@ -112,7 +111,6 @@ describe('Created directory', function () {
   it('should have an path option for fetching a valid git repo', function (done) {
     exec('./bin/em new test-app --test --path github.com/mattma/Ember-Rocks-Template-Basic',
       function (error, stdout, stderr) {
-        // console.log('stdout: ', stdout);
         expect(stdout).to.include('Going to fetch the app template from');
         expect(stdout).to.include('github.com/mattma/Ember-Rocks-Template-Basic');
         expect(stdout).to.include('[-done:] Successfully fetched and installed the app template');

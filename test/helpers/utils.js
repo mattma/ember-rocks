@@ -71,14 +71,14 @@ exports.assertFoldersExist = function (folderPathArray, done) {
 exports.genCommandTester = function (command, pathExist, done) {
   exec(command, function (error, stdout, stderr) {
     var fullPath = 'client/app/' + pathExist;
-    stdout.should.include('[-done:]');
+    expect(stdout).to.include('[-done:]');
     assertPathExist(fullPath, done);
   });
 };
 
 exports.genCommandAndUnitTester = function (command, multiplePathsExist, done) {
   exec(command, function (error, stdout, stderr) {
-    stdout.should.include('[-done:]');
+    expect(stdout).to.include('[-done:]');
     assertPathsExist(multiplePathsExist, done);
   });
 };
@@ -86,7 +86,7 @@ exports.genCommandAndUnitTester = function (command, multiplePathsExist, done) {
 exports.genIntegrationTestsCommandTester = function (command, fileName, done) {
   exec(command, function (error, stdout, stderr) {
     var fullPath = 'client/tests/integration/' + fileName;
-    stdout.should.include('[-done:]');
+    expect(stdout).to.include('[-done:]');
     assertPathExist(fullPath, done);
   });
 };
@@ -94,7 +94,7 @@ exports.genIntegrationTestsCommandTester = function (command, fileName, done) {
 exports.genUnitTestsCommandTester = function (command, pathExist, done) {
   exec(command, function (error, stdout, stderr) {
     var fullPath = 'client/tests/unit/' + pathExist;
-    stdout.should.include('[-done:]');
+    expect(stdout).to.include('[-done:]');
     assertPathExist(fullPath, done);
   });
 };
