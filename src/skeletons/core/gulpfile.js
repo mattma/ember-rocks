@@ -2,7 +2,6 @@
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var fs = require('fs');
 var $ = require('gulp-load-plugins')();
 var to5 = require('gulp-6to5');
 var del = require('del');
@@ -28,11 +27,10 @@ var AutoPrefixerConfig = [
   'android >= 4.4',
   'bb >= 10'
 ];
-var clientFolder = 'client';
 var path = require('path');
 var server = require('tiny-lr')();
-var compileAllSrc; // Compile all src if filename start with _, or single without leading _
-var sassFilePath; // Used to dynamically set sass path, default to all sass
+var clientFolder = 'client';
+var sassRootPath = clientFolder + '/assets/styles/sass/';
 // Local Variable
 var options = {
   hostname: 'localhost',
@@ -97,60 +95,25 @@ gulp.task('injectLRScript', function () {
     .pipe(gulp.dest(path.join(__dirname, clientFolder)));
 });
 
-// Smart compile: if filename start with _, when save it will compile the whole project.
-// if filename is all text without _, when save it will only compile changed file
 gulp.task('sass', function () {
-  // var allSrc = clientFolder + '/assets/styles/sass/**/*.{scss,sass}';
-  // var compileFiles = ( compileAllSrc ) ? allSrc : ( sassFilePath ) ? sassFilePath : allSrc;
-  var nestedFolder = void 0;
+  var styleDestPath = clientFolder + '/assets/styles';
 
-  // When it is single file for compiling, it needs to render it in the right folder path.
-  // default it is   appName +'/resources/css',
-  // If it is nested folder inside sass/path/to/compileFilename, it will alert the dest folder path
-  if (!compileAllSrc) {
-    var basepathArr = path.dirname(sassFilePath).split('/');
-    var len = basepathArr.length;
-    var lastPos = len - 1;
-    var sassPos = basepathArr.indexOf('sass');
-
-    if (len > sassPos) {
-      nestedFolder = '';
-      var diff = lastPos - sassPos;
-      for (var i = 0; i < diff; i++) {
-        var foldername = '/' + basepathArr[lastPos - i];
-        nestedFolder = foldername.concat(nestedFolder);
-      }
-    }
-  }
-
-  var destPath = clientFolder + '/assets/styles' + ( ( nestedFolder ) ? nestedFolder : '' );
-
-  // return gulp.src( compileFiles, { base: 'client/assets/styles/sass' } )
-  //   .pipe($.rubySass({
-  //     // compass: false,  // default value
-  //     // debugInfo: false,  // default value
-  //     // lineNumbers: false,  // default value
-  //     sourcemapPath: './sass',
-  //     style: 'expanded',
-  //     precision: 3,
-  //     loadPath: ['/assets/styles/sass']
-  //   }))
-  return $.rubySass('client/assets/styles/sass', {
+  return $.rubySass(sassRootPath, {
     sourcemap: true,
     style:     'expanded',
-    loadPath:  ['/assets/styles/sass']
+    loadPath:  [sassRootPath]
   })
     .on('error', function (err) {
-      console.log(err.message);
+      console.log('[Error]: ', err.message);
     })
     .pipe($.autoprefixer({
       browsers: AutoPrefixerConfig
     }))
     .pipe($.sourcemaps.write('maps', {
       includeContent: false,
-      sourceRoot:     destPath
+      sourceRoot:     styleDestPath
     }))
-    .pipe(gulp.dest(destPath))
+    .pipe(gulp.dest(styleDestPath))
     .pipe($.size({title: 'compiled css'}))
     .pipe($.notify({message: 'Compiled <%= file.relative %>'}));
 });
@@ -221,7 +184,7 @@ gulp.task('envProd', function () {
   var dest = 'client';
 
   return gulp.src(src)
-  // .pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.js/, '/vendors/jquery/dist/jquery.min.js'))
+  // .pipe( $.replace(/\/vendors\/jquery\/dist\/jquery.js/,'/vendors/jquery/dist/jquery.min.js'))
     .pipe($.replace(
       /\/vendors\/handlebars\/handlebars.js/, '/vendors/handlebars/handlebars.min.js'
     ))
@@ -235,7 +198,7 @@ gulp.task('envDev', function () {
   var dest = 'client';
 
   return gulp.src(src)
-  // .pipe( $.replace( /\/vendors\/jquery\/dist\/jquery.min.js/, '/vendors/jquery/dist/jquery.js'))
+  // .pipe( $.replace(/\/vendors\/jquery\/dist\/jquery.min.js/,'/vendors/jquery/dist/jquery.js'))
     .pipe($.replace(
       /\/vendors\/handlebars\/handlebars.min.js/, '/vendors/handlebars/handlebars.js'
     ))
@@ -504,6 +467,10 @@ function notifyLivereload (event) {
 
 function rebuildProject (event) {
   switch (path.extname(event.path)) {
+    case '.sass' :
+    case '.scss' :
+      gulp.start('sass');
+      break;
     case '.hbs' :
       gulp.start('buildhbs');
       break;
@@ -518,27 +485,13 @@ function rebuildProject (event) {
 
 gulp.task('serve', ['express', 'sass', 'build', 'injectLRScript'], function () {
   gulp.start('open');
-  $.watch(clientFolder + '/assets/styles/sass/**/*.{scss,sass}', function (event) {
-    sassFilePath = event.path; // Only pass changed file to the sass task
-    var basename = path.basename(sassFilePath);
-    compileAllSrc = ( basename.indexOf('_') > -1 ) ? true : false;
-
-    if (sassFilePath && !compileAllSrc) {
-      var contents = fs.readFileSync(sassFilePath, 'utf8');
-      var exist = contents.match(/[^\/\/| ]@import/gm);
-
-      if (exist && exist.length > 0) {
-        compileAllSrc = true;
-      }
-    }
-    gulp.start('sass');
-  });
 
   server.listen(35729, function (err) {
     if (err) {
       return gutil.log('\n[-log]', gutil.colors.red(err));
     }
 
+    $.watch(sassRootPath + '**/*.{scss,sass}', rebuildProject);
     $.watch(clientFolder + '/app/**/*.js', rebuildProject);
     $.watch(clientFolder + '/app/**/*.hbs', rebuildProject);
     $.watch(clientFolder + '/index.html', notifyLivereload);
