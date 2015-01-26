@@ -228,6 +228,7 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 - Update the module [`gulp-htmlbars`](https://www.npmjs.com/package/gulp-htmlbars) to latest v0.3.0
 - [ENHENCEMENT] Sass pre-compiler (gulp sass task) has been dramatically simplified to provide a better and faster css compilation.
+- Replaced the testing framework from Mocha to Lab, assertion library from Chai to Code.
 
 #### 0.8.0 (01/24/15)
 
