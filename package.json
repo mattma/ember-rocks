@@ -41,9 +41,10 @@
     "gulp"
   ],
   "scripts": {
-    "test": "./node_modules/lab/bin/lab -cv -m 5000 ./test/**/*.spec.js"
+    "test": "./node_modules/lab/bin/lab -cv -m 5000 ./test/**/new.spec.js"
   },
   "dependencies": {
+    "bluebird": "^2.9.2",
     "commander": "^2.2.0",
     "gulp": "^3.8.10",
     "gulp-rename": "^1.2.0",

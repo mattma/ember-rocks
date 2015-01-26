@@ -1,5 +1,6 @@
 'use strict';
 
+var Promise = require('bluebird');
 var path = require('path');
 var fs = require('fs');
 var exec = require('child_process').exec;
@@ -142,14 +143,21 @@ function runningCallback (isRunningTest, dest, newFolderName, callback) {
   }
 }
 
-function setupTask (coreSrcPath, appSrcPath, dest, newFolderName, isRunningTest) {
+function scaffoldFiles() {
+
+}
+
+function setupTask (appSrcPath, dest, newFolderName, isRunningTest) {
   gutil.log(
     gutil.colors.gray('[-log:]'),
     'Starting to generate an application at',
     gutil.colors.magenta(tildify(dest))
   );
 
-  var coreSrc = [coreSrcPath + '/**/*'];
+  // get the full path to the core of application. ( Server && Client )
+  var skeletonsCorePath = getSkeletonsCorePath();
+
+  var coreSrc = [skeletonsCorePath + '/**/*'];
   var appSrc = ( appSrcPath.indexOf('http') !== -1 ) ? appSrcPath : [appSrcPath + '/**/*'];
 
   return gulp.task('generator', function (callback) {
@@ -262,8 +270,6 @@ var create = function (generatorPath, options) {
     ( re.test(userInputPath) ) ?
       userInputPath : ('http://' + userInputPath) : undefined;
 
-  // get the full path to the core of application. ( Server && Client )
-  var skeletonsCorePath = getSkeletonsCorePath();
   // get the full path to the ember application or take the generator from github or an URL
   // skeletonsAppPath = ( userInputPath ) ? remoteUrl : getSkeletonsAppPath();
   var skeletonsAppPath = getSkeletonsAppPath();
@@ -285,7 +291,7 @@ var create = function (generatorPath, options) {
 
   var currentAppPath = path.resolve(generatorPath);
   // Setup gulp task, copy the source files into the newly create folder
-  setupTask(skeletonsCorePath, skeletonsAppPath, currentAppPath, generatorPath, isRunningTest);
+  setupTask(skeletonsAppPath, currentAppPath, generatorPath, isRunningTest);
   // Trigger the generator task
   gulp.start('generator');
 };
