@@ -143,11 +143,12 @@ function runningCallback (isRunningTest, dest, newFolderName, callback) {
   }
 }
 
-function scaffoldFiles() {
+function scaffoldFiles () {
 
 }
 
-function setupTask (appSrcPath, dest, newFolderName, isRunningTest) {
+function setupTask (appSrcPath, newFolderName, isRunningTest) {
+  var dest = path.resolve(newFolderName);
   gutil.log(
     gutil.colors.gray('[-log:]'),
     'Starting to generate an application at',
@@ -156,7 +157,6 @@ function setupTask (appSrcPath, dest, newFolderName, isRunningTest) {
 
   // get the full path to the core of application. ( Server && Client )
   var skeletonsCorePath = getSkeletonsCorePath();
-
   var coreSrc = [skeletonsCorePath + '/**/*'];
   var appSrc = ( appSrcPath.indexOf('http') !== -1 ) ? appSrcPath : [appSrcPath + '/**/*'];
 
@@ -258,22 +258,8 @@ var create = function (generatorPath, options) {
     process.exit(0);
   }
 
-  // check for the mode, is running test or not
-  var isRunningTest = options.test || false;
-
-  // Pass in a valid git url for installing ember-application-template
-  var re = /^http(?:s)?:\/\//;
-  var userInputPath = options.path;
-
-  // check for remote URL path
-  var remoteUrl = ( userInputPath ) ?
-    ( re.test(userInputPath) ) ?
-      userInputPath : ('http://' + userInputPath) : undefined;
-
-  // get the full path to the ember application or take the generator from github or an URL
-  // skeletonsAppPath = ( userInputPath ) ? remoteUrl : getSkeletonsAppPath();
-  var skeletonsAppPath = getSkeletonsAppPath();
-
+  // Create the folder if it is not existed
+  // If existed, do what? maybe just empty it and start scaffolding???
   if (fs.existsSync(generatorPath)) {
     gutil.log(
       gutil.colors.red('[-Error:]'), 'The folder name',
@@ -285,13 +271,26 @@ var create = function (generatorPath, options) {
     fs.mkdirSync(generatorPath);
   }
 
+  // check for the mode, is running test or not
+  var isRunningTest = options.test || false;
+  // Pass in a valid git url for installing ember-application-template
+  var re = /^http(?:s)?:\/\//;
+  var userInputPath = options.path;
+  // check for remote URL path
+  var remoteUrl = (userInputPath) ?
+    (re.test(userInputPath)) ?
+      userInputPath : ('http://' + userInputPath) : undefined;
+
+  // get the full path to the ember application or take the generator from github or an URL
+  // skeletonsAppPath = ( userInputPath ) ? remoteUrl : getSkeletonsAppPath();
+  var skeletonsAppPath = getSkeletonsAppPath();
+
   if (remoteUrl !== undefined) {
     skeletonsAppPath = remoteUrl;
   }
 
-  var currentAppPath = path.resolve(generatorPath);
   // Setup gulp task, copy the source files into the newly create folder
-  setupTask(skeletonsAppPath, currentAppPath, generatorPath, isRunningTest);
+  setupTask(skeletonsAppPath, generatorPath, isRunningTest);
   // Trigger the generator task
   gulp.start('generator');
 };
