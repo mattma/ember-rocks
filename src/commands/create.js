@@ -12,6 +12,7 @@ var rename = require('gulp-rename');
 
 // Promises for each task...
 
+// "npm install" task to install project module dependencies
 function npmInstaller (dest) {
   return new Promise(function (resolve, reject) {
     dest = dest || process.cwd();
@@ -27,6 +28,7 @@ function npmInstaller (dest) {
   });
 }
 
+// "bower install" task to install client side libraries
 function bowerInstaller (dest) {
   return new Promise(function (resolve, reject) {
     dest = dest || process.cwd();
@@ -42,6 +44,7 @@ function bowerInstaller (dest) {
   });
 }
 
+// "git init" task to kick start a git project
 function gitInitializer (dest) {
   gutil.log(
     gutil.colors.gray('[-log:]'),
