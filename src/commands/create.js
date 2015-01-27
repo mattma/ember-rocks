@@ -10,40 +10,7 @@ var rimraf = require('rimraf');
 var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 
-function runningCallback (isRunningTest, dest, newFolderName, callback) {
-  // switch to the newly generated folder
-  process.chdir(dest);
-  // rename `gitignore` to `.gitignore`
-  // then remove the originial `gitignore`
-  gulp.src('./gitignore')
-    .pipe(rename('.gitignore'))
-    .on('end', function () {
-      rimraf('./gitignore', function () {});
-    })
-    .pipe(gulp.dest(dest));
-
-  if (!isRunningTest) {
-    // Flow Control: execute serial tasks: npm install, bower install, git init
-    npmInstaller(dest)
-      .then(function () {
-        bowerInstaller(dest);
-      })
-      .then(function () {
-        gitInitializer(dest);
-      })
-      .then(function () {
-        successInfoLogger(newFolderName);
-        // give the control back to gulp task
-        callback();
-      })
-      .catch(function (err, errFunction) {
-        // output error for individual task
-        errFunction(err);
-      });
-  } else {
-    callback();
-  }
-}
+// Promises for each task...
 
 function npmInstaller (dest) {
   return new Promise(function (resolve, reject) {
@@ -101,6 +68,42 @@ function gitInitializer (dest) {
       resolve();
     });
   });
+}
+
+function runningCallback (isRunningTest, dest, newFolderName, callback) {
+  // switch to the newly generated folder
+  process.chdir(dest);
+  // rename `gitignore` to `.gitignore`
+  // then remove the originial `gitignore`
+  gulp.src('./gitignore')
+    .pipe(rename('.gitignore'))
+    .on('end', function () {
+      rimraf('./gitignore', function () {
+      });
+    })
+    .pipe(gulp.dest(dest));
+
+  if (!isRunningTest) {
+    // Flow Control: execute serial tasks: npm install, bower install, git init
+    npmInstaller(dest)
+      .then(function () {
+        bowerInstaller(dest);
+      })
+      .then(function () {
+        gitInitializer(dest);
+      })
+      .then(function () {
+        successInfoLogger(newFolderName);
+        // give the control back to gulp task
+        callback();
+      })
+      .catch(function (err, errFunction) {
+        // output error for individual task
+        errFunction(err);
+      });
+  } else {
+    callback();
+  }
 }
 
 function setupTask (newFolderName, options) {
@@ -187,91 +190,8 @@ function setupTask (newFolderName, options) {
   });
 }
 
-function npmInstallationFailLogger (err) {
-  gutil.log(gutil.colors.red('[-Error:] ' + err));
-  gutil.log(gutil.colors.red('[-Error:] npm install failed dramatically.'));
-  gutil.log(gutil.colors.red('[-Error:] Need to manually do "npm install" and "bower install"'));
-  gutil.log(gutil.colors.red('[-Error:] Before the project is fully ready for development'));
-}
-
-function bowerInstalltionFailLogger (err) {
-  gutil.log(gutil.colors.red('[-Error:] ' + err));
-  gutil.log(gutil.colors.red('[-Error:] bower install failed dramatically.'));
-  gutil.log(gutil.colors.red('[-Error:] Need to manually do \'bower install\''));
-  gutil.log(gutil.colors.red('[-Error:] Before the project is fully ready for development'));
-}
-
-function gitInitializerFailLogger (err) {
-  gutil.log(gutil.colors.red('[-Error:] ' + err));
-  gutil.log(gutil.colors.red('[-Error:] initialize git repository failed dramatically.'));
-  gutil.log(gutil.colors.red('[-Error:] Need to manually do'));
-  gutil.log(gutil.colors.red('[-Error:] \'git init && git add . && git commit -m\''));
-}
-
-function successInfoLogger (newFolderName) {
-  gutil.log(
-    gutil.colors.green('[-done:] Initialized a new git repo and did a first commit')
-  );
-  gutil.log(
-    gutil.colors.bold('[-copy:] =>'),
-    gutil.colors.cyan('cd ' + newFolderName),
-    gutil.colors.gray('# navigate to the newly created application')
-  );
-  gutil.log(
-    gutil.colors.bold('[-copy:] =>'),
-    gutil.colors.cyan('em serve'),
-    gutil.colors.gray(' # kick start the server, open project in favorite browser,'),
-    gutil.colors.gray('auto watch file changes and rebuild the project')
-  );
-}
-
-function appGenerationLogger () {
-  gutil.log(
-    gutil.colors.green('[-done:] A new'),
-    gutil.colors.cyan('Ember.js'),
-    gutil.colors.green('mvc application have been successfully created!')
-  );
-}
-
-function coreGenerationLogger () {
-  gutil.log(
-    gutil.colors.green('[-done:] A new'),
-    gutil.colors.cyan('Node.js'),
-    gutil.colors.green('web server have been successfully created!')
-  );
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    gutil.colors.magenta('It may take up to 1 minute and half!')
-  );
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    gutil.colors.magenta('Be patient, fetching packages from internet ...')
-  );
-}
-
-function pathResolver (relativePath) {
-  return path.resolve(__dirname, '..', relativePath);
-}
-
-function getSkeletonsCorePath () {
-  var skeletonsCorePath = pathResolver('skeletons/core');
-  return skeletonsCorePath;
-}
-
-function getSkeletonsAppPath (options) {
-  // Pass in a valid git url for installing ember-application-template
-  var re = /^http(?:s)?:\/\//;
-  var userInputPath = options.path;
-  // check for remote URL path
-  var remoteUrl = (userInputPath) ?
-    (re.test(userInputPath)) ?
-      userInputPath : ('http://' + userInputPath) : undefined;
-
-  var skeletonsAppPath = (remoteUrl !== undefined) ? remoteUrl : pathResolver('skeletons/app');
-  return skeletonsAppPath;
-}
-
-var create = function (generatorPath, options) {
+// Create command entry point function
+function create (generatorPath, options) {
   if (!generatorPath || typeof generatorPath !== 'string') {
     gutil.log(gutil.colors.red('[-Error:] Missing directory name.'), 'ex: em new my-app');
     gutil.log(gutil.colors.red('[-Error:]'), 'See \'em new --help\'');
@@ -295,6 +215,100 @@ var create = function (generatorPath, options) {
   setupTask(generatorPath, options);
   // Trigger the generator task
   gulp.start('generator');
-};
+}
 
 module.exports = create;
+
+// Resolve project paths start...
+
+function pathResolver (relativePath) {
+  return path.resolve(__dirname, '..', relativePath);
+}
+
+function getSkeletonsCorePath () {
+  var skeletonsCorePath = pathResolver('skeletons/core');
+  return skeletonsCorePath;
+}
+
+function getSkeletonsAppPath (options) {
+  // Pass in a valid git url for installing ember-application-template
+  var re = /^http(?:s)?:\/\//;
+  var userInputPath = options.path;
+  // check for remote URL path
+  var remoteUrl = (userInputPath) ?
+    (re.test(userInputPath)) ?
+      userInputPath : ('http://' + userInputPath) : undefined;
+
+  var skeletonsAppPath = (remoteUrl !== undefined) ? remoteUrl : pathResolver('skeletons/app');
+  return skeletonsAppPath;
+}
+
+// Logger functions start...
+
+// Trigger when NPM installation fails, output error message in terminal
+function npmInstallationFailLogger (err) {
+  gutil.log(gutil.colors.red('[-Error:] ' + err));
+  gutil.log(gutil.colors.red('[-Error:] npm install failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] Need to manually do "npm install" and "bower install"'));
+  gutil.log(gutil.colors.red('[-Error:] Before the project is fully ready for development'));
+}
+
+// Trigger when Bower installation fails, output error message in terminal
+function bowerInstalltionFailLogger (err) {
+  gutil.log(gutil.colors.red('[-Error:] ' + err));
+  gutil.log(gutil.colors.red('[-Error:] bower install failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] Need to manually do \'bower install\''));
+  gutil.log(gutil.colors.red('[-Error:] Before the project is fully ready for development'));
+}
+
+// Trigger when Git initialization fails, output error message in terminal
+function gitInitializerFailLogger (err) {
+  gutil.log(gutil.colors.red('[-Error:] ' + err));
+  gutil.log(gutil.colors.red('[-Error:] initialize git repository failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] Need to manually do'));
+  gutil.log(gutil.colors.red('[-Error:] \'git init && git add . && git commit -m\''));
+}
+
+// When `em new` command succeed and output successfully message to user
+function successInfoLogger (newFolderName) {
+  gutil.log(
+    gutil.colors.green('[-done:] Initialized a new git repo and did a first commit')
+  );
+  gutil.log(
+    gutil.colors.bold('[-copy:] =>'),
+    gutil.colors.cyan('cd ' + newFolderName),
+    gutil.colors.gray('# navigate to the newly created application')
+  );
+  gutil.log(
+    gutil.colors.bold('[-copy:] =>'),
+    gutil.colors.cyan('em serve'),
+    gutil.colors.gray(' # kick start the server, open project in favorite browser,'),
+    gutil.colors.gray('auto watch file changes and rebuild the project')
+  );
+}
+
+// When "app/" folder has been inserted into "client/" for client side development
+function appGenerationLogger () {
+  gutil.log(
+    gutil.colors.green('[-done:] A new'),
+    gutil.colors.cyan('Ember.js'),
+    gutil.colors.green('mvc application have been successfully created!')
+  );
+}
+
+// When all root files and core files has been generated from the scaffold folder
+function coreGenerationLogger () {
+  gutil.log(
+    gutil.colors.green('[-done:] A new'),
+    gutil.colors.cyan('Node.js'),
+    gutil.colors.green('web server have been successfully created!')
+  );
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    gutil.colors.magenta('It may take up to 1 minute and half!')
+  );
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    gutil.colors.magenta('Be patient, fetching packages from internet ...')
+  );
+}
