@@ -88,9 +88,11 @@ function setupGitignore (dest) {
 function taskRunner (isRunningTest, dest, newFolderName, callback) {
   // switch to the newly generated folder
   process.chdir(dest);
-  setupGitignore(dest);
 
   if (!isRunningTest) {
+    // can be run in concurrency, since it won't affect other tasks
+    setupGitignore(dest);
+
     // Flow Control: execute serial tasks: npm install, bower install, git init
     npmInstaller(dest)
       .then(function () {
@@ -112,6 +114,22 @@ function taskRunner (isRunningTest, dest, newFolderName, callback) {
     callback();
   }
 }
+
+// Copy "scaffold/core" files to the destination
+//function copyCoreContent (dest) {
+//  return new Promise(function (resolve, reject) {
+//    dest = dest || process.cwd();
+//    gutil.log(gutil.colors.gray('[-log:]'), 'NPM is installing node packages...');
+//    process.chdir(dest);
+//    return exec('npm install', function (error, stdout, stderr) {
+//      if (error !== null) {
+//        var err = stderr.toString();
+//        reject(err, npmInstallationFailLogger);
+//      }
+//      resolve();
+//    });
+//  });
+//}
 
 function setupTask (newFolderName, options) {
   var dest = path.resolve(newFolderName);
