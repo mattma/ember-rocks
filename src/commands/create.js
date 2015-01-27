@@ -18,9 +18,7 @@ function runningCallback (isRunningTest, dest, newFolderName, callback) {
   gulp.src('./gitignore')
     .pipe(rename('.gitignore'))
     .on('end', function () {
-      rimraf('./gitignore', function (err) {
-        if (err) throw err;
-      });
+      rimraf('./gitignore', function () {});
     })
     .pipe(gulp.dest(dest));
 
@@ -33,12 +31,12 @@ function runningCallback (isRunningTest, dest, newFolderName, callback) {
       .then(function () {
         gitInitializer(dest);
       })
-      .then(function() {
+      .then(function () {
         successInfoLogger(newFolderName);
         // give the control back to gulp task
         callback();
       })
-      .catch(function(err, errFunction){
+      .catch(function (err, errFunction) {
         // output error for individual task
         errFunction(err);
       });
