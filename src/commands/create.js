@@ -125,19 +125,8 @@ function copyCoreContent (dest) {
   });
 }
 
-function appContentFetchingError (err, reject, options) {
-  return function () {
-    var log = err.toString();
-    gutil.log(gutil.colors.red('[-Error:] ' + log));
-    if (options.appSrc) {
-      gutil.log(gutil.colors.red('[-Error:] --path ' + appSrc + ' cannot be fetched!'));
-    }
-    reject(err);
-  }
-}
-
 // Fetching the "app/" content from any "git" protocol of github
-function appContentFetchingFromGithub (appSrc) {
+function appContentFetchingFromGithub (appSrc, dest) {
   var command = 'git clone ' + appSrc + ' app';
   var rootPath = dest || process.cwd();
   var clientPath = rootPath + '/client';
@@ -167,7 +156,8 @@ function appContentFetchingFromGithub (appSrc) {
         if (err !== null) {
           appContentFetchingError(stderr, reject);
         }
-        appGenerationLogger(resolve, {remote: true});
+        // this function has been decorated with options
+        appGenerationLogger(resolve, {remote: true})();
       });
     });
   });
@@ -194,7 +184,7 @@ function copyAppContent (dest, options) {
   // it should return an Promise
   if (typeof appSrc === 'string') {
     // fetching "app/" contents from github repo url
-    ret = appContentFetchingFromGithub(appSrc);
+    ret = appContentFetchingFromGithub(appSrc, dest);
   } else {
     // Scaffolding the "app/" folder from bundled "ember-rocks"
     ret = appContentScaffoldFromLocal(appSrc, dest);
@@ -280,6 +270,19 @@ function getSkeletonsAppPath (options) {
   return skeletonsAppPath;
 }
 
+// App content github fetching error handler start...
+
+function appContentFetchingError (err, reject, options) {
+  return function () {
+    var log = err.toString();
+    gutil.log(gutil.colors.red('[-Error:] ' + log));
+    if (options.appSrc) {
+      gutil.log(gutil.colors.red('[-Error:] --path ' + appSrc + ' cannot be fetched!'));
+    }
+    reject(err);
+  }
+}
+
 // Logger functions start...
 
 // Trigger when NPM installation fails, output error message in terminal
@@ -333,7 +336,6 @@ function appGenerationLogger (resolve, options) {
         gutil.colors.green('[-done:] Successfully fetched and installed the app template ')
       );
     }
-
     gutil.log(
       gutil.colors.green('[-done:] A new'),
       gutil.colors.cyan('Ember.js'),
