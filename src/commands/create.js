@@ -85,7 +85,7 @@ function setupGitignore (dest) {
     .pipe(gulp.dest(dest));
 }
 
-function taskRunner (isRunningTest, dest, newFolderName, callback) {
+function taskRunner (newFolderName, dest, isRunningTest) {
   // switch to the newly generated folder
   process.chdir(dest);
   // can be run in concurrency, since it won't affect other tasks
@@ -102,15 +102,11 @@ function taskRunner (isRunningTest, dest, newFolderName, callback) {
       })
       .then(function () {
         successInfoLogger(newFolderName);
-        // give the control back to gulp task
-        callback();
       })
       .catch(function (err, errFunction) {
         // output error for individual task
         errFunction(err);
       });
-  } else {
-    callback();
   }
 }
 
@@ -129,24 +125,12 @@ function copyCoreContent (dest) {
   });
 }
 
-function setupTask (newFolderName, options) {
-  var dest = path.resolve(newFolderName);
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    'Starting to generate an application at',
-    gutil.colors.magenta(tildify(dest))
-  );
-
-  // check for the mode, is running test or not
-  var isRunningTest = options.test || false;
-
+function copyAppContent (dest, options) {
   // get the full path to the ember application or take the generator from github or an URL
   var appSrcPath = getSkeletonsAppPath(options);
   var appSrc = ( appSrcPath.indexOf('http') !== -1 ) ? appSrcPath : [appSrcPath + '/**/*'];
 
-  return gulp.task('generator', function (callback) {
-    copyCoreContent(dest);
-
+  return new Promise(function (resolve, reject) {
     // if option.path exist and it is a git url, it will be fetched
     // Otherwise, it will use the default scaffold folder app
     if (typeof appSrc === 'string') {
@@ -191,18 +175,38 @@ function setupTask (newFolderName, options) {
             process.exit(0);
           }
           // running npm install callback
-          taskRunner(isRunningTest, dest, newFolderName, callback);
+          // taskRunner(isRunningTest, dest, newFolderName, callback);
         });
       });
     } else {
       // Scaffold the "app/" folder from bundled "ember-rocks"
       gulp.src(appSrc, {dot: true})
-        .on('end', function () {
-          appGenerationLogger();
-          taskRunner(isRunningTest, dest, newFolderName, callback);
-        })
+        .on('error', reject)
+        .on('end', appGenerationLogger(resolve))
         .pipe(gulp.dest(dest + '/client/app'));
     }
+  });
+}
+
+function setupTask (newFolderName, options) {
+  var dest = path.resolve(newFolderName);
+  // check for the mode, is running test or not
+  var isRunningTest = options.test || false;
+
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    'Starting to generate an application at',
+    gutil.colors.magenta(tildify(dest))
+  );
+
+  var tasks = [
+    copyCoreContent(dest),
+    copyAppContent(dest, options)
+  ];
+
+  Promise.all(tasks).then(function () {
+    console.log('runn task dones');
+    taskRunner(newFolderName, dest, isRunningTest);
   });
 }
 
@@ -229,8 +233,6 @@ function create (generatorPath, options) {
 
   // Setup gulp task, copy the source files into the newly create folder
   setupTask(generatorPath, options);
-  // Trigger the generator task
-  gulp.start('generator');
 }
 
 module.exports = create;
@@ -304,17 +306,20 @@ function successInfoLogger (newFolderName) {
 }
 
 // When "app/" folder has been inserted into "client/" for client side development
-function appGenerationLogger () {
-  gutil.log(
-    gutil.colors.green('[-done:] A new'),
-    gutil.colors.cyan('Ember.js'),
-    gutil.colors.green('mvc application have been successfully created!')
-  );
+function appGenerationLogger (resolve) {
+  return function () {
+    gutil.log(
+      gutil.colors.green('[-done:] A new'),
+      gutil.colors.cyan('Ember.js'),
+      gutil.colors.green('mvc application have been successfully created!')
+    );
+    resolve();
+  }
 }
 
 // When all root files and core files has been generated from the scaffold folder
 function coreGenerationLogger (resolve) {
-  return function() {
+  return function () {
     gutil.log(
       gutil.colors.green('[-done:] A new'),
       gutil.colors.cyan('Node.js'),
