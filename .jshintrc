@@ -40,6 +40,7 @@
   // suppresses warnings about comma-first coding style
   "laxcomma": true,
   "predef": [
+    "-Promise",
     "document",
     "window",
     "console",

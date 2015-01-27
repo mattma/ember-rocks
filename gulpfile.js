@@ -16,7 +16,6 @@ var lintFiles = [
 ];
 
 gulp.task('lint', function () {
-  log('Linting Files');
   return gulp.src(lintFiles)
     .pipe(jshint('.jshintrc'))
     .pipe(jshint.reporter('default'));
