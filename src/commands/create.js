@@ -125,67 +125,81 @@ function copyCoreContent (dest) {
   });
 }
 
+function appContentFetchingError (err, reject, options) {
+  return function () {
+    var log = err.toString();
+    gutil.log(gutil.colors.red('[-Error:] ' + log));
+    if (options.appSrc) {
+      gutil.log(gutil.colors.red('[-Error:] --path ' + appSrc + ' cannot be fetched!'));
+    }
+    reject(err);
+  }
+}
+
+// Fetching the "app/" content from any "git" protocol of github
+function appContentFetchingFromGithub (appSrc) {
+  var command = 'git clone ' + appSrc + ' app';
+  var rootPath = dest || process.cwd();
+  var clientPath = rootPath + '/client';
+
+  // if client/ folder is not existed, simply create one
+  if (!fs.existsSync(clientPath)) {
+    fs.mkdirSync(clientPath);
+  }
+
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    'Going to fetch the app template from ',
+    gutil.colors.cyan(appSrc)
+  );
+
+  // change to the client folder to install app template
+  process.chdir(path.resolve(clientPath));
+
+  return new Promise(function (resolve, reject) {
+    // fetch the git url now
+    exec(command, function (err, stdout, stderr) {
+      if (err !== null) {
+        appContentFetchingError(stderr, reject, {appSrc: appSrc});
+      }
+      // After fetching a git repo, then remove the .git folder
+      rimraf(path.join(dest, 'client', 'app', '.git'), function (err) {
+        if (err !== null) {
+          appContentFetchingError(stderr, reject);
+        }
+        appGenerationLogger(resolve, {remote: true});
+      });
+    });
+  });
+}
+
+// Copying "app/" folder contents from Local file system bundled with "ember-rocks"
+function appContentScaffoldFromLocal (appSrc, dest) {
+  return new Promise(function (resolve, reject) {
+    gulp.src(appSrc, {dot: true})
+      .on('error', reject)
+      .on('end', appGenerationLogger(resolve))
+      .pipe(gulp.dest(dest + '/client/app'));
+  });
+}
+
 function copyAppContent (dest, options) {
   // get the full path to the ember application or take the generator from github or an URL
   var appSrcPath = getSkeletonsAppPath(options);
   var appSrc = ( appSrcPath.indexOf('http') !== -1 ) ? appSrcPath : [appSrcPath + '/**/*'];
+  var ret;
 
-  return new Promise(function (resolve, reject) {
-    // if option.path exist and it is a git url, it will be fetched
-    // Otherwise, it will use the default scaffold folder app
-    if (typeof appSrc === 'string') {
-      var command = 'git clone ' + appSrc + ' app';
-      var rootPath = dest || process.cwd();
-      var clientPath = rootPath + '/client';
-
-      // if client/ folder is not existed, simply create one
-      if (!fs.existsSync(clientPath)) {
-        fs.mkdirSync(clientPath);
-      }
-
-      gutil.log(
-        gutil.colors.gray('[-log:]'),
-        'Going to fetch the app template from ',
-        gutil.colors.cyan(appSrc)
-      );
-
-      // change to the client folder to install app template
-      process.chdir(path.resolve(clientPath));
-
-      // fetch the git url now
-      exec(command, function (error, stdout, stderr) {
-        if (error !== null) {
-          var log = stderr.toString();
-          gutil.log(gutil.colors.red('[-Error:] ' + log));
-          gutil.log(gutil.colors.red('[-Error:] --path ' + appSrc + ' cannot be fetched!'));
-          process.exit(0);
-        }
-
-        gutil.log(
-          gutil.colors.green('[-done:] Successfully fetched and installed the app template ')
-        );
-
-        appGenerationLogger();
-
-        // After fetching a git repo, then remove the .git folder
-        return rimraf(path.join(dest, 'client', 'app', '.git'), function (error) {
-          if (error !== null) {
-            var log = stderr.toString();
-            gutil.log(gutil.colors.red('[-Error:] ' + log));
-            process.exit(0);
-          }
-          // running npm install callback
-          // taskRunner(isRunningTest, dest, newFolderName, callback);
-        });
-      });
-    } else {
-      // Scaffold the "app/" folder from bundled "ember-rocks"
-      gulp.src(appSrc, {dot: true})
-        .on('error', reject)
-        .on('end', appGenerationLogger(resolve))
-        .pipe(gulp.dest(dest + '/client/app'));
-    }
-  });
+  // if option.path exist and it is a git url, it will be fetched
+  // Otherwise, it will use the default scaffold folder app
+  // it should return an Promise
+  if (typeof appSrc === 'string') {
+    // fetching "app/" contents from github repo url
+    ret = appContentFetchingFromGithub(appSrc);
+  } else {
+    // Scaffolding the "app/" folder from bundled "ember-rocks"
+    ret = appContentScaffoldFromLocal(appSrc, dest);
+  }
+  return ret;
 }
 
 function setupTask (newFolderName, options) {
@@ -204,10 +218,15 @@ function setupTask (newFolderName, options) {
     copyAppContent(dest, options)
   ];
 
-  Promise.all(tasks).then(function () {
-    console.log('runn task dones');
-    taskRunner(newFolderName, dest, isRunningTest);
-  });
+  Promise.all(tasks)
+    .then(function () {
+      taskRunner(newFolderName, dest, isRunningTest);
+    })
+    .catch(function () {
+      gutil.log(gutil.colors.red('[-Error:]'),
+        'ember-rocks could not generate an application due to the error above!');
+      process.exit(0);
+    });
 }
 
 // Create command entry point function
@@ -306,8 +325,15 @@ function successInfoLogger (newFolderName) {
 }
 
 // When "app/" folder has been inserted into "client/" for client side development
-function appGenerationLogger (resolve) {
+function appGenerationLogger (resolve, options) {
+  options = options || {};
   return function () {
+    if (options.remote) {
+      gutil.log(
+        gutil.colors.green('[-done:] Successfully fetched and installed the app template ')
+      );
+    }
+
     gutil.log(
       gutil.colors.green('[-done:] A new'),
       gutil.colors.cyan('Ember.js'),
