@@ -277,10 +277,10 @@ function appContentFetchingError (err, reject, options) {
     var log = err.toString();
     gutil.log(gutil.colors.red('[-Error:] ' + log));
     if (options.appSrc) {
-      gutil.log(gutil.colors.red('[-Error:] --path ' + appSrc + ' cannot be fetched!'));
+      gutil.log(gutil.colors.red('[-Error:] --path ' + options.appSrc + ' cannot be fetched!'));
     }
     reject(err);
-  }
+  };
 }
 
 // Logger functions start...
@@ -342,7 +342,7 @@ function appGenerationLogger (resolve, options) {
       gutil.colors.green('mvc application have been successfully created!')
     );
     resolve();
-  }
+  };
 }
 
 // When all root files and core files has been generated from the scaffold folder
@@ -362,5 +362,5 @@ function coreGenerationLogger (resolve) {
       gutil.colors.magenta('Be patient, fetching packages from internet ...')
     );
     resolve();
-  }
+  };
 }
