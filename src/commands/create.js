@@ -12,6 +12,69 @@ var rename = require('gulp-rename');
 
 // Promises for each task...
 
+// Fetching the "app/" content from any "git" protocol of github
+function appContentFetchingFromGithub (appSrc, dest) {
+  var command = 'git clone ' + appSrc + ' app';
+  var rootPath = dest || process.cwd();
+  var clientPath = rootPath + '/client';
+
+  // if client/ folder is not existed, simply create one
+  if (!fs.existsSync(clientPath)) {
+    fs.mkdirSync(clientPath);
+  }
+
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    'Going to fetch the app template from ',
+    gutil.colors.cyan(appSrc)
+  );
+
+  // change to the client folder to install app template
+  process.chdir(path.resolve(clientPath));
+
+  return new Promise(function (resolve, reject) {
+    // fetch the git url now
+    exec(command, function (err, stdout, stderr) {
+      if (err !== null) {
+        appContentFetchingError(stderr, reject, {appSrc: appSrc});
+      }
+      // After fetching a git repo, then remove the .git folder
+      rimraf(path.join(dest, 'client', 'app', '.git'), function (err) {
+        if (err !== null) {
+          appContentFetchingError(stderr, reject);
+        }
+        // this function has been decorated with options
+        appGenerationLogger(resolve, {remote: true})();
+      });
+    });
+  });
+}
+
+// Copying "app/" folder contents from Local file system bundled with "ember-rocks"
+function appContentScaffoldFromLocal (appSrc, dest) {
+  return new Promise(function (resolve, reject) {
+    gulp.src(appSrc, {dot: true})
+      .on('error', reject)
+      .on('end', appGenerationLogger(resolve))
+      .pipe(gulp.dest(dest + '/client/app'));
+  });
+}
+
+// Copy "scaffold/core" files to the destination
+function copyCoreContent (dest) {
+  // get the full path to the core of application. ( Server && Client )
+  var skeletonsCorePath = getSkeletonsCorePath();
+  var coreSrc = [skeletonsCorePath + '/**/*'];
+
+  return new Promise(function (resolve, reject) {
+    // Scaffold the "core/" of the application. ( Server && Client )
+    gulp.src(coreSrc, {dot: true})
+      .on('error', reject)
+      .on('end', coreGenerationLogger(resolve))
+      .pipe(gulp.dest(dest));
+  });
+}
+
 // "npm install" task to install project module dependencies
 function npmInstaller (dest) {
   return new Promise(function (resolve, reject) {
@@ -85,94 +148,26 @@ function setupGitignore (dest) {
     .pipe(gulp.dest(dest));
 }
 
-function taskRunner (newFolderName, dest, isRunningTest) {
-  // switch to the newly generated folder
-  process.chdir(dest);
-  // can be run in concurrency, since it won't affect other tasks
-  setupGitignore(dest);
+// Second series of tasks
+// Flow Control: execute serial tasks: npm install, bower install, git init
+function installerTasks (newFolderName, dest) {
+  var tasks = [
+    npmInstaller(dest),
+    bowerInstaller(dest),
+    gitInitializer(dest)
+  ];
 
-  if (!isRunningTest) {
-    // Flow Control: execute serial tasks: npm install, bower install, git init
-    npmInstaller(dest)
-      .then(function () {
-        bowerInstaller(dest);
-      })
-      .then(function () {
-        gitInitializer(dest);
-      })
-      .then(function () {
-        successInfoLogger(newFolderName);
-      })
-      .catch(function (err, errFunction) {
-        // output error for individual task
-        errFunction(err);
-      });
-  }
-}
-
-// Copy "scaffold/core" files to the destination
-function copyCoreContent (dest) {
-  // get the full path to the core of application. ( Server && Client )
-  var skeletonsCorePath = getSkeletonsCorePath();
-  var coreSrc = [skeletonsCorePath + '/**/*'];
-
-  return new Promise(function (resolve, reject) {
-    // Scaffold the "core/" of the application. ( Server && Client )
-    gulp.src(coreSrc, {dot: true})
-      .on('error', reject)
-      .on('end', coreGenerationLogger(resolve))
-      .pipe(gulp.dest(dest));
-  });
-}
-
-// Fetching the "app/" content from any "git" protocol of github
-function appContentFetchingFromGithub (appSrc, dest) {
-  var command = 'git clone ' + appSrc + ' app';
-  var rootPath = dest || process.cwd();
-  var clientPath = rootPath + '/client';
-
-  // if client/ folder is not existed, simply create one
-  if (!fs.existsSync(clientPath)) {
-    fs.mkdirSync(clientPath);
-  }
-
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    'Going to fetch the app template from ',
-    gutil.colors.cyan(appSrc)
-  );
-
-  // change to the client folder to install app template
-  process.chdir(path.resolve(clientPath));
-
-  return new Promise(function (resolve, reject) {
-    // fetch the git url now
-    exec(command, function (err, stdout, stderr) {
-      if (err !== null) {
-        appContentFetchingError(stderr, reject, {appSrc: appSrc});
-      }
-      // After fetching a git repo, then remove the .git folder
-      rimraf(path.join(dest, 'client', 'app', '.git'), function (err) {
-        if (err !== null) {
-          appContentFetchingError(stderr, reject);
-        }
-        // this function has been decorated with options
-        appGenerationLogger(resolve, {remote: true})();
-      });
+  Promise.all(tasks)
+    .then(function () {
+      successInfoLogger(newFolderName);
+    })
+    .catch(function (err, errFunction) {
+      // output error for individual task
+      errFunction(err);
     });
-  });
 }
 
-// Copying "app/" folder contents from Local file system bundled with "ember-rocks"
-function appContentScaffoldFromLocal (appSrc, dest) {
-  return new Promise(function (resolve, reject) {
-    gulp.src(appSrc, {dot: true})
-      .on('error', reject)
-      .on('end', appGenerationLogger(resolve))
-      .pipe(gulp.dest(dest + '/client/app'));
-  });
-}
-
+// executed by "runTasks" function, copy "app/" assets
 function copyAppContent (dest, options) {
   // get the full path to the ember application or take the generator from github or an URL
   var appSrcPath = getSkeletonsAppPath(options);
@@ -192,14 +187,12 @@ function copyAppContent (dest, options) {
   return ret;
 }
 
-function setupTask (newFolderName, options) {
+function runTasks (newFolderName, options) {
   var dest = path.resolve(newFolderName);
   // check for the mode, is running test or not
   var isRunningTest = options.test || false;
 
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    'Starting to generate an application at',
+  gutil.log(gutil.colors.gray('[-log:]'), 'Starting to generate an application at',
     gutil.colors.magenta(tildify(dest))
   );
 
@@ -210,7 +203,15 @@ function setupTask (newFolderName, options) {
 
   Promise.all(tasks)
     .then(function () {
-      taskRunner(newFolderName, dest, isRunningTest);
+      // switch to the newly generated folder
+      process.chdir(dest);
+      // can be run in concurrency, since it won't affect other tasks
+      setupGitignore(dest);
+    })
+    .then(function () {
+      if (!isRunningTest) {
+        installerTasks(newFolderName, dest);
+      }
     })
     .catch(function () {
       gutil.log(gutil.colors.red('[-Error:]'),
@@ -239,9 +240,8 @@ function create (generatorPath, options) {
     // Create a new directory name what user passed in
     fs.mkdirSync(generatorPath);
   }
-
-  // Setup gulp task, copy the source files into the newly create folder
-  setupTask(generatorPath, options);
+  // Orchestration, copy the source files into the newly create folder
+  runTasks(generatorPath, options);
 }
 
 module.exports = create;
