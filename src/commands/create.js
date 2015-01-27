@@ -88,11 +88,10 @@ function setupGitignore (dest) {
 function taskRunner (isRunningTest, dest, newFolderName, callback) {
   // switch to the newly generated folder
   process.chdir(dest);
+  // can be run in concurrency, since it won't affect other tasks
+  setupGitignore(dest);
 
   if (!isRunningTest) {
-    // can be run in concurrency, since it won't affect other tasks
-    setupGitignore(dest);
-
     // Flow Control: execute serial tasks: npm install, bower install, git init
     npmInstaller(dest)
       .then(function () {
@@ -116,20 +115,19 @@ function taskRunner (isRunningTest, dest, newFolderName, callback) {
 }
 
 // Copy "scaffold/core" files to the destination
-//function copyCoreContent (dest) {
-//  return new Promise(function (resolve, reject) {
-//    dest = dest || process.cwd();
-//    gutil.log(gutil.colors.gray('[-log:]'), 'NPM is installing node packages...');
-//    process.chdir(dest);
-//    return exec('npm install', function (error, stdout, stderr) {
-//      if (error !== null) {
-//        var err = stderr.toString();
-//        reject(err, npmInstallationFailLogger);
-//      }
-//      resolve();
-//    });
-//  });
-//}
+function copyCoreContent (dest) {
+  // get the full path to the core of application. ( Server && Client )
+  var skeletonsCorePath = getSkeletonsCorePath();
+  var coreSrc = [skeletonsCorePath + '/**/*'];
+
+  return new Promise(function (resolve, reject) {
+    // Scaffold the "core/" of the application. ( Server && Client )
+    gulp.src(coreSrc, {dot: true})
+      .on('error', reject)
+      .on('end', coreGenerationLogger(resolve))
+      .pipe(gulp.dest(dest));
+  });
+}
 
 function setupTask (newFolderName, options) {
   var dest = path.resolve(newFolderName);
@@ -142,19 +140,12 @@ function setupTask (newFolderName, options) {
   // check for the mode, is running test or not
   var isRunningTest = options.test || false;
 
-  // get the full path to the core of application. ( Server && Client )
-  var skeletonsCorePath = getSkeletonsCorePath();
-  var coreSrc = [skeletonsCorePath + '/**/*'];
-
   // get the full path to the ember application or take the generator from github or an URL
   var appSrcPath = getSkeletonsAppPath(options);
   var appSrc = ( appSrcPath.indexOf('http') !== -1 ) ? appSrcPath : [appSrcPath + '/**/*'];
 
   return gulp.task('generator', function (callback) {
-    // Scaffold the "core/" of the application. ( Server && Client )
-    gulp.src(coreSrc, {dot: true})
-      .on('end', coreGenerationLogger)
-      .pipe(gulp.dest(dest));
+    copyCoreContent(dest);
 
     // if option.path exist and it is a git url, it will be fetched
     // Otherwise, it will use the default scaffold folder app
@@ -322,18 +313,21 @@ function appGenerationLogger () {
 }
 
 // When all root files and core files has been generated from the scaffold folder
-function coreGenerationLogger () {
-  gutil.log(
-    gutil.colors.green('[-done:] A new'),
-    gutil.colors.cyan('Node.js'),
-    gutil.colors.green('web server have been successfully created!')
-  );
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    gutil.colors.magenta('It may take up to 1 minute and half!')
-  );
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    gutil.colors.magenta('Be patient, fetching packages from internet ...')
-  );
+function coreGenerationLogger (resolve) {
+  return function() {
+    gutil.log(
+      gutil.colors.green('[-done:] A new'),
+      gutil.colors.cyan('Node.js'),
+      gutil.colors.green('web server have been successfully created!')
+    );
+    gutil.log(
+      gutil.colors.gray('[-log:]'),
+      gutil.colors.magenta('It may take up to 1 minute and half!')
+    );
+    gutil.log(
+      gutil.colors.gray('[-log:]'),
+      gutil.colors.magenta('Be patient, fetching packages from internet ...')
+    );
+    resolve();
+  }
 }
