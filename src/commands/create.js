@@ -10,57 +10,81 @@ var rimraf = require('rimraf');
 var gutil = require('gulp-util');
 var rename = require('gulp-rename');
 
-// installer plugins to handle the npm and bower packages installation
-function installer (rootPath, command, description, nextStepFn, newFolderName, callback) {
-  rootPath = rootPath || process.cwd();
-  gutil.log(gutil.colors.gray('[-log:]'), description);
-  process.chdir(rootPath);
-  return exec(command, function (error, stdout, stderr) {
-    // process.chdir(rootPath);
-    if (error !== null) {
-      var log = stderr.toString();
-      gutil.log(gutil.colors.red('[-Error:] ' + log));
-      if (command === 'npm install') {
-        gutil.log(gutil.colors.red('[-Error:] npm install failed dramatically.'));
-        gutil.log(
-          gutil.colors.red('[-Error:] Need to manually do \'npm install\' and \'bower install\' ')
-        );
-        gutil.log(
-          gutil.colors.red('[-Error:] Before the project is fully ready for development')
-        );
-      } else if (command === 'bower install') {
-        gutil.log(gutil.colors.red('[-Error:] bower install failed dramatically.'));
-        gutil.log(gutil.colors.red('[-Error:] Need to manually do \'bower install\''));
-        gutil.log(
-          gutil.colors.red('[-Error:] Before the project is fully ready for development')
-        );
-      } else {
-        gutil.log(
-          gutil.colors.red('[-Error:] initialize git repository failed dramatically.')
-        );
-        gutil.log(gutil.colors.red('[-Error:] Need to manually do'));
-        gutil.log(gutil.colors.red('[-Error:] \'git init && git add . && git commit -m\''));
+function runningCallback (isRunningTest, dest, newFolderName, callback) {
+  // switch to the newly generated folder
+  process.chdir(dest);
+  // rename `gitignore` to `.gitignore`
+  // then remove the originial `gitignore`
+  gulp.src('./gitignore')
+    .pipe(rename('.gitignore'))
+    .on('end', function () {
+      rimraf('./gitignore', function (err) {
+        if (err) throw err;
+      });
+    })
+    .pipe(gulp.dest(dest));
+
+  if (!isRunningTest) {
+    // Flow Control: execute serial tasks: npm install, bower install, git init
+    npmInstaller(dest)
+      .then(function () {
+        bowerInstaller(dest);
+      })
+      .then(function () {
+        gitInitializer(dest);
+      })
+      .then(function() {
+        successInfoLogger(newFolderName);
+        // give the control back to gulp task
+        callback();
+      })
+      .catch(function(err, errFunction){
+        // output error for individual task
+        errFunction(err);
+      });
+  } else {
+    callback();
+  }
+}
+
+function npmInstaller (dest) {
+  return new Promise(function (resolve, reject) {
+    dest = dest || process.cwd();
+    gutil.log(gutil.colors.gray('[-log:]'), 'NPM is installing node packages...');
+    process.chdir(dest);
+    return exec('npm install', function (error, stdout, stderr) {
+      if (error !== null) {
+        var err = stderr.toString();
+        reject(err, npmInstallationFailLogger);
       }
-      return callback(log);
-    }
-    nextStepFn(rootPath, newFolderName, callback);
+      resolve();
+    });
   });
 }
 
-function gitInit (rootPath, newFolderName, callback) {
+function bowerInstaller (dest) {
+  return new Promise(function (resolve, reject) {
+    dest = dest || process.cwd();
+    gutil.log(gutil.colors.gray('[-log:]'), 'Bower is installing javascript packages...');
+    process.chdir(dest);
+    return exec('bower install', function (error, stdout, stderr) {
+      if (error !== null) {
+        var err = stderr.toString();
+        reject(err, bowerInstalltionFailLogger);
+      }
+      resolve();
+    });
+  });
+}
+
+function gitInitializer (dest) {
   gutil.log(
     gutil.colors.gray('[-log:]'),
     gutil.colors.cyan('em-cli'),
     'is doing REALLY hard to initialize your repo ...'
   );
 
-  rootPath = rootPath || process.cwd();
-  process.chdir(rootPath);
-
-  var month = [
-    'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-  ];
+  var month = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
   var today = new Date();
   var todayDate = today.getDate();
   var todayMonth = month[today.getMonth()];
@@ -68,99 +92,17 @@ function gitInit (rootPath, newFolderName, callback) {
   var command = 'git init && git add . && git commit -m \'Initial Commit @ ' +
     todayMonth + ' ' + todayDate + ', ' + todayYear + '\'';
 
-  return exec(command, function (error, stdout, stderr) {
-    if (error !== null) {
-      var log = stderr.toString();
-      gutil.log(gutil.colors.red('[-Error:] ' + log));
-      return callback(log);
-    }
-    gutil.log(
-      gutil.colors.green('[-done:] Initialized a new git repo and did a first commit')
-    );
-    gutil.log(
-      gutil.colors.bold('[-copy:] =>'),
-      gutil.colors.cyan('cd ' + newFolderName),
-      gutil.colors.gray('# navigate to the newly created application')
-    );
-    gutil.log(
-      gutil.colors.bold('[-copy:] =>'),
-      gutil.colors.cyan('em serve'),
-      gutil.colors.gray(' # kick start the server, open project in favorite browser,'),
-      gutil.colors.gray('auto watch file changes and rebuild the project')
-    );
-    callback();
+  return new Promise(function (resolve, reject) {
+    dest = dest || process.cwd();
+    process.chdir(dest);
+    return exec(command, function (error, stdout, stderr) {
+      if (error !== null) {
+        var err = stderr.toString();
+        reject(err, gitInitializerFailLogger);
+      }
+      resolve();
+    });
   });
-}
-
-function installBower (rootPath, newFolderName, callback) {
-  installer(
-    rootPath,
-    'bower install',
-    'Bower is installing javascript packages...',
-    gitInit,
-    newFolderName,
-    callback
-  );
-}
-
-function installNpm (rootPath, newFolderName, callback) {
-  installer(
-    rootPath,
-    'npm install',
-    'NPM is installing node packages...',
-    installBower,
-    newFolderName,
-    callback
-  );
-}
-
-function appGenerationLogger () {
-  gutil.log(
-    gutil.colors.green('[-done:] A new'),
-    gutil.colors.cyan('Ember.js'),
-    gutil.colors.green('mvc application have been successfully created!')
-  );
-}
-
-function coreGenerationLogger () {
-  gutil.log(
-    gutil.colors.green('[-done:] A new'),
-    gutil.colors.cyan('Node.js'),
-    gutil.colors.green('web server have been successfully created!')
-  );
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    gutil.colors.magenta('It may take up to 1 minute and half!')
-  );
-  gutil.log(
-    gutil.colors.gray('[-log:]'),
-    gutil.colors.magenta('Be patient, fetching packages from internet ...')
-  );
-}
-
-function runningCallback (isRunningTest, dest, newFolderName, callback) {
-  // switch to the newly generated folder
-  process.chdir(dest);
-
-  // rename `gitignore` to `.gitignore`
-  // then remove the originial `gitignore`
-  gulp.src('./gitignore')
-    .pipe(rename('.gitignore'))
-    .on('end', function () {
-      rimraf('./gitignore', function () {
-      });
-    })
-    .pipe(gulp.dest(dest));
-
-  if (!isRunningTest) {
-    installNpm(dest, newFolderName, callback);
-  } else {
-    callback();
-  }
-}
-
-function scaffoldFiles () {
-
 }
 
 function setupTask (newFolderName, options) {
@@ -236,6 +178,7 @@ function setupTask (newFolderName, options) {
         });
       });
     } else {
+      // Scaffold the "app/" folder from bundled "ember-rocks"
       gulp.src(appSrc, {dot: true})
         .on('end', function () {
           appGenerationLogger();
@@ -244,6 +187,68 @@ function setupTask (newFolderName, options) {
         .pipe(gulp.dest(dest + '/client/app'));
     }
   });
+}
+
+function npmInstallationFailLogger (err) {
+  gutil.log(gutil.colors.red('[-Error:] ' + err));
+  gutil.log(gutil.colors.red('[-Error:] npm install failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] Need to manually do "npm install" and "bower install"'));
+  gutil.log(gutil.colors.red('[-Error:] Before the project is fully ready for development'));
+}
+
+function bowerInstalltionFailLogger (err) {
+  gutil.log(gutil.colors.red('[-Error:] ' + err));
+  gutil.log(gutil.colors.red('[-Error:] bower install failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] Need to manually do \'bower install\''));
+  gutil.log(gutil.colors.red('[-Error:] Before the project is fully ready for development'));
+}
+
+function gitInitializerFailLogger (err) {
+  gutil.log(gutil.colors.red('[-Error:] ' + err));
+  gutil.log(gutil.colors.red('[-Error:] initialize git repository failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] Need to manually do'));
+  gutil.log(gutil.colors.red('[-Error:] \'git init && git add . && git commit -m\''));
+}
+
+function successInfoLogger (newFolderName) {
+  gutil.log(
+    gutil.colors.green('[-done:] Initialized a new git repo and did a first commit')
+  );
+  gutil.log(
+    gutil.colors.bold('[-copy:] =>'),
+    gutil.colors.cyan('cd ' + newFolderName),
+    gutil.colors.gray('# navigate to the newly created application')
+  );
+  gutil.log(
+    gutil.colors.bold('[-copy:] =>'),
+    gutil.colors.cyan('em serve'),
+    gutil.colors.gray(' # kick start the server, open project in favorite browser,'),
+    gutil.colors.gray('auto watch file changes and rebuild the project')
+  );
+}
+
+function appGenerationLogger () {
+  gutil.log(
+    gutil.colors.green('[-done:] A new'),
+    gutil.colors.cyan('Ember.js'),
+    gutil.colors.green('mvc application have been successfully created!')
+  );
+}
+
+function coreGenerationLogger () {
+  gutil.log(
+    gutil.colors.green('[-done:] A new'),
+    gutil.colors.cyan('Node.js'),
+    gutil.colors.green('web server have been successfully created!')
+  );
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    gutil.colors.magenta('It may take up to 1 minute and half!')
+  );
+  gutil.log(
+    gutil.colors.gray('[-log:]'),
+    gutil.colors.magenta('Be patient, fetching packages from internet ...')
+  );
 }
 
 function pathResolver (relativePath) {
