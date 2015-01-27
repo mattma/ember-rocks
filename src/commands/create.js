@@ -73,11 +73,9 @@ function gitInitializer (dest) {
   });
 }
 
-function runningCallback (isRunningTest, dest, newFolderName, callback) {
-  // switch to the newly generated folder
-  process.chdir(dest);
-  // rename `gitignore` to `.gitignore`
-  // then remove the originial `gitignore`
+// rename `gitignore` to `.gitignore`
+// then remove the originial `gitignore`
+function setupGitignore (dest) {
   gulp.src('./gitignore')
     .pipe(rename('.gitignore'))
     .on('end', function () {
@@ -85,6 +83,12 @@ function runningCallback (isRunningTest, dest, newFolderName, callback) {
       });
     })
     .pipe(gulp.dest(dest));
+}
+
+function taskRunner (isRunningTest, dest, newFolderName, callback) {
+  // switch to the newly generated folder
+  process.chdir(dest);
+  setupGitignore(dest);
 
   if (!isRunningTest) {
     // Flow Control: execute serial tasks: npm install, bower install, git init
@@ -178,7 +182,7 @@ function setupTask (newFolderName, options) {
             process.exit(0);
           }
           // running npm install callback
-          runningCallback(isRunningTest, dest, newFolderName, callback);
+          taskRunner(isRunningTest, dest, newFolderName, callback);
         });
       });
     } else {
@@ -186,7 +190,7 @@ function setupTask (newFolderName, options) {
       gulp.src(appSrc, {dot: true})
         .on('end', function () {
           appGenerationLogger();
-          runningCallback(isRunningTest, dest, newFolderName, callback);
+          taskRunner(isRunningTest, dest, newFolderName, callback);
         })
         .pipe(gulp.dest(dest + '/client/app'));
     }
