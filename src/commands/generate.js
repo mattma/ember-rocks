@@ -95,7 +95,6 @@ function runTasks (generator, options) {
     var pathName = '';
     var moduleName = '';
     var moduleDashedName = '';
-    var i = 0;
     var pathNested; // Boolean
     var fileName; // setup the fileName which used for rename module
     var srcPath = []; // the filePath/srcPath would be used to generate files
@@ -115,12 +114,11 @@ function runTasks (generator, options) {
     // component name has to be dash separated string
     // case 1: `em g component:name`         <= simple case
     // case 2: `em g component:nested/name`  <= nested case
-    if (type === 'component') {
-      validateComponentName(fileName);
-    }
+
     // when type is template, name[0] is component, name of nest path has to be dashized string
-    // case 3: `em g template:component/name`  <= nested case in template
-    if (type === 'template' && pathNested && name[0] === 'component') {
+    // case 3: `em g template:component/name`  <= nested case in template. defined after "||"
+    if (type === 'component' ||
+      type === 'template' && pathNested && name[0] === 'component') {
       validateComponentName(fileName);
     }
 
@@ -128,7 +126,7 @@ function runTasks (generator, options) {
     // `moduleName` would be used inside replacement of template placeholder
     if (pathNested) {
       // build up the nested path
-      for (; i < name.length; i++) {
+      for (var i = 0; i < name.length; i++) {
         // 'component' and 'components' resolve as a 'app/templates/components/'
         if (type === 'template' && name[0] === 'component') {
           name[i] = 'components';
@@ -182,8 +180,6 @@ function runTasks (generator, options) {
       }
     }
 
-
-
     // if type is test, or route-test or any sorts, it should append `-test` to the filename
     fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
 
@@ -197,7 +193,7 @@ function runTasks (generator, options) {
   });
 }
 
-function generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested) {
+function generateSimpleFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested) {
   var dirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
   var finalDirName;
   var finalPath;
@@ -224,7 +220,7 @@ function generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileNam
   generatorEngine(type, srcPath, null, moduleName, moduleDashedName, fileName, destPath);
 }
 
-function generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest) {
+function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest) {
   var dirName, finalPath, destPath;
 
   for (var j = 0, l = srcPath.length; j < l; j++) {
