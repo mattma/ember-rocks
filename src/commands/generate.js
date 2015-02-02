@@ -182,7 +182,7 @@ function runTasks (generator, options) {
       }
     }
 
-    var dirName, finalPath, destPath;
+
 
     // if type is test, or route-test or any sorts, it should append `-test` to the filename
     fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
@@ -192,33 +192,7 @@ function runTasks (generator, options) {
     if (typeof srcPath === 'string') {
       generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
     } else {
-      for (var j = 0, l = srcPath.length; j < l; j++) {
-        var _type = srcPath[j].type;
-        var testDirName;
-        // when original type is 'component'
-        // it will create a template file at 'templates/components' folder
-        var injection = srcPath[j].injection;
-        var finalFileName;
-
-        dirName = (_type === 'store') ? _type : (_type.slice(-1) === 's') ? _type : _type + 's';
-        dirName = (injection === 'components') ? dirName + '/' + injection : dirName;
-        testDirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
-
-        finalPath = pathNested ? dirName + pathName : dirName;
-
-        if (isGeneratingTest && srcPath[j].testGenerator) {
-          destPath = path.resolve('client/tests/unit') + '/' + testDirName;
-          finalFileName = fileName + '-test';
-        } else {
-          destPath = path.resolve('client/app') + '/' + finalPath;
-          finalFileName = fileName;
-        }
-
-        generatorEngine(
-          _type, srcPath[j].generatorPath, injection, moduleName,
-          moduleDashedName, finalFileName, destPath
-        );
-      }
+      generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest);
     }
   });
 }
@@ -248,6 +222,38 @@ function generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileNam
   path.resolve('client/app') + '/' + finalPath;
 
   generatorEngine(type, srcPath, null, moduleName, moduleDashedName, fileName, destPath);
+}
+
+function generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest) {
+  var dirName, finalPath, destPath;
+
+  for (var j = 0, l = srcPath.length; j < l; j++) {
+    var _type = srcPath[j].type;
+    var testDirName;
+    // when original type is 'component'
+    // it will create a template file at 'templates/components' folder
+    var injection = srcPath[j].injection;
+    var finalFileName;
+
+    dirName = (_type === 'store') ? _type : (_type.slice(-1) === 's') ? _type : _type + 's';
+    dirName = (injection === 'components') ? dirName + '/' + injection : dirName;
+    testDirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
+
+    finalPath = pathNested ? dirName + pathName : dirName;
+
+    if (isGeneratingTest && srcPath[j].testGenerator) {
+      destPath = path.resolve('client/tests/unit') + '/' + testDirName;
+      finalFileName = fileName + '-test';
+    } else {
+      destPath = path.resolve('client/app') + '/' + finalPath;
+      finalFileName = fileName;
+    }
+
+    generatorEngine(
+      _type, srcPath[j].generatorPath, injection, moduleName,
+      moduleDashedName, finalFileName, destPath
+    );
+  }
 }
 
 // Check the fullname attribute is correct or not
