@@ -182,7 +182,7 @@ function runTasks (generator, options) {
       }
     }
 
-    var dirName, finalDirName, finalPath, destPath;
+    var dirName, finalPath, destPath;
 
     // if type is test, or route-test or any sorts, it should append `-test` to the filename
     fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
@@ -190,28 +190,7 @@ function runTasks (generator, options) {
     // if it is a string, simple call generatorEngine once
     // else it is an object(array), repeat the generatorEngine call
     if (typeof srcPath === 'string') {
-      dirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
-
-      // Figure out the type is testing generator
-      if (type.indexOf('test') > -1) {
-        // Is it an Unit Test generator or Integration Test generator
-        if (type.indexOf('-test') > -1) {
-          var typeArray = type.split('-');
-          finalDirName = 'tests/unit/' + typeArray[0] + 's';
-        } else {
-          finalDirName = dirName + '/integration';
-        }
-      } else {
-        finalDirName = dirName;
-      }
-
-      finalPath = pathNested ? finalDirName + pathName : finalDirName;
-
-      destPath = (type.indexOf('test') > -1) ?
-      path.resolve('client') + '/' + finalPath :
-      path.resolve('client/app') + '/' + finalPath;
-
-      generatorEngine(type, srcPath, null, moduleName, moduleDashedName, fileName, destPath);
+      generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
     } else {
       for (var j = 0, l = srcPath.length; j < l; j++) {
         var _type = srcPath[j].type;
@@ -242,6 +221,33 @@ function runTasks (generator, options) {
       }
     }
   });
+}
+
+function generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested) {
+  var dirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
+  var finalDirName;
+  var finalPath;
+
+  // Figure out the type is testing generator
+  if (type.indexOf('test') > -1) {
+    // Is it an Unit Test generator or Integration Test generator
+    if (type.indexOf('-test') > -1) {
+      var typeArray = type.split('-');
+      finalDirName = 'tests/unit/' + typeArray[0] + 's';
+    } else {
+      finalDirName = dirName + '/integration';
+    }
+  } else {
+    finalDirName = dirName;
+  }
+
+  finalPath = pathNested ? finalDirName + pathName : finalDirName;
+
+  var destPath = (type.indexOf('test') > -1) ?
+  path.resolve('client') + '/' + finalPath :
+  path.resolve('client/app') + '/' + finalPath;
+
+  generatorEngine(type, srcPath, null, moduleName, moduleDashedName, fileName, destPath);
 }
 
 // Check the fullname attribute is correct or not
