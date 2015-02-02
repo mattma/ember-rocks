@@ -1,5 +1,6 @@
 'use strict';
 
+var Promise = require('bluebird');
 var path = require('path');
 var fs = require('fs');
 var tildify = require('tildify');
@@ -20,33 +21,6 @@ function validateComponentName (filename) {
       gutil.colors.red('[-Error:]  Generate task has been canceled')
     );
     process.exit(0);
-  }
-}
-
-function checkFileExisted (fullFilePath, injection, fileName, ext, destPath) {
-  if (fs.existsSync(fullFilePath)) {
-    if (!!injection) {
-      gutil.log(
-        gutil.colors.red('[-Warning:] '),
-        gutil.colors.cyan(fileName + ext),
-        gutil.colors.red('has existed at '),
-        gutil.colors.magenta(tildify(destPath))
-      );
-      // Does not continue to generate file, but won't stop the process
-      return true;
-    } else {
-      gutil.log(
-        gutil.colors.red('[-Error:] '),
-        gutil.colors.cyan(fileName + ext),
-        gutil.colors.red('has existed at '),
-        gutil.colors.magenta(tildify(destPath))
-      );
-      gutil.log(
-        gutil.colors.red('[-Error:]  Generate task has been canceled')
-      );
-      // File is existed in the system, kill the process
-      process.exit(0);
-    }
   }
 }
 
@@ -110,9 +84,11 @@ function generatorEngine
     .pipe(gulp.dest(destPath));
 }
 
-function setupTask (generator, isGeneratingTest) {
-  // task: gen
-  // @describe	generate an model,view,store,controller from base template
+// @describe	generate an model,view,store,controller from base template
+function runTasks (generator, options) {
+  // check for the options mode, to generate an unit test file or not
+  var isGeneratingTest = options.test || false;
+
   return gulp.task('gen', function () {
     var type = generator.type;
     var name = generator.name;
@@ -271,24 +247,6 @@ function setupTask (generator, isGeneratingTest) {
 // Check the fullname attribute is correct or not
 var VALID_FULL_NAME_REGEXP = /^[^:]+.+:[^:]+$/;
 
-function errorHandler (fullName) {
-  gutil.log(
-    gutil.colors.red('[-Error:] Invalid argument, expected: `type:name` got: '),
-    gutil.colors.bold(fullName)
-  );
-
-  gutil.log(
-    '[-Syntax:]',
-    gutil.colors.cyan('type:name'), ' ex: em generate route:post'
-  );
-
-  gutil.log(
-    gutil.colors.red('[-Error:]'),
-    'See \'em generate --help\''
-  );
-  process.exit(0);
-}
-
 var generate = function (generator, options) {
   // if the folder 'client/app' is not existed
   // can assume that the project may not be created by Ember Rocks
@@ -326,8 +284,6 @@ var generate = function (generator, options) {
   var generatorAndTasks = generator.split(':', 2);
   var type = generatorAndTasks[0];
   var name = generatorAndTasks[1];
-  // check for the options mode, to generate an unit test file or not
-  var isGeneratingTest = options.test || false;
 
   // type could be either route or routes
   type = (type.slice(-1) === 's') ? type.substring(0, type.length - 1) : type;
@@ -362,9 +318,54 @@ var generate = function (generator, options) {
     process.exit(0);
   }
 
-  setupTask(gen, isGeneratingTest);
+  runTasks(gen, options);
   // Trigger the generator task
   gulp.start('gen');
 };
 
 module.exports = generate;
+
+function checkFileExisted (fullFilePath, injection, fileName, ext, destPath) {
+  if (fs.existsSync(fullFilePath)) {
+    if (!!injection) {
+      gutil.log(
+        gutil.colors.red('[-Warning:] '),
+        gutil.colors.cyan(fileName + ext),
+        gutil.colors.red('has existed at '),
+        gutil.colors.magenta(tildify(destPath))
+      );
+      // Does not continue to generate file, but won't stop the process
+      return true;
+    } else {
+      gutil.log(
+        gutil.colors.red('[-Error:] '),
+        gutil.colors.cyan(fileName + ext),
+        gutil.colors.red('has existed at '),
+        gutil.colors.magenta(tildify(destPath))
+      );
+      gutil.log(
+        gutil.colors.red('[-Error:]  Generate task has been canceled')
+      );
+      // File is existed in the system, kill the process
+      process.exit(0);
+    }
+  }
+}
+
+function errorHandler (fullName) {
+  gutil.log(
+    gutil.colors.red('[-Error:] Invalid argument, expected: `type:name` got: '),
+    gutil.colors.bold(fullName)
+  );
+
+  gutil.log(
+    '[-Syntax:]',
+    gutil.colors.cyan('type:name'), ' ex: em generate route:post'
+  );
+
+  gutil.log(
+    gutil.colors.red('[-Error:]'),
+    'See \'em generate --help\''
+  );
+  process.exit(0);
+}
