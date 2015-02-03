@@ -16,7 +16,7 @@ function injectSrcPath (srcPath, type) {
   if (type === 'route' || type === 'component') {
     injectTemplateGenerator = [{
       type:          'template',
-      injection:     ( type === 'component' ) ? 'components' : true,
+      injection:     (type === 'component') ? 'components' : true,
       generatorPath: path.join(__dirname, '..', 'skeletons/generators/template.js')
     }];
     srcPath = srcPath.concat(injectTemplateGenerator);
@@ -128,7 +128,7 @@ function generateNestedFile (type, srcPath, moduleName, fileName, pathName, opti
     // if the file has existed in destination folder, exit the program. with Two exception,
     // 1. injection file, if true & existed, handle the case in the next condition
     // 2, generate a template, if existed, stop the template generating, won't exit program
-    if (!!checkFileExisted(fullFilePath, null, fileName, ext, destPath)) {
+    if (!!checkFileExisted(fullFilePath, true, fileName, ext, destPath)) {
       return;
     }
 
