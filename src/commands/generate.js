@@ -197,17 +197,8 @@ function runTasks (generator, options) {
     fileName = name;
   }
 
-  // handle the error case when arg is `component:foo`
   // component name has to be dash separated string
-  // case 1: `em g component:name`         <= simple case
-  // case 2: `em g component:nested/name`  <= nested case
-
-  // when type is template, name[0] is component, name of nest path has to be dashized string
-  // case 3: `em g template:component/name`  <= nested case in template. defined after "||"
-  if (type === 'component' ||
-    type === 'template' && pathNested && name[0] === 'component') {
-    validComponentName(fileName);
-  }
+  validComponentName(type, fileName, name[0], pathNested);
 
   // ignore the 'store' case, since it is already created
   // create a folder if it is not existed in the "client/app/"
@@ -338,13 +329,21 @@ function validTypesAndValidName (gen, validTypes) {
   }
 }
 
-function validComponentName (filename) {
-  if (filename.indexOf('-') === -1) {
-    gutil.log(gutil.colors.red('[-Error:] '), gutil.colors.cyan(filename),
-      gutil.colors.red(' must be a dashize string. ex: my-component')
-    );
-    gutil.log(gutil.colors.red('[-Error:]  Generate task has been canceled'));
-    exitProgram();
+function validComponentName (type, fileName, folderName, pathNested) {
+  // Three error cases:
+  // case 1: `em g component:name`         <= simple case
+  // case 2: `em g component:nested/name`  <= nested case
+  // case 3: `em g template:component/name`  <= name of nest path has to be dashized string
+  if (type === 'component' ||
+    type === 'template' && pathNested &&
+    folderName === 'components' || folderName === 'component') {
+    if (fileName.indexOf('-') === -1) {
+      gutil.log(gutil.colors.red('[-Error:] '), gutil.colors.cyan(fileName),
+        gutil.colors.red(' must be a dashize string. ex: my-component')
+      );
+      gutil.log(gutil.colors.red('[-Error:]  Generate task has been canceled'));
+      exitProgram();
+    }
   }
 }
 
