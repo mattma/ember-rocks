@@ -53,7 +53,7 @@ function execCommand (command, opts) {
   }
 }
 
-var commands = function (options) {
+function commands(options) {
   var command = process.argv.slice(2)[0] || options.parent.rawArgs[2];
   var configFileName = 'gulpfile.js';
 
@@ -70,6 +70,6 @@ var commands = function (options) {
     .catch(function (err) {
       console.log(err);
     });
-};
+}
 
 module.exports = commands;
