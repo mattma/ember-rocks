@@ -1,6 +1,5 @@
 'use strict';
 
-var Promise = require('bluebird');
 var path = require('path');
 var fs = require('fs');
 var tildify = require('tildify');
@@ -13,9 +12,9 @@ var stringUtils = require('../utils/string');
 // Add a test file template into the generating file list
 function injectTestFile (srcPath, type) {
   var injectTestFile = [{
-    type:          type + '-test',
-    injection:     true,
-    generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '-test.js',
+    type:             type + '-test',
+    injection:        true,
+    generatorPath:    path.join(__dirname, '..', 'skeletons/generators', type) + '-test.js',
     generateUnitTest: true
   }];
   // flag `-T` or `--test`, will generate the unit test file
@@ -67,41 +66,31 @@ function injectFiles (type, options) {
   return srcPath;
 }
 
-function generateSimpleFile (type, srcPath, moduleName, fileName, pathName, options) {
-  var dirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
-  var finalDirName;
-  var finalPath;
+// Core function to generate the file from template, insert into the destination folder
+function generatorEngine (type, srcPath, moduleName, fileName, ext, destPath) {
+  var namespace = stringUtils.classify(moduleName + '-' + type);
+  var dasherizeName = stringUtils.dasherize(moduleName);
+  var classifyName = stringUtils.classify(moduleName);
 
-  // Figure out the type is testing generator
-  if (type.indexOf('test') > -1) {
-    // Is it an Unit Test generator or Integration Test generator
-    if (type.indexOf('-test') > -1) {
-      var typeArray = type.split('-');
-      finalDirName = 'tests/unit/' + typeArray[0] + 's';
-    } else {
-      finalDirName = dirName + '/integration';
-    }
-  } else {
-    finalDirName = dirName;
-  }
-
-  finalPath = options.nestPath ? finalDirName + pathName : finalDirName;
-
-  var destPath = (type.indexOf('test') > -1) ?
-  path.resolve('client') + '/' + finalPath :
-  path.resolve('client/app') + '/' + finalPath;
-
-  var ext = (type === 'template') ? '.hbs' : '.js';
-  var fullFilePath = destPath + '/' + fileName + ext;
-
-  // if the file has existed in destination folder, exit the program. with Two exception,
-  // 1. injection file, if true & existed, handle the case in the next condition
-  // 2, generate a template, if existed, stop the template generating, won't exit program
-  if (!!checkFileExisted(fullFilePath, null, fileName, ext, destPath)) {
-    return;
-  }
-
-  generatorEngine(type, srcPath, moduleName, fileName, destPath);
+  // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
+  // __CLASSIFY_NAMESPACE__ mainly used in regular generator
+  return gulp.src(srcPath)
+    .pipe(replace(/__NAMESPACE__/g, namespace))
+    .pipe(replace(/__DASHERIZE_NAMESPACE__/g, dasherizeName))
+    .pipe(replace(/__CLASSIFY_NAMESPACE__/g, classifyName))
+    .pipe(rename({
+      basename: fileName,
+      extname:  ext
+    }))
+    .on('end', function () {
+      gutil.log(
+        gutil.colors.green('[-done:] Generate'),
+        gutil.colors.cyan(fileName + ext),
+        gutil.colors.green('at'),
+        gutil.colors.magenta(tildify(destPath))
+      );
+    })
+    .pipe(gulp.dest(destPath));
 }
 
 function generateFileTask (srcPath, moduleName, fileName, pathName, options) {
@@ -127,7 +116,13 @@ function generateFileTask (srcPath, moduleName, fileName, pathName, options) {
       // Is it an Unit Test generator or Integration Test generator
       if (_type.indexOf('-test') > -1) {
         var typeArray = _type.split('-');
-        dirName = 'tests/unit/' + typeArray[0] + 's';
+        // if injection is true, the dirName has been setup already
+        // otherwise, we have to build up manually when user input directly
+        if (!!injection) {
+          dirName = typeArray[0] + 's';
+        } else {
+          dirName = 'tests/unit/' + typeArray[0] + 's';
+        }
       } else {
         dirName = dirName + '/integration';
       }
@@ -135,15 +130,13 @@ function generateFileTask (srcPath, moduleName, fileName, pathName, options) {
 
     finalPath = options.nestPath ? dirName + pathName : dirName;
 
-    if(_type.indexOf('test') > -1 && !!injection === false ) {
+    if (_type.indexOf('test') > -1 && !!injection === false) {
       // srcPath length is 1, no injection files, only ask for one test file generation
       destPath = path.resolve('client') + '/' + finalPath;
-      console.log('destPath: ', destPath);
       finalFileName = fileName;
     } else if (options.test && srcPath[i].generateUnitTest) {
       // user pass "--test" flag, and inject test is true, generate an unit test file or not
       destPath = path.resolve('client/tests/unit') + '/' + dirName;
-      console.log('second destPath: ', destPath);
       finalFileName = fileName + '-test';
     } else {
       // generate an application development file
@@ -161,42 +154,14 @@ function generateFileTask (srcPath, moduleName, fileName, pathName, options) {
       return;
     }
 
-    generatorEngine(_type, srcPath[i].generatorPath, moduleName, finalFileName, destPath);
+    generatorEngine(_type, srcPath[i].generatorPath, moduleName, finalFileName, ext, destPath);
   }
 }
 
 function generateFile (type, moduleName, fileName, pathName, options) {
   // an Array, contains a list of generating file info: path, generatorPath, type, etc
   var srcPath = injectFiles(type, options);
-  generateFileTask (srcPath, moduleName, fileName, pathName, options);
-}
-
-// Core function to generate the file from template, insert into the destination folder
-function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
-  var ext = (type === 'template') ? '.hbs' : '.js';
-  var namespace = stringUtils.classify(moduleName + '-' + type);
-  var dasherizeName = stringUtils.dasherize(moduleName);
-  var classifyName = stringUtils.classify(moduleName);
-
-  // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
-  // __CLASSIFY_NAMESPACE__ mainly used in regular generator
-  return gulp.src(srcPath)
-    .pipe(replace(/__NAMESPACE__/g, namespace))
-    .pipe(replace(/__DASHERIZE_NAMESPACE__/g, dasherizeName))
-    .pipe(replace(/__CLASSIFY_NAMESPACE__/g, classifyName))
-    .pipe(rename({
-      basename: fileName,
-      extname:  ext
-    }))
-    .on('end', function () {
-      gutil.log(
-        gutil.colors.green('[-done:] Generate'),
-        gutil.colors.cyan(fileName + ext),
-        gutil.colors.green('at'),
-        gutil.colors.magenta(tildify(destPath))
-      );
-    })
-    .pipe(gulp.dest(destPath));
+  generateFileTask(srcPath, moduleName, fileName, pathName, options);
 }
 
 // @describe	generate an model,view,store,controller from base template
@@ -248,19 +213,7 @@ function runTasks (generator, options) {
   // if type is test, or route-test or any sorts, it should append `-test` to the filename
   fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
 
-  // Handle `flag` of `--test` case, and other special case
-  // like generate template when the type is route or component, etc
-  // srcPath = generatorSrcPath(type, srcPath, options);
-
   generateFile(type, moduleName, fileName, pathName, options);
-
-  // if it is a string, simple call generatorEngine once
-  // else it is an object(array), repeat the generatorEngine call
-  //if (typeof srcPath === 'string') {
-  //  generateSimpleFile(type, srcPath, moduleName, fileName, pathName, options);
-  //} else {
-  //  generateNestedFile(type, srcPath, moduleName, fileName, pathName, options);
-  //}
 }
 
 // Entry point of the generate command
