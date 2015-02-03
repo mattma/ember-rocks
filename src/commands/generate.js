@@ -31,7 +31,7 @@ function injectSrcPath (srcPath, type) {
   return srcPath;
 }
 
-function generatorEngine (type, srcPath, injection, moduleName, moduleDashedName, fileName, destPath) {
+function generatorEngine (type, srcPath, moduleName, moduleDashedName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
 
   // Classify the plain module name without its type
@@ -200,7 +200,7 @@ function generateSimpleFile (type, srcPath, moduleName, moduleDashedName, fileNa
     return;
   }
 
-  generatorEngine(type, srcPath, null, moduleName, moduleDashedName, fileName, destPath);
+  generatorEngine(type, srcPath, moduleName, moduleDashedName, fileName, destPath);
 }
 
 function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, options) {
@@ -244,8 +244,7 @@ function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileNa
     }
 
     generatorEngine(
-      _type, srcPath[j].generatorPath, injection, moduleName,
-      moduleDashedName, finalFileName, destPath
+      _type, srcPath[j].generatorPath, moduleName, moduleDashedName, finalFileName, destPath
     );
   }
 }
