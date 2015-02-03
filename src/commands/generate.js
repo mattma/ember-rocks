@@ -257,8 +257,7 @@ var generate = function (generator, options) {
   if (!fs.existsSync('client') && !fs.existsSync('client/app')) {
     gutil.log(gutil.colors.red('[-Error:] This project may not be created by \'Ember-Rocks\'\n'),
       gutil.colors.red(
-        '[-Error:] `em new [dirName]` does not install the NPM packages dependencies correctly')
-    );
+        '[-Error:] `em new [dirName]` does not install the NPM packages dependencies correctly'));
     exitProgram(1);
   }
 
@@ -297,24 +296,18 @@ var generate = function (generator, options) {
         name: name
       };
     } else {
-      gutil.log(
-        gutil.colors.red('[-Error:] '),
-        gutil.colors.cyan(name),
-        gutil.colors.red(' must be a valid string.')
-      );
+      gutil.log(gutil.colors.red('[-Error:] '), gutil.colors.cyan(name),
+        gutil.colors.red(' must be a valid string.'));
+
       gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
       exitProgram();
     }
   } else {
-    gutil.log(
-      gutil.colors.red('[-Error:] '),
-      gutil.colors.cyan(type),
-      gutil.colors.red(' is not a valid type.')
-    );
-    gutil.log(
-      gutil.colors.bold('[-note:] valid types are'),
-      gutil.colors.cyan(validTypes.join(', '))
-    );
+    gutil.log(gutil.colors.red('[-Error:] '), gutil.colors.cyan(type),
+      gutil.colors.red(' is not a valid type.'));
+
+    gutil.log(gutil.colors.bold('[-note:] valid types are'),
+      gutil.colors.cyan(validTypes.join(', ')));
     exitProgram();
   }
 
@@ -395,7 +388,7 @@ function errorHandler (fullName) {
   exitProgram();
 }
 
-function exitProgram(errNumber){
+function exitProgram (errNumber) {
   errNumber = errNumber || 0;
   process.exit(errNumber);
 }
