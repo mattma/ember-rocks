@@ -146,8 +146,9 @@ function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileNa
 
 function generatorEngine (type, srcPath, moduleName, moduleDashedName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
-  // Classify the plain module name without its type
-  var classifyName = stringUtils.classify(moduleDashedName);
+  var namespace = stringUtils.classify(moduleName + '-' + type);
+  var dasherizeName = stringUtils.dasherize(moduleName);
+  var classifyName = stringUtils.classify(moduleName);
 
   //console.log('fileName: ', fileName);
   //console.log('moduleDashedName: ', moduleDashedName);
@@ -157,8 +158,8 @@ function generatorEngine (type, srcPath, moduleName, moduleDashedName, fileName,
   // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
   // __CLASSIFY_NAMESPACE__ mainly used in regular generator
   return gulp.src(srcPath)
-    .pipe(replace(/__NAMESPACE__/g, moduleName))
-    .pipe(replace(/__DASHERIZE_NAMESPACE__/g, moduleDashedName))
+    .pipe(replace(/__NAMESPACE__/g, namespace))
+    .pipe(replace(/__DASHERIZE_NAMESPACE__/g, dasherizeName))
     .pipe(replace(/__CLASSIFY_NAMESPACE__/g, classifyName))
     .pipe(rename({
       basename: fileName,
@@ -189,8 +190,8 @@ function runTasks (generator, options) {
   // based on the passing name arguments, to determine it is an nested folder structure
   // or it is a simple file generation. assign a var `fileName` for current file name
   if (name.indexOf('/') > -1) {
-    name = name.split('/');
     pathNested = true;
+    name = name.split('/');
     fileName = name.pop();
   } else {
     pathNested = false;
@@ -229,7 +230,7 @@ function runTasks (generator, options) {
   // dash separated moduleName used in template replacement
   moduleDashedName += moduleName;
   // Classify the moduleName in format of `MattMaController`
-  moduleName = stringUtils.classify(moduleName + '-' + type);
+  // moduleName = stringUtils.classify(moduleName + '-' + type);
 
   // Handle `flag` of `--test` case, and other special case
   // like generate template when the type is route or component, etc
