@@ -10,20 +10,6 @@ var replace = require('gulp-replace');
 var rename = require('gulp-rename');
 var stringUtils = require('../utils/string');
 
-function validateComponentName (filename) {
-  if (filename.indexOf('-') === -1) {
-    gutil.log(
-      gutil.colors.red('[-Error:] '),
-      gutil.colors.cyan(filename),
-      gutil.colors.red(' must be a dashize string. ex: my-component')
-    );
-    gutil.log(
-      gutil.colors.red('[-Error:]  Generate task has been canceled')
-    );
-    process.exit(0);
-  }
-}
-
 function injectSrcPath (srcPath, type) {
   var injectTemplateGenerator;
   // when `type` is `route` or `component`, will generate its template file
@@ -45,29 +31,17 @@ function injectSrcPath (srcPath, type) {
   return srcPath;
 }
 
-function generatorEngine
-(type, srcPath, injection, moduleName, moduleDashedName, fileName, destPath) {
+function generatorEngine (type, srcPath, injection, moduleName, moduleDashedName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
-  var fullFilePath = destPath + '/' + fileName + ext;
-
-  // if the file has existed, it will abort the task
-  // if return true, mean that it is an injection file, which already exist in the system
-  // handle the case in the next condition
-  var stopGenerateFile = checkFileExisted(fullFilePath, injection, fileName, ext, destPath);
-  // check if template is existed or not, not going to kill the process
-  // only stop the generator task on this operation
-  if (stopGenerateFile) {
-    return;
-  }
 
   // Classify the plain module name without its type
   var classifyName = stringUtils.classify(moduleDashedName);
 
+  // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
+  // __CLASSIFY_NAMESPACE__ mainly used in regular generator
   return gulp.src(srcPath)
     .pipe(replace(/__NAMESPACE__/g, moduleName))
-    // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
     .pipe(replace(/__DASHERIZE_NAMESPACE__/g, moduleDashedName))
-    // __CLASSIFY_NAMESPACE__ mainly used in regular generator
     .pipe(replace(/__CLASSIFY_NAMESPACE__/g, classifyName))
     .pipe(rename({
       basename: fileName,
@@ -213,6 +187,19 @@ function generateSimpleFile (type, srcPath, moduleName, moduleDashedName, fileNa
   path.resolve('client') + '/' + finalPath :
   path.resolve('client/app') + '/' + finalPath;
 
+  var ext = (type === 'template') ? '.hbs' : '.js';
+  var fullFilePath = destPath + '/' + fileName + ext;
+
+  // if the file has existed, it will abort the task
+  // if return true, mean that it is an injection file, which already exist in the system
+  // handle the case in the next condition
+  var stopGenerateFile = checkFileExisted(fullFilePath, null, fileName, ext, destPath);
+  // check if template is existed or not, not going to kill the process
+  // only stop the generator task on this operation
+  if (stopGenerateFile) {
+    return;
+  }
+
   generatorEngine(type, srcPath, null, moduleName, moduleDashedName, fileName, destPath);
 }
 
@@ -241,6 +228,19 @@ function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileNa
     } else {
       destPath = path.resolve('client/app') + '/' + finalPath;
       finalFileName = fileName;
+    }
+
+    var ext = (type === 'template') ? '.hbs' : '.js';
+    var fullFilePath = destPath + '/' + fileName + ext;
+
+    // if the file has existed, it will abort the task
+    // if return true, mean that it is an injection file, which already exist in the system
+    // handle the case in the next condition
+    var stopGenerateFile = checkFileExisted(fullFilePath, injection, fileName, ext, destPath);
+    // check if template is existed or not, not going to kill the process
+    // only stop the generator task on this operation
+    if (stopGenerateFile) {
+      return;
     }
 
     generatorEngine(
@@ -328,6 +328,20 @@ var generate = function (generator, options) {
 };
 
 module.exports = generate;
+
+function validateComponentName (filename) {
+  if (filename.indexOf('-') === -1) {
+    gutil.log(
+      gutil.colors.red('[-Error:] '),
+      gutil.colors.cyan(filename),
+      gutil.colors.red(' must be a dashize string. ex: my-component')
+    );
+    gutil.log(
+      gutil.colors.red('[-Error:]  Generate task has been canceled')
+    );
+    process.exit(0);
+  }
+}
 
 function createFolderWhenMissing(type) {
   var typeFolder = path.resolve('client/app', type + 's');
