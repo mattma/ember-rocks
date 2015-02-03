@@ -151,6 +151,24 @@ function runTasks (generator, options) {
 
   // Handle `flag` of `--test` case, and other special case
   // like generate template when the type is route or component, etc
+  srcPath = generatorSrcPath(type, srcPath, options);
+
+  // if type is test, or route-test or any sorts, it should append `-test` to the filename
+  fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
+
+  // if it is a string, simple call generatorEngine once
+  // else it is an object(array), repeat the generatorEngine call
+  if (typeof srcPath === 'string') {
+    generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
+  } else {
+    generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest);
+  }
+}
+
+function generatorSrcPath(type, srcPath, options) {
+  // check for the options mode, to generate an unit test file or not
+  var isGeneratingTest = options.test || false;
+  
   if (isGeneratingTest) {
     var injectTestFile = [{
       type:          type + '-test',
@@ -171,16 +189,7 @@ function runTasks (generator, options) {
     }
   }
 
-  // if type is test, or route-test or any sorts, it should append `-test` to the filename
-  fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
-
-  // if it is a string, simple call generatorEngine once
-  // else it is an object(array), repeat the generatorEngine call
-  if (typeof srcPath === 'string') {
-    generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
-  } else {
-    generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest);
-  }
+  return srcPath;
 }
 
 function generateSimpleFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested) {
