@@ -146,16 +146,8 @@ function runTasks (generator, options) {
   moduleName = stringUtils.classify(moduleName + '-' + type);
 
   // ignore the 'store' case, since it is already created
-  var typeFolder = path.resolve('client/app', type + 's');
-
-  // if client/app/[type](s) is not existed and it is not a test generator, simply create one
-  if (!fs.existsSync(typeFolder) && type.indexOf('test') === -1) {
-    fs.mkdirSync(typeFolder);
-    gutil.log(
-      gutil.colors.gray('[-log:] Created a new folder at '),
-      gutil.colors.cyan('~/client/app/' + type + 's')
-    );
-  }
+  // create a folder if it is not existed in the "client/app/"
+  createFolderWhenMissing(type);
 
   // Handle `flag` of `--test` case, and other special case
   // like generate template when the type is route or component, etc
@@ -328,6 +320,19 @@ var generate = function (generator, options) {
 };
 
 module.exports = generate;
+
+function createFolderWhenMissing(type) {
+  var typeFolder = path.resolve('client/app', type + 's');
+
+  // if client/app/[type](s) is not existed and it is not a test generator, simply create one
+  if (!fs.existsSync(typeFolder) && type.indexOf('test') === -1) {
+    fs.mkdirSync(typeFolder);
+    gutil.log(
+      gutil.colors.gray('[-log:] Created a new folder at '),
+      gutil.colors.cyan('~/client/app/' + type + 's')
+    );
+  }
+}
 
 function checkFileExisted (fullFilePath, injection, fileName, ext, destPath) {
   if (fs.existsSync(fullFilePath)) {
