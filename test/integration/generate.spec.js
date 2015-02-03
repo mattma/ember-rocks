@@ -476,7 +476,7 @@ describe('Command `em generate [type]-test(s):[name]` - Unit Test Generated and 
   });
 });
 
-describe('Command `em generate [type]-test(s):[name] --test` - Generated original file and its tests with flag `-T` or `--test`', function () {
+describe('Command `em generate [type](s):[name] --test` - Generated original file and its tests with flag `-T` or `--test`', function () {
   beforeEach(function (done) {
     mkdirp('client/app', function () {
       mkdirp('client/tests/unit', done);

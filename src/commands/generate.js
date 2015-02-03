@@ -10,51 +10,60 @@ var replace = require('gulp-replace');
 var rename = require('gulp-rename');
 var stringUtils = require('../utils/string');
 
-function injectSrcPath (srcPath, type) {
-  var injectTemplateGenerator;
-  // when `type` is `route` or `component`, will generate its template file
-  if (type === 'route' || type === 'component') {
-    injectTemplateGenerator = [{
-      type:          'template',
-      injection:     (type === 'component') ? 'components' : true,
-      generatorPath: path.join(__dirname, '..', 'skeletons/generators/template.js')
-    }];
-    srcPath = srcPath.concat(injectTemplateGenerator);
-  }
+// Add a test file template into the generating file list
+function injectTestFile (srcPath, type) {
+  var injectTestFile = [{
+    type:          type + '-test',
+    injection:     true,
+    generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '-test.js',
+    generateUnitTest: true
+  }];
+  // flag `-T` or `--test`, will generate the unit test file
+  srcPath = srcPath.concat(injectTestFile);
 
-  // Default, it will generate whatever user inserts the `type`
-  srcPath = srcPath.concat([{
-    type:          type,
-    generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '.js'
-  }]);
   // return the modified `srcPath` array
   return srcPath;
 }
 
-function generatorSrcPath (type, srcPath, options) {
+// Add a template file template into the generating file list
+function injectTemplateFile (srcPath, type) {
+  var injectTemplateGenerator = [{
+    type:          'template',
+    // injection: components is needed to setup the correct path: "templates/components/*.hbs"
+    injection:     (type === 'component') ? 'components' : true,
+    generatorPath: path.join(__dirname, '..', 'skeletons/generators/template.js')
+  }];
+  srcPath = srcPath.concat(injectTemplateGenerator);
+
+  // return the modified `srcPath` array
+  return srcPath;
+}
+
+// Add a default type template into the generating file list
+function injectDefaultTemplate (srcPath, type) {
+  var defaultTemplateGenerator = [{
+    type:          type,
+    generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '.js'
+  }];
+  srcPath = srcPath.concat(defaultTemplateGenerator);
+
+  // return the modified `srcPath` array
+  return srcPath;
+}
+
+function injectFiles (type, options) {
+  var srcPath = []; // the filePath/srcPath would be used to generate files
+
   // check for the options mode, to generate an unit test file or not
-  var isGeneratingTest = options.test || false;
-
-  if (isGeneratingTest) {
-    var injectTestFile = [{
-      type:          type + '-test',
-      injection:     true,
-      generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '-test.js',
-      testGenerator: true
-    }];
-    // flag `-T` or `--test`, will generate the unit test file
-    srcPath = srcPath.concat(injectTestFile);
-
-    srcPath = injectSrcPath(srcPath, type);
-  } else {
-    if (type === 'route' || type === 'component') {
-      srcPath = injectSrcPath(srcPath, type);
-    } else {
-      // convert the array into string.
-      srcPath = path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
-    }
+  if (options.test || false) {
+    srcPath = injectTestFile(srcPath, type);
   }
-
+  // when `type` is `route` or `component`, will generate its template file
+  if (type === 'route' || type === 'component') {
+    srcPath = injectTemplateFile(srcPath, type);
+  }
+  // Default, it will generate whatever user inserts the `type`
+  srcPath = injectDefaultTemplate(srcPath, type);
   return srcPath;
 }
 
@@ -95,45 +104,71 @@ function generateSimpleFile (type, srcPath, moduleName, fileName, pathName, opti
   generatorEngine(type, srcPath, moduleName, fileName, destPath);
 }
 
-function generateNestedFile (type, srcPath, moduleName, fileName, pathName, options) {
-  // check for the options mode, to generate an unit test file or not
-  var isGeneratingTest = options.test || false;
-  var dirName, finalPath, destPath;
-
-  for (var j = 0, l = srcPath.length; j < l; j++) {
-    var _type = srcPath[j].type;
-    var testDirName;
-    // when original type is 'component'
-    // it will create a template file at 'templates/components' folder
-    var injection = srcPath[j].injection;
+function generateFileTask (srcPath, moduleName, fileName, pathName, options) {
+  for (var i = 0, l = srcPath.length; i < l; i++) {
+    var _type = srcPath[i].type;
+    var dirName;
+    // Not asked by user input, create automatically by framework
+    var injection = srcPath[i].injection;
+    // original fileName, or if test is true, append "-test"
     var finalFileName;
+    // used to build up the final output directory path "destPath"
+    var finalPath;
+    // final output directory path
+    var destPath;
 
+    // Update the direction name, if store, won't append 's'
     dirName = (_type === 'store') ? _type : (_type.slice(-1) === 's') ? _type : _type + 's';
+    // when template is injected automatically, setup the right path "templates/components/"
     dirName = (injection === 'components') ? dirName + '/' + injection : dirName;
-    testDirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
+
+    // Figure out the type is testing generator
+    if (_type.indexOf('test') > -1) {
+      // Is it an Unit Test generator or Integration Test generator
+      if (_type.indexOf('-test') > -1) {
+        var typeArray = _type.split('-');
+        dirName = 'tests/unit/' + typeArray[0] + 's';
+      } else {
+        dirName = dirName + '/integration';
+      }
+    }
 
     finalPath = options.nestPath ? dirName + pathName : dirName;
 
-    if (isGeneratingTest && srcPath[j].testGenerator) {
-      destPath = path.resolve('client/tests/unit') + '/' + testDirName;
+    if(_type.indexOf('test') > -1 && !!injection === false ) {
+      // srcPath length is 1, no injection files, only ask for one test file generation
+      destPath = path.resolve('client') + '/' + finalPath;
+      console.log('destPath: ', destPath);
+      finalFileName = fileName;
+    } else if (options.test && srcPath[i].generateUnitTest) {
+      // user pass "--test" flag, and inject test is true, generate an unit test file or not
+      destPath = path.resolve('client/tests/unit') + '/' + dirName;
+      console.log('second destPath: ', destPath);
       finalFileName = fileName + '-test';
     } else {
+      // generate an application development file
       destPath = path.resolve('client/app') + '/' + finalPath;
       finalFileName = fileName;
     }
 
-    var ext = (type === 'template') ? '.hbs' : '.js';
+    var ext = (_type === 'template') ? '.hbs' : '.js';
     var fullFilePath = destPath + '/' + fileName + ext;
 
     // if the file has existed in destination folder, exit the program. with Two exception,
     // 1. injection file, if true & existed, handle the case in the next condition
     // 2, generate a template, if existed, stop the template generating, won't exit program
-    if (!!checkFileExisted(fullFilePath, true, fileName, ext, destPath)) {
+    if (!!checkFileExisted(fullFilePath, injection, fileName, ext, destPath)) {
       return;
     }
 
-    generatorEngine(_type, srcPath[j].generatorPath, moduleName, finalFileName, destPath);
+    generatorEngine(_type, srcPath[i].generatorPath, moduleName, finalFileName, destPath);
   }
+}
+
+function generateFile (type, moduleName, fileName, pathName, options) {
+  // an Array, contains a list of generating file info: path, generatorPath, type, etc
+  var srcPath = injectFiles(type, options);
+  generateFileTask (srcPath, moduleName, fileName, pathName, options);
 }
 
 // Core function to generate the file from template, insert into the destination folder
@@ -171,7 +206,7 @@ function runTasks (generator, options) {
   var pathName = '';
   var moduleName = '';
   var fileName; // setup the fileName which used for rename module
-  var srcPath = []; // the filePath/srcPath would be used to generate files
+  // var srcPath = []; // the filePath/srcPath would be used to generate files
 
   // based on the passing name arguments, to determine it is an nested folder structure
   // or it is a simple file generation. assign a var `fileName` for current file name
@@ -215,15 +250,17 @@ function runTasks (generator, options) {
 
   // Handle `flag` of `--test` case, and other special case
   // like generate template when the type is route or component, etc
-  srcPath = generatorSrcPath(type, srcPath, options);
+  // srcPath = generatorSrcPath(type, srcPath, options);
+
+  generateFile(type, moduleName, fileName, pathName, options);
 
   // if it is a string, simple call generatorEngine once
   // else it is an object(array), repeat the generatorEngine call
-  if (typeof srcPath === 'string') {
-    generateSimpleFile(type, srcPath, moduleName, fileName, pathName, options);
-  } else {
-    generateNestedFile(type, srcPath, moduleName, fileName, pathName, options);
-  }
+  //if (typeof srcPath === 'string') {
+  //  generateSimpleFile(type, srcPath, moduleName, fileName, pathName, options);
+  //} else {
+  //  generateNestedFile(type, srcPath, moduleName, fileName, pathName, options);
+  //}
 }
 
 // Entry point of the generate command
