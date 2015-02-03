@@ -85,13 +85,10 @@ function generateSimpleFile (type, srcPath, moduleName, fileName, pathName, path
   var ext = (type === 'template') ? '.hbs' : '.js';
   var fullFilePath = destPath + '/' + fileName + ext;
 
-  // if the file has existed, it will abort the task
-  // if return true, mean that it is an injection file, which already exist in the system
-  // handle the case in the next condition
-  var stopGenerateFile = checkFileExisted(fullFilePath, null, fileName, ext, destPath);
-  // check if template is existed or not, not going to kill the process
-  // only stop the generator task on this operation
-  if (stopGenerateFile) {
+  // if the file has existed in destination folder, exit the program. with Two exception,
+  // 1. injection file, if true & existed, handle the case in the next condition
+  // 2, generate a template, if existed, stop the template generating, won't exit program
+  if (!!checkFileExisted(fullFilePath, null, fileName, ext, destPath)) {
     return;
   }
 
@@ -128,19 +125,14 @@ function generateNestedFile (type, srcPath, moduleName, fileName, pathName, path
     var ext = (type === 'template') ? '.hbs' : '.js';
     var fullFilePath = destPath + '/' + fileName + ext;
 
-    // if the file has existed, it will abort the task
-    // if return true, mean that it is an injection file, which already exist in the system
-    // handle the case in the next condition
-    var stopGenerateFile = checkFileExisted(fullFilePath, injection, fileName, ext, destPath);
-    // check if template is existed or not, not going to kill the process
-    // only stop the generator task on this operation
-    if (stopGenerateFile) {
+    // if the file has existed in destination folder, exit the program. with Two exception,
+    // 1. injection file, if true & existed, handle the case in the next condition
+    // 2, generate a template, if existed, stop the template generating, won't exit program
+    if (!!checkFileExisted(fullFilePath, null, fileName, ext, destPath)) {
       return;
     }
 
-    generatorEngine(
-      _type, srcPath[j].generatorPath, moduleName, finalFileName, destPath
-    );
+    generatorEngine(_type, srcPath[j].generatorPath, moduleName, finalFileName, destPath);
   }
 }
 
@@ -149,7 +141,7 @@ function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
   var namespace = stringUtils.classify(moduleName + '-' + type);
   var dasherizeName = stringUtils.dasherize(moduleName);
   var classifyName = stringUtils.classify(moduleName);
-  
+
   // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
   // __CLASSIFY_NAMESPACE__ mainly used in regular generator
   return gulp.src(srcPath)
