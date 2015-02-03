@@ -33,7 +33,6 @@ function injectSrcPath (srcPath, type) {
 
 function generatorEngine (type, srcPath, moduleName, moduleDashedName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
-
   // Classify the plain module name without its type
   var classifyName = stringUtils.classify(moduleDashedName);
 
@@ -136,7 +135,7 @@ function runTasks (generator, options) {
   }
 }
 
-function generatorSrcPath(type, srcPath, options) {
+function generatorSrcPath (type, srcPath, options) {
   // check for the options mode, to generate an unit test file or not
   var isGeneratingTest = options.test || false;
 
@@ -256,22 +255,18 @@ var generate = function (generator, options) {
   // if the folder 'client/app' is not existed
   // can assume that the project may not be created by Ember Rocks
   if (!fs.existsSync('client') && !fs.existsSync('client/app')) {
-    gutil.log(
+    gutil.log(gutil.colors.red('[-Error:] This project may not be created by \'Ember-Rocks\'\n'),
       gutil.colors.red(
-        '[-Error:] This project may not be created by \'Ember-Rocks\'\n'
-      ),
-      gutil.colors.red(
-        '[-Error:] `em new [dirName]` does not install the NPM packages dependencies correctly'
-      )
+        '[-Error:] `em new [dirName]` does not install the NPM packages dependencies correctly')
     );
-    process.exit(1);
+    exitProgram(1);
   }
 
   // Error out when user did not provide any argument
   if (!generator || typeof generator !== 'string') {
     gutil.log(gutil.colors.red('[-Error:] Missing type:name argument.'), 'ex: em new route:post');
     gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
-    process.exit(0);
+    exitProgram();
   }
 
   if (!VALID_FULL_NAME_REGEXP.test(generator)) {
@@ -308,7 +303,7 @@ var generate = function (generator, options) {
         gutil.colors.red(' must be a valid string.')
       );
       gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
-      process.exit(0);
+      exitProgram();
     }
   } else {
     gutil.log(
@@ -320,7 +315,7 @@ var generate = function (generator, options) {
       gutil.colors.bold('[-note:] valid types are'),
       gutil.colors.cyan(validTypes.join(', '))
     );
-    process.exit(0);
+    exitProgram();
   }
 
   runTasks(gen, options);
@@ -338,11 +333,11 @@ function validateComponentName (filename) {
     gutil.log(
       gutil.colors.red('[-Error:]  Generate task has been canceled')
     );
-    process.exit(0);
+    exitProgram();
   }
 }
 
-function createFolderWhenMissing(type) {
+function createFolderWhenMissing (type) {
   var typeFolder = path.resolve('client/app', type + 's');
 
   // if client/app/[type](s) is not existed and it is not a test generator, simply create one
@@ -377,7 +372,7 @@ function checkFileExisted (fullFilePath, injection, fileName, ext, destPath) {
         gutil.colors.red('[-Error:]  Generate task has been canceled')
       );
       // File is existed in the system, kill the process
-      process.exit(0);
+      exitProgram();
     }
   }
 }
@@ -397,5 +392,10 @@ function errorHandler (fullName) {
     gutil.colors.red('[-Error:]'),
     'See \'em generate --help\''
   );
-  process.exit(0);
+  exitProgram();
+}
+
+function exitProgram(errNumber){
+  errNumber = errNumber || 0;
+  process.exit(errNumber);
 }
