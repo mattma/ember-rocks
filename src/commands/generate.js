@@ -58,7 +58,7 @@ function generatorSrcPath (type, srcPath, options) {
   return srcPath;
 }
 
-function generateSimpleFile (type, srcPath, moduleName, fileName, pathName, pathNested) {
+function generateSimpleFile (type, srcPath, moduleName, fileName, pathName, options) {
   var dirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
   var finalDirName;
   var finalPath;
@@ -76,7 +76,7 @@ function generateSimpleFile (type, srcPath, moduleName, fileName, pathName, path
     finalDirName = dirName;
   }
 
-  finalPath = pathNested ? finalDirName + pathName : finalDirName;
+  finalPath = options.nestPath ? finalDirName + pathName : finalDirName;
 
   var destPath = (type.indexOf('test') > -1) ?
   path.resolve('client') + '/' + finalPath :
@@ -95,7 +95,7 @@ function generateSimpleFile (type, srcPath, moduleName, fileName, pathName, path
   generatorEngine(type, srcPath, moduleName, fileName, destPath);
 }
 
-function generateNestedFile (type, srcPath, moduleName, fileName, pathName, pathNested, options) {
+function generateNestedFile (type, srcPath, moduleName, fileName, pathName, options) {
   // check for the options mode, to generate an unit test file or not
   var isGeneratingTest = options.test || false;
   var dirName, finalPath, destPath;
@@ -112,7 +112,7 @@ function generateNestedFile (type, srcPath, moduleName, fileName, pathName, path
     dirName = (injection === 'components') ? dirName + '/' + injection : dirName;
     testDirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
 
-    finalPath = pathNested ? dirName + pathName : dirName;
+    finalPath = options.nestPath ? dirName + pathName : dirName;
 
     if (isGeneratingTest && srcPath[j].testGenerator) {
       destPath = path.resolve('client/tests/unit') + '/' + testDirName;
@@ -136,6 +136,7 @@ function generateNestedFile (type, srcPath, moduleName, fileName, pathName, path
   }
 }
 
+// Core function to generate the file from template, insert into the destination folder
 function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
   var namespace = stringUtils.classify(moduleName + '-' + type);
@@ -169,23 +170,22 @@ function runTasks (generator, options) {
   var name = generator.name;
   var pathName = '';
   var moduleName = '';
-  var pathNested; // Boolean
   var fileName; // setup the fileName which used for rename module
   var srcPath = []; // the filePath/srcPath would be used to generate files
 
   // based on the passing name arguments, to determine it is an nested folder structure
   // or it is a simple file generation. assign a var `fileName` for current file name
   if (name.indexOf('/') > -1) {
-    pathNested = true;
+    options.nestPath = true;
     name = name.split('/');
     fileName = name.pop();
   } else {
-    pathNested = false;
+    options.nestPath = false;
     fileName = name;
   }
 
   // component name has to be dash separated string
-  validComponentName(type, fileName, name[0], pathNested);
+  validComponentName(type, fileName, name[0], options);
 
   // ignore the 'store' case, since it is already created
   // create a folder if it is not existed in the "client/app/"
@@ -193,7 +193,7 @@ function runTasks (generator, options) {
 
   // Setup `pathName`
   // `moduleName` would be used inside replacement of template placeholder
-  if (pathNested) {
+  if (options.nestPath) {
     // build up the nested path
     for (var i = 0; i < name.length; i++) {
       // 'component' and 'components' resolve as a 'app/templates/components/'
@@ -220,14 +220,15 @@ function runTasks (generator, options) {
   // if it is a string, simple call generatorEngine once
   // else it is an object(array), repeat the generatorEngine call
   if (typeof srcPath === 'string') {
-    generateSimpleFile(type, srcPath, moduleName, fileName, pathName, pathNested);
+    generateSimpleFile(type, srcPath, moduleName, fileName, pathName, options);
   } else {
-    generateNestedFile(type, srcPath, moduleName, fileName, pathName, pathNested, options);
+    generateNestedFile(type, srcPath, moduleName, fileName, pathName, options);
   }
 }
 
 // Entry point of the generate command
 function generate (generator, options) {
+  options = options || {};
   // must be Ember Rocks project, user input must exist and is a string,
   // generator must be in the right format separated by ":", otherwise, exit the program
   validProjectAndValidUserInput(generator);
@@ -311,13 +312,13 @@ function validTypesAndValidName (gen, validTypes) {
   }
 }
 
-function validComponentName (type, fileName, folderName, pathNested) {
+function validComponentName (type, fileName, folderName, options) {
   // Three error cases:
   // case 1: `em g component:name`         <= simple case
   // case 2: `em g component:nested/name`  <= nested case
   // case 3: `em g template:component/name`  <= name of nest path has to be dashized string
   if (type === 'component' ||
-    type === 'template' && pathNested &&
+    type === 'template' && options.nestPath &&
     folderName === 'components' || folderName === 'component') {
     if (fileName.indexOf('-') === -1) {
       gutil.log(gutil.colors.red('[-Error:] '), gutil.colors.cyan(fileName),
