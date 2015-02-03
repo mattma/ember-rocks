@@ -31,110 +31,6 @@ function injectSrcPath (srcPath, type) {
   return srcPath;
 }
 
-function generatorEngine (type, srcPath, moduleName, moduleDashedName, fileName, destPath) {
-  var ext = (type === 'template') ? '.hbs' : '.js';
-  // Classify the plain module name without its type
-  var classifyName = stringUtils.classify(moduleDashedName);
-
-  // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
-  // __CLASSIFY_NAMESPACE__ mainly used in regular generator
-  return gulp.src(srcPath)
-    .pipe(replace(/__NAMESPACE__/g, moduleName))
-    .pipe(replace(/__DASHERIZE_NAMESPACE__/g, moduleDashedName))
-    .pipe(replace(/__CLASSIFY_NAMESPACE__/g, classifyName))
-    .pipe(rename({
-      basename: fileName,
-      extname:  ext
-    }))
-    .on('end', function () {
-      gutil.log(
-        gutil.colors.green('[-done:] Generate'),
-        gutil.colors.cyan(fileName + ext),
-        gutil.colors.green('at'),
-        gutil.colors.magenta(tildify(destPath))
-      );
-    })
-    .pipe(gulp.dest(destPath));
-}
-
-// @describe	generate an model,view,store,controller from base template
-function runTasks (generator, options) {
-  var type = generator.type;
-  var name = generator.name;
-  var pathName = '';
-  var moduleName = '';
-  var moduleDashedName = '';
-  var pathNested; // Boolean
-  var fileName; // setup the fileName which used for rename module
-  var srcPath = []; // the filePath/srcPath would be used to generate files
-
-  // based on the passing name arguments, to determine it is an nested folder structure
-  // or it is a simple file generation. assign a var `fileName` for current file name
-  if (name.indexOf('/') > -1) {
-    name = name.split('/');
-    pathNested = true;
-    fileName = name.pop();
-  } else {
-    pathNested = false;
-    fileName = name;
-  }
-
-  // handle the error case when arg is `component:foo`
-  // component name has to be dash separated string
-  // case 1: `em g component:name`         <= simple case
-  // case 2: `em g component:nested/name`  <= nested case
-
-  // when type is template, name[0] is component, name of nest path has to be dashized string
-  // case 3: `em g template:component/name`  <= nested case in template. defined after "||"
-  if (type === 'component' ||
-    type === 'template' && pathNested && name[0] === 'component') {
-    validateComponentName(fileName);
-  }
-
-  // Setup `pathName`
-  // `moduleName` would be used inside replacement of template placeholder
-  if (pathNested) {
-    // build up the nested path
-    for (var i = 0; i < name.length; i++) {
-      // 'component' and 'components' resolve as a 'app/templates/components/'
-      if (type === 'template' && name[0] === 'component') {
-        name[i] = 'components';
-      }
-      pathName += '/' + name[i];
-      moduleName += name[i] + '-';
-    }
-    // append fileName to the moduleName string
-    moduleName += fileName;
-  } else {
-    pathName += name;
-    moduleName = name;
-  }
-
-  // dash separated moduleName used in template replacement
-  moduleDashedName += moduleName;
-  // Classify the moduleName in format of `MattMaController`
-  moduleName = stringUtils.classify(moduleName + '-' + type);
-
-  // ignore the 'store' case, since it is already created
-  // create a folder if it is not existed in the "client/app/"
-  createFolderWhenMissing(type);
-
-  // Handle `flag` of `--test` case, and other special case
-  // like generate template when the type is route or component, etc
-  srcPath = generatorSrcPath(type, srcPath, options);
-
-  // if type is test, or route-test or any sorts, it should append `-test` to the filename
-  fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
-
-  // if it is a string, simple call generatorEngine once
-  // else it is an object(array), repeat the generatorEngine call
-  if (typeof srcPath === 'string') {
-    generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
-  } else {
-    generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, options);
-  }
-}
-
 function generatorSrcPath (type, srcPath, options) {
   // check for the options mode, to generate an unit test file or not
   var isGeneratingTest = options.test || false;
@@ -248,7 +144,112 @@ function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileNa
   }
 }
 
-function generate(generator, options) {
+function generatorEngine (type, srcPath, moduleName, moduleDashedName, fileName, destPath) {
+  var ext = (type === 'template') ? '.hbs' : '.js';
+  // Classify the plain module name without its type
+  var classifyName = stringUtils.classify(moduleDashedName);
+
+  // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
+  // __CLASSIFY_NAMESPACE__ mainly used in regular generator
+  return gulp.src(srcPath)
+    .pipe(replace(/__NAMESPACE__/g, moduleName))
+    .pipe(replace(/__DASHERIZE_NAMESPACE__/g, moduleDashedName))
+    .pipe(replace(/__CLASSIFY_NAMESPACE__/g, classifyName))
+    .pipe(rename({
+      basename: fileName,
+      extname:  ext
+    }))
+    .on('end', function () {
+      gutil.log(
+        gutil.colors.green('[-done:] Generate'),
+        gutil.colors.cyan(fileName + ext),
+        gutil.colors.green('at'),
+        gutil.colors.magenta(tildify(destPath))
+      );
+    })
+    .pipe(gulp.dest(destPath));
+}
+
+// @describe	generate an model,view,store,controller from base template
+function runTasks (generator, options) {
+  var type = generator.type;
+  var name = generator.name;
+  var pathName = '';
+  var moduleName = '';
+  var moduleDashedName = '';
+  var pathNested; // Boolean
+  var fileName; // setup the fileName which used for rename module
+  var srcPath = []; // the filePath/srcPath would be used to generate files
+
+  // based on the passing name arguments, to determine it is an nested folder structure
+  // or it is a simple file generation. assign a var `fileName` for current file name
+  if (name.indexOf('/') > -1) {
+    name = name.split('/');
+    pathNested = true;
+    fileName = name.pop();
+  } else {
+    pathNested = false;
+    fileName = name;
+  }
+
+  // handle the error case when arg is `component:foo`
+  // component name has to be dash separated string
+  // case 1: `em g component:name`         <= simple case
+  // case 2: `em g component:nested/name`  <= nested case
+
+  // when type is template, name[0] is component, name of nest path has to be dashized string
+  // case 3: `em g template:component/name`  <= nested case in template. defined after "||"
+  if (type === 'component' ||
+    type === 'template' && pathNested && name[0] === 'component') {
+    validateComponentName(fileName);
+  }
+
+  // Setup `pathName`
+  // `moduleName` would be used inside replacement of template placeholder
+  if (pathNested) {
+    // build up the nested path
+    for (var i = 0; i < name.length; i++) {
+      // 'component' and 'components' resolve as a 'app/templates/components/'
+      if (type === 'template' && name[0] === 'component') {
+        name[i] = 'components';
+      }
+      pathName += '/' + name[i];
+      moduleName += name[i] + '-';
+    }
+    // append fileName to the moduleName string
+    moduleName += fileName;
+  } else {
+    pathName += name;
+    moduleName = name;
+  }
+
+  // dash separated moduleName used in template replacement
+  moduleDashedName += moduleName;
+  // Classify the moduleName in format of `MattMaController`
+  moduleName = stringUtils.classify(moduleName + '-' + type);
+
+  // ignore the 'store' case, since it is already created
+  // create a folder if it is not existed in the "client/app/"
+  createFolderWhenMissing(type);
+
+  // Handle `flag` of `--test` case, and other special case
+  // like generate template when the type is route or component, etc
+  srcPath = generatorSrcPath(type, srcPath, options);
+
+  // if type is test, or route-test or any sorts, it should append `-test` to the filename
+  fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
+
+  // if it is a string, simple call generatorEngine once
+  // else it is an object(array), repeat the generatorEngine call
+  if (typeof srcPath === 'string') {
+    generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
+  } else {
+    generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, options);
+  }
+}
+
+// Entry point of the generate command
+function generate (generator, options) {
   // must be Ember Rocks project, user input must exist and is a string,
   // generator must be in the right format separated by ":", otherwise, exit the program
   validProjectAndValidUserInput(generator);
@@ -278,7 +279,7 @@ function generate(generator, options) {
 
 module.exports = generate;
 
-function validProjectAndValidUserInput(generator) {
+function validProjectAndValidUserInput (generator) {
   // if the folder 'client/app' is not existed
   // can assume that the project may not be created by Ember Rocks
   if (!fs.existsSync('client') && !fs.existsSync('client/app')) {
@@ -308,7 +309,7 @@ function validProjectAndValidUserInput(generator) {
   }
 }
 
-function validTypesAndValidName(gen, validTypes) {
+function validTypesAndValidName (gen, validTypes) {
   var type = gen.type;
   var name = gen.name;
 
