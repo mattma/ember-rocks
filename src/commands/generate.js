@@ -149,6 +149,11 @@ function generatorEngine (type, srcPath, moduleName, moduleDashedName, fileName,
   // Classify the plain module name without its type
   var classifyName = stringUtils.classify(moduleDashedName);
 
+  //console.log('fileName: ', fileName);
+  //console.log('moduleDashedName: ', moduleDashedName);
+  //console.log('moduleName: ', moduleName);
+  //console.log('classifyName: ', classifyName);
+
   // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
   // __CLASSIFY_NAMESPACE__ mainly used in regular generator
   return gulp.src(srcPath)
@@ -201,8 +206,12 @@ function runTasks (generator, options) {
   // case 3: `em g template:component/name`  <= nested case in template. defined after "||"
   if (type === 'component' ||
     type === 'template' && pathNested && name[0] === 'component') {
-    validateComponentName(fileName);
+    validComponentName(fileName);
   }
+
+  // ignore the 'store' case, since it is already created
+  // create a folder if it is not existed in the "client/app/"
+  createFolderWhenMissing(type);
 
   // Setup `pathName`
   // `moduleName` would be used inside replacement of template placeholder
@@ -223,21 +232,17 @@ function runTasks (generator, options) {
     moduleName = name;
   }
 
+  // if type is test, or route-test or any sorts, it should append `-test` to the filename
+  fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
+
   // dash separated moduleName used in template replacement
   moduleDashedName += moduleName;
   // Classify the moduleName in format of `MattMaController`
   moduleName = stringUtils.classify(moduleName + '-' + type);
 
-  // ignore the 'store' case, since it is already created
-  // create a folder if it is not existed in the "client/app/"
-  createFolderWhenMissing(type);
-
   // Handle `flag` of `--test` case, and other special case
   // like generate template when the type is route or component, etc
   srcPath = generatorSrcPath(type, srcPath, options);
-
-  // if type is test, or route-test or any sorts, it should append `-test` to the filename
-  fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
 
   // if it is a string, simple call generatorEngine once
   // else it is an object(array), repeat the generatorEngine call
@@ -333,16 +338,12 @@ function validTypesAndValidName (gen, validTypes) {
   }
 }
 
-function validateComponentName (filename) {
+function validComponentName (filename) {
   if (filename.indexOf('-') === -1) {
-    gutil.log(
-      gutil.colors.red('[-Error:] '),
-      gutil.colors.cyan(filename),
+    gutil.log(gutil.colors.red('[-Error:] '), gutil.colors.cyan(filename),
       gutil.colors.red(' must be a dashize string. ex: my-component')
     );
-    gutil.log(
-      gutil.colors.red('[-Error:]  Generate task has been canceled')
-    );
+    gutil.log(gutil.colors.red('[-Error:]  Generate task has been canceled'));
     exitProgram();
   }
 }
@@ -353,10 +354,8 @@ function createFolderWhenMissing (type) {
   // if client/app/[type](s) is not existed and it is not a test generator, simply create one
   if (!fs.existsSync(typeFolder) && type.indexOf('test') === -1) {
     fs.mkdirSync(typeFolder);
-    gutil.log(
-      gutil.colors.gray('[-log:] Created a new folder at '),
-      gutil.colors.cyan('~/client/app/' + type + 's')
-    );
+    gutil.log(gutil.colors.gray('[-log:] Created a new folder at '),
+      gutil.colors.cyan('~/client/app/' + type + 's'));
   }
 }
 
