@@ -89,108 +89,106 @@ function runTasks (generator, options) {
   // check for the options mode, to generate an unit test file or not
   var isGeneratingTest = options.test || false;
 
-  return gulp.task('gen', function () {
-    var type = generator.type;
-    var name = generator.name;
-    var pathName = '';
-    var moduleName = '';
-    var moduleDashedName = '';
-    var pathNested; // Boolean
-    var fileName; // setup the fileName which used for rename module
-    var srcPath = []; // the filePath/srcPath would be used to generate files
+  var type = generator.type;
+  var name = generator.name;
+  var pathName = '';
+  var moduleName = '';
+  var moduleDashedName = '';
+  var pathNested; // Boolean
+  var fileName; // setup the fileName which used for rename module
+  var srcPath = []; // the filePath/srcPath would be used to generate files
 
-    // based on the passing name arguments, to determine it is an nested folder structure
-    // or it is a simple file generation. assign a var `fileName` for current file name
-    if (name.indexOf('/') > -1) {
-      name = name.split('/');
-      pathNested = true;
-      fileName = name.pop();
-    } else {
-      pathNested = false;
-      fileName = name;
-    }
+  // based on the passing name arguments, to determine it is an nested folder structure
+  // or it is a simple file generation. assign a var `fileName` for current file name
+  if (name.indexOf('/') > -1) {
+    name = name.split('/');
+    pathNested = true;
+    fileName = name.pop();
+  } else {
+    pathNested = false;
+    fileName = name;
+  }
 
-    // handle the error case when arg is `component:foo`
-    // component name has to be dash separated string
-    // case 1: `em g component:name`         <= simple case
-    // case 2: `em g component:nested/name`  <= nested case
+  // handle the error case when arg is `component:foo`
+  // component name has to be dash separated string
+  // case 1: `em g component:name`         <= simple case
+  // case 2: `em g component:nested/name`  <= nested case
 
-    // when type is template, name[0] is component, name of nest path has to be dashized string
-    // case 3: `em g template:component/name`  <= nested case in template. defined after "||"
-    if (type === 'component' ||
-      type === 'template' && pathNested && name[0] === 'component') {
-      validateComponentName(fileName);
-    }
+  // when type is template, name[0] is component, name of nest path has to be dashized string
+  // case 3: `em g template:component/name`  <= nested case in template. defined after "||"
+  if (type === 'component' ||
+    type === 'template' && pathNested && name[0] === 'component') {
+    validateComponentName(fileName);
+  }
 
-    // Setup `pathName`
-    // `moduleName` would be used inside replacement of template placeholder
-    if (pathNested) {
-      // build up the nested path
-      for (var i = 0; i < name.length; i++) {
-        // 'component' and 'components' resolve as a 'app/templates/components/'
-        if (type === 'template' && name[0] === 'component') {
-          name[i] = 'components';
-        }
-        pathName += '/' + name[i];
-        moduleName += name[i] + '-';
+  // Setup `pathName`
+  // `moduleName` would be used inside replacement of template placeholder
+  if (pathNested) {
+    // build up the nested path
+    for (var i = 0; i < name.length; i++) {
+      // 'component' and 'components' resolve as a 'app/templates/components/'
+      if (type === 'template' && name[0] === 'component') {
+        name[i] = 'components';
       }
-      // append fileName to the moduleName string
-      moduleName += fileName;
-    } else {
-      pathName += name;
-      moduleName = name;
+      pathName += '/' + name[i];
+      moduleName += name[i] + '-';
     }
+    // append fileName to the moduleName string
+    moduleName += fileName;
+  } else {
+    pathName += name;
+    moduleName = name;
+  }
 
-    // dash separated moduleName used in template replacement
-    moduleDashedName += moduleName;
-    // Classify the moduleName in format of `MattMaController`
-    moduleName = stringUtils.classify(moduleName + '-' + type);
+  // dash separated moduleName used in template replacement
+  moduleDashedName += moduleName;
+  // Classify the moduleName in format of `MattMaController`
+  moduleName = stringUtils.classify(moduleName + '-' + type);
 
-    // ignore the 'store' case, since it is already created
-    var typeFolder = path.resolve('client/app', type + 's');
+  // ignore the 'store' case, since it is already created
+  var typeFolder = path.resolve('client/app', type + 's');
 
-    // if client/app/[type](s) is not existed and it is not a test generator, simply create one
-    if (!fs.existsSync(typeFolder) && type.indexOf('test') === -1) {
-      fs.mkdirSync(typeFolder);
-      gutil.log(
-        gutil.colors.gray('[-log:] Created a new folder at '),
-        gutil.colors.cyan('~/client/app/' + type + 's')
-      );
-    }
+  // if client/app/[type](s) is not existed and it is not a test generator, simply create one
+  if (!fs.existsSync(typeFolder) && type.indexOf('test') === -1) {
+    fs.mkdirSync(typeFolder);
+    gutil.log(
+      gutil.colors.gray('[-log:] Created a new folder at '),
+      gutil.colors.cyan('~/client/app/' + type + 's')
+    );
+  }
 
-    // Handle `flag` of `--test` case, and other special case
-    // like generate template when the type is route or component, etc
-    if (isGeneratingTest) {
-      var injectTestFile = [{
-        type:          type + '-test',
-        injection:     true,
-        generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '-test.js',
-        testGenerator: true
-      }];
-      // flag `-T` or `--test`, will generate the unit test file
-      srcPath = srcPath.concat(injectTestFile);
+  // Handle `flag` of `--test` case, and other special case
+  // like generate template when the type is route or component, etc
+  if (isGeneratingTest) {
+    var injectTestFile = [{
+      type:          type + '-test',
+      injection:     true,
+      generatorPath: path.join(__dirname, '..', 'skeletons/generators', type) + '-test.js',
+      testGenerator: true
+    }];
+    // flag `-T` or `--test`, will generate the unit test file
+    srcPath = srcPath.concat(injectTestFile);
 
+    srcPath = injectSrcPath(srcPath, type);
+  } else {
+    if (type === 'route' || type === 'component') {
       srcPath = injectSrcPath(srcPath, type);
     } else {
-      if (type === 'route' || type === 'component') {
-        srcPath = injectSrcPath(srcPath, type);
-      } else {
-        // convert the array into string.
-        srcPath = path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
-      }
+      // convert the array into string.
+      srcPath = path.join(__dirname, '..', 'skeletons/generators', type) + '.js';
     }
+  }
 
-    // if type is test, or route-test or any sorts, it should append `-test` to the filename
-    fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
+  // if type is test, or route-test or any sorts, it should append `-test` to the filename
+  fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
 
-    // if it is a string, simple call generatorEngine once
-    // else it is an object(array), repeat the generatorEngine call
-    if (typeof srcPath === 'string') {
-      generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
-    } else {
-      generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest);
-    }
-  });
+  // if it is a string, simple call generatorEngine once
+  // else it is an object(array), repeat the generatorEngine call
+  if (typeof srcPath === 'string') {
+    generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
+  } else {
+    generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest);
+  }
 }
 
 function generateSimpleFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested) {
@@ -327,8 +325,6 @@ var generate = function (generator, options) {
   }
 
   runTasks(gen, options);
-  // Trigger the generator task
-  gulp.start('gen');
 };
 
 module.exports = generate;
