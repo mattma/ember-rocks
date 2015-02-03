@@ -11,14 +11,14 @@ var stringUtils = require('../utils/string');
 
 // Add a test file template into the generating file list
 function injectTestFile (srcPath, type) {
-  var injectTestFile = [{
+  var injectTestGenerator = [{
     type:             type + '-test',
     injection:        true,
     generatorPath:    path.join(__dirname, '..', 'skeletons/generators', type) + '-test.js',
     generateUnitTest: true
   }];
   // flag `-T` or `--test`, will generate the unit test file
-  srcPath = srcPath.concat(injectTestFile);
+  srcPath = srcPath.concat(injectTestGenerator);
 
   // return the modified `srcPath` array
   return srcPath;
@@ -98,7 +98,7 @@ function generateFileTask (srcPath, moduleName, fileName, pathName, options) {
     var _type = srcPath[i].type;
     var dirName;
     // Not asked by user input, create automatically by framework
-    var injection = srcPath[i].injection;
+    var injection = srcPath[i].injection || false;
     // original fileName, or if test is true, append "-test"
     var finalFileName;
     // used to build up the final output directory path "destPath"
@@ -130,7 +130,7 @@ function generateFileTask (srcPath, moduleName, fileName, pathName, options) {
 
     finalPath = options.nestPath ? dirName + pathName : dirName;
 
-    if (_type.indexOf('test') > -1 && !!injection === false) {
+    if (_type.indexOf('test') > -1 && injection === false) {
       // srcPath length is 1, no injection files, only ask for one test file generation
       destPath = path.resolve('client') + '/' + finalPath;
       finalFileName = fileName;
