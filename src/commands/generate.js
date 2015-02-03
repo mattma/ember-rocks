@@ -58,7 +58,7 @@ function generatorSrcPath (type, srcPath, options) {
   return srcPath;
 }
 
-function generateSimpleFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested) {
+function generateSimpleFile (type, srcPath, moduleName, fileName, pathName, pathNested) {
   var dirName = (type === 'store') ? type : (type.slice(-1) === 's') ? type : type + 's';
   var finalDirName;
   var finalPath;
@@ -95,10 +95,10 @@ function generateSimpleFile (type, srcPath, moduleName, moduleDashedName, fileNa
     return;
   }
 
-  generatorEngine(type, srcPath, moduleName, moduleDashedName, fileName, destPath);
+  generatorEngine(type, srcPath, moduleName, fileName, destPath);
 }
 
-function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, options) {
+function generateNestedFile (type, srcPath, moduleName, fileName, pathName, pathNested, options) {
   // check for the options mode, to generate an unit test file or not
   var isGeneratingTest = options.test || false;
   var dirName, finalPath, destPath;
@@ -139,22 +139,17 @@ function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileNa
     }
 
     generatorEngine(
-      _type, srcPath[j].generatorPath, moduleName, moduleDashedName, finalFileName, destPath
+      _type, srcPath[j].generatorPath, moduleName, finalFileName, destPath
     );
   }
 }
 
-function generatorEngine (type, srcPath, moduleName, moduleDashedName, fileName, destPath) {
+function generatorEngine (type, srcPath, moduleName, fileName, destPath) {
   var ext = (type === 'template') ? '.hbs' : '.js';
   var namespace = stringUtils.classify(moduleName + '-' + type);
   var dasherizeName = stringUtils.dasherize(moduleName);
   var classifyName = stringUtils.classify(moduleName);
-
-  //console.log('fileName: ', fileName);
-  //console.log('moduleDashedName: ', moduleDashedName);
-  //console.log('moduleName: ', moduleName);
-  //console.log('classifyName: ', classifyName);
-
+  
   // __DASHERIZE_NAMESPACE__  mainly used in `-test` generator
   // __CLASSIFY_NAMESPACE__ mainly used in regular generator
   return gulp.src(srcPath)
@@ -182,7 +177,6 @@ function runTasks (generator, options) {
   var name = generator.name;
   var pathName = '';
   var moduleName = '';
-  var moduleDashedName = '';
   var pathNested; // Boolean
   var fileName; // setup the fileName which used for rename module
   var srcPath = []; // the filePath/srcPath would be used to generate files
@@ -227,11 +221,6 @@ function runTasks (generator, options) {
   // if type is test, or route-test or any sorts, it should append `-test` to the filename
   fileName = (type.indexOf('test') > -1) ? fileName + '-test' : fileName;
 
-  // dash separated moduleName used in template replacement
-  moduleDashedName += moduleName;
-  // Classify the moduleName in format of `MattMaController`
-  // moduleName = stringUtils.classify(moduleName + '-' + type);
-
   // Handle `flag` of `--test` case, and other special case
   // like generate template when the type is route or component, etc
   srcPath = generatorSrcPath(type, srcPath, options);
@@ -239,9 +228,9 @@ function runTasks (generator, options) {
   // if it is a string, simple call generatorEngine once
   // else it is an object(array), repeat the generatorEngine call
   if (typeof srcPath === 'string') {
-    generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
+    generateSimpleFile(type, srcPath, moduleName, fileName, pathName, pathNested);
   } else {
-    generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, options);
+    generateNestedFile(type, srcPath, moduleName, fileName, pathName, pathNested, options);
   }
 }
 
