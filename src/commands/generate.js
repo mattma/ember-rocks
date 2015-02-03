@@ -279,7 +279,6 @@ var generate = function (generator, options) {
     'initializer-test', 'mixin-test', 'model-test', 'route-test', 'serializer-test',
     'transform-test', 'util-test', 'view-test'
   ];
-  var gen;
   var generatorAndTasks = generator.split(':', 2);
   var type = generatorAndTasks[0];
   var name = generatorAndTasks[1];
@@ -287,15 +286,24 @@ var generate = function (generator, options) {
   // type could be either route or routes
   type = (type.slice(-1) === 's') ? type.substring(0, type.length - 1) : type;
 
+  // must be a valid name, must be a valid type, otherwise, exit the program
+  validTypesAndValidName(type, name, validTypes);
+
+  var gen = {
+    type: type,
+    name: name
+  };
+
+  runTasks(gen, options);
+};
+
+module.exports = generate;
+
+function validTypesAndValidName(type, name, validTypes) {
   // Type must be in the `validTypes` array
   if (validTypes.indexOf(type) > -1) {
     // Name must be a valid string
-    if (name.length > 0) {
-      gen = {
-        type: type,
-        name: name
-      };
-    } else {
+    if (name.length <= 0) {
       gutil.log(gutil.colors.red('[-Error:] '), gutil.colors.cyan(name),
         gutil.colors.red(' must be a valid string.'));
 
@@ -310,11 +318,7 @@ var generate = function (generator, options) {
       gutil.colors.cyan(validTypes.join(', ')));
     exitProgram();
   }
-
-  runTasks(gen, options);
-};
-
-module.exports = generate;
+}
 
 function validateComponentName (filename) {
   if (filename.indexOf('-') === -1) {
