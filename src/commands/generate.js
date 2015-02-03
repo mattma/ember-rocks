@@ -248,10 +248,37 @@ function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileNa
   }
 }
 
-// Check the fullname attribute is correct or not
-var VALID_FULL_NAME_REGEXP = /^[^:]+.+:[^:]+$/;
+function generate(generator, options) {
+  // must be Ember Rocks project, user input must exist and is a string,
+  // generator must be in the right format separated by ":", otherwise, exit the program
+  validProjectAndValidUserInput(generator);
 
-var generate = function (generator, options) {
+  var validTypes = [
+    'adapter', 'component', 'controller', 'helper', 'initializer', 'mixin', 'model',
+    'route', 'serializer', 'template', 'transform', 'util', 'view',
+    'test', 'adapter-test', 'component-test', 'controller-test', 'helper-test',
+    'initializer-test', 'mixin-test', 'model-test', 'route-test', 'serializer-test',
+    'transform-test', 'util-test', 'view-test'
+  ];
+  var generatorAndTasks = generator.split(':', 2);
+  var type = generatorAndTasks[0];
+  // type could be either route or routes
+  type = (type.slice(-1) === 's') ? type.substring(0, type.length - 1) : type;
+
+  var gen = {
+    type: type,
+    name: generatorAndTasks[1]
+  };
+
+  // must be a valid name, must be a valid type, otherwise, exit the program
+  validTypesAndValidName(gen, validTypes);
+  // only run tasks when it is a valid type and name
+  runTasks(gen, options);
+}
+
+module.exports = generate;
+
+function validProjectAndValidUserInput(generator) {
   // if the folder 'client/app' is not existed
   // can assume that the project may not be created by Ember Rocks
   if (!fs.existsSync('client') && !fs.existsSync('client/app')) {
@@ -268,38 +295,23 @@ var generate = function (generator, options) {
     exitProgram();
   }
 
+  // Check the fullname(generator) attribute is correct or not
+  var VALID_FULL_NAME_REGEXP = /^[^:]+.+:[^:]+$/;
   if (!VALID_FULL_NAME_REGEXP.test(generator)) {
-    errorHandler(generator);
+    gutil.log(gutil.colors.red('[-Error:] Invalid argument, expected: `type:name` got: '),
+      gutil.colors.bold(generator));
+
+    gutil.log('[-Syntax:]', gutil.colors.cyan('type:name'), ' ex: em generate route:post');
+
+    gutil.log(gutil.colors.red('[-Error:]'), 'See \'em generate --help\'');
+    exitProgram();
   }
+}
 
-  var validTypes = [
-    'adapter', 'component', 'controller', 'helper', 'initializer', 'mixin', 'model',
-    'route', 'serializer', 'template', 'transform', 'util', 'view',
-    'test', 'adapter-test', 'component-test', 'controller-test', 'helper-test',
-    'initializer-test', 'mixin-test', 'model-test', 'route-test', 'serializer-test',
-    'transform-test', 'util-test', 'view-test'
-  ];
-  var generatorAndTasks = generator.split(':', 2);
-  var type = generatorAndTasks[0];
-  var name = generatorAndTasks[1];
+function validTypesAndValidName(gen, validTypes) {
+  var type = gen.type;
+  var name = gen.name;
 
-  // type could be either route or routes
-  type = (type.slice(-1) === 's') ? type.substring(0, type.length - 1) : type;
-
-  // must be a valid name, must be a valid type, otherwise, exit the program
-  validTypesAndValidName(type, name, validTypes);
-
-  var gen = {
-    type: type,
-    name: name
-  };
-
-  runTasks(gen, options);
-};
-
-module.exports = generate;
-
-function validTypesAndValidName(type, name, validTypes) {
   // Type must be in the `validTypes` array
   if (validTypes.indexOf(type) > -1) {
     // Name must be a valid string
@@ -372,24 +384,6 @@ function checkFileExisted (fullFilePath, injection, fileName, ext, destPath) {
       exitProgram();
     }
   }
-}
-
-function errorHandler (fullName) {
-  gutil.log(
-    gutil.colors.red('[-Error:] Invalid argument, expected: `type:name` got: '),
-    gutil.colors.bold(fullName)
-  );
-
-  gutil.log(
-    '[-Syntax:]',
-    gutil.colors.cyan('type:name'), ' ex: em generate route:post'
-  );
-
-  gutil.log(
-    gutil.colors.red('[-Error:]'),
-    'See \'em generate --help\''
-  );
-  exitProgram();
 }
 
 function exitProgram (errNumber) {
