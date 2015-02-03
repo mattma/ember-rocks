@@ -150,8 +150,8 @@ function generateFileTask (srcPath, moduleName, fileName, pathName, options) {
     // if the file has existed in destination folder, exit the program. with Two exception,
     // 1. injection file, if true & existed, handle the case in the next condition
     // 2, generate a template, if existed, stop the template generating, won't exit program
-    if (!!checkFileExisted(fullFilePath, injection, fileName, ext, destPath)) {
-      return;
+    if (checkFileExisted(fullFilePath, injection, fileName, ext, destPath)) {
+      continue;
     }
 
     generatorEngine(_type, srcPath[i].generatorPath, moduleName, finalFileName, ext, destPath);
