@@ -15,7 +15,6 @@ var fs = require('fs');
 var path = require('path');
 
 describe('Command `em generate` - verify content', function () {
-
   beforeEach(function (done) {
     mkdirp('client/app', done);
   });
@@ -65,7 +64,7 @@ describe('Command `em generate` - verify content', function () {
 
   it('should contains generated and match component content', function (done) {
     exec('./bin/em generate component:x-user', function (error, stdout) {
-      var filename = path.join(__dirname, '..', '..', 'client/app/components/x-user.js');
+      var filename = path.join(__dirname, '../..', 'client/app/components/x-user.js');
       var contentBuffer = fs.readFileSync(filename);
       var content = contentBuffer.toString();
 
@@ -82,7 +81,7 @@ describe('Command `em generate` - verify content', function () {
 
   it('should contains right content in integration test', function (done) {
     exec('./bin/em generate test:x-user', function (error, stdout) {
-      var filename = path.join(__dirname, '..', '..', 'client/tests/integration/x-user-test.js');
+      var filename = path.join(__dirname, '../..', 'client/tests/integration/x-user-test.js');
       var contentBuffer = fs.readFileSync(filename);
       var content = contentBuffer.toString();
 
@@ -107,7 +106,7 @@ describe('Command `em generate` - verify content', function () {
 
   it('should contains an unit test in tests/unit/controllers', function (done) {
     exec('./bin/em generate controller-test:x-user', function (error, stdout) {
-      var filename = path.join(__dirname,'..','..','client/tests/unit/controllers/x-user-test.js');
+      var filename = path.join(__dirname, '../..', 'client/tests/unit/controllers/x-user-test.js');
       var contentBuffer = fs.readFileSync(filename);
       var content = contentBuffer.toString();
 
