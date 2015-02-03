@@ -86,9 +86,6 @@ function generatorEngine
 
 // @describe	generate an model,view,store,controller from base template
 function runTasks (generator, options) {
-  // check for the options mode, to generate an unit test file or not
-  var isGeneratingTest = options.test || false;
-
   var type = generator.type;
   var name = generator.name;
   var pathName = '';
@@ -161,14 +158,14 @@ function runTasks (generator, options) {
   if (typeof srcPath === 'string') {
     generateSimpleFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested);
   } else {
-    generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest);
+    generateNestedFile(type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, options);
   }
 }
 
 function generatorSrcPath(type, srcPath, options) {
   // check for the options mode, to generate an unit test file or not
   var isGeneratingTest = options.test || false;
-  
+
   if (isGeneratingTest) {
     var injectTestFile = [{
       type:          type + '-test',
@@ -219,7 +216,9 @@ function generateSimpleFile (type, srcPath, moduleName, moduleDashedName, fileNa
   generatorEngine(type, srcPath, null, moduleName, moduleDashedName, fileName, destPath);
 }
 
-function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, isGeneratingTest) {
+function generateNestedFile (type, srcPath, moduleName, moduleDashedName, fileName, pathName, pathNested, options) {
+  // check for the options mode, to generate an unit test file or not
+  var isGeneratingTest = options.test || false;
   var dirName, finalPath, destPath;
 
   for (var j = 0, l = srcPath.length; j < l; j++) {
