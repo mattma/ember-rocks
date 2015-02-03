@@ -11,6 +11,140 @@ var exec = require('child_process').exec;
 var mkdirp = require('mkdirp');
 var rm = require('rimraf');
 var helpers = require('../helpers/utils');
+var fs = require('fs');
+var path = require('path');
+
+describe('Command `em generate` - verify content', function () {
+
+  beforeEach(function (done) {
+    mkdirp('client/app', done);
+  });
+
+  afterEach(function (done) {
+    rm('./client', done);
+  });
+
+  it('should contains generated moduleName in controller', function (done) {
+    exec('./bin/em generate controller:x-user', function (error, stdout) {
+      var filename = path.join(__dirname, '..', '..', 'client/app/controllers/x-user.js');
+      var contentBuffer = fs.readFileSync(filename);
+      var content = contentBuffer.toString();
+
+      expect(content).to.include('import Ember from \'ember\';');
+      expect(content).to.include('var XUserController = Ember.Controller.extend({');
+      expect(content).to.include('});');
+      expect(content).to.include('export default XUserController;');
+
+      // need to test the program should successfully shut down
+      expect(stdout).to.include('[-done:] Generate x-user.js');
+      expect(stdout).to.include('client/app/controllers');
+      done();
+    });
+  });
+
+  it('should contains generated moduleName, dasherizeName, classifyName', function (done) {
+    exec('./bin/em generate initializer:x-user', function (error, stdout) {
+      var filename = path.join(__dirname, '..', '..', 'client/app/initializers/x-user.js');
+      var contentBuffer = fs.readFileSync(filename);
+      var content = contentBuffer.toString();
+
+      expect(content).to.include('import XUserHelper from \'rocks/helpers/x-user\';');
+      expect(content).to.include('var XUserInitializer = {');
+      expect(content).to.include('name: \'x-user\',');
+      expect(content).to.include('application.register(\'x-user:main\', XUser);');
+      expect(content).to.include('application.inject(\'route\', \'x-user\', \'x-user:main\');');
+      expect(content).to.include('// Ember.Handlebars.registerHelper(\'x-user\', XUserHelper);');
+      expect(content).to.include('export default XUserInitializer;');
+
+      // need to test the program should successfully shut down
+      expect(stdout).to.include('[-done:] Generate x-user.js');
+      expect(stdout).to.include('client/app/initializers');
+      done();
+    });
+  });
+
+  it('should contains generated and match component content', function (done) {
+    exec('./bin/em generate component:x-user', function (error, stdout) {
+      var filename = path.join(__dirname, '..', '..', 'client/app/components/x-user.js');
+      var contentBuffer = fs.readFileSync(filename);
+      var content = contentBuffer.toString();
+
+      expect(content).to.include('var XUserComponent = Ember.Component.extend({');
+      expect(content).to.include('});');
+      expect(content).to.include('export default XUserComponent;');
+
+      // need to test the program should successfully shut down
+      expect(stdout).to.include('[-done:] Generate x-user.js');
+      expect(stdout).to.include('client/app/components');
+      done();
+    });
+  });
+
+  it('should contains right content in integration test', function (done) {
+    exec('./bin/em generate test:x-user', function (error, stdout) {
+      var filename = path.join(__dirname, '..', '..', 'client/tests/integration/x-user-test.js');
+      var contentBuffer = fs.readFileSync(filename);
+      var content = contentBuffer.toString();
+
+      expect(content).to.include('import Ember from \'ember\';');
+      expect(content).to.include('import startApp from \'rocksTest/start-app\';');
+      expect(content).to.include('describe(\'XUser - "/x-user" -\', () => {');
+      expect(content).to.include('beforeEach(() => {');
+      expect(content).to.include('App = startApp();');
+      expect(content).to.include('afterEach(() => {');
+      expect(content).to.include('it(\'can visit /x-user\', () => {');
+      expect(content).to.include('visit(\'/x-user\');');
+      expect(content).to.include('andThen(() => {');
+      expect(content).to.include('Ember.run(App, App.destroy);');
+      expect(content).to.include('currentPath().should.be.ok;');
+
+      // need to test the program should successfully shut down
+      expect(stdout).to.include('[-done:] Generate x-user-test.js');
+      expect(stdout).to.include('client/tests/integration');
+      done();
+    });
+  });
+
+  it('should contains an unit test in tests/unit/controllers', function (done) {
+    exec('./bin/em generate controller-test:x-user', function (error, stdout) {
+      var filename = path.join(__dirname,'..','..','client/tests/unit/controllers/x-user-test.js');
+      var contentBuffer = fs.readFileSync(filename);
+      var content = contentBuffer.toString();
+
+      expect(content).to.include('import {');
+      expect(content).to.include('} from \'ember-mocha\';');
+      expect(content).to.include('describeModule(');
+      expect(content).to.include('\'controller:x-user\',');
+      expect(content).to.include('\'XUserControllerTest\',');
+      expect(content).to.include('var controller = this.subject();');
+      expect(content).to.include('controller.should.be.ok;');
+
+      // need to test the program should successfully shut down
+      expect(stdout).to.include('[-done:] Generate x-user-test.js');
+      expect(stdout).to.include('client/tests/unit/controllers');
+      done();
+    });
+  });
+
+  it('should contains an unit test in tests/unit/mixins', function (done) {
+    exec('./bin/em generate mixin-test:x-user', function (error, stdout) {
+      var filename = path.join(__dirname, '..', '..', 'client/tests/unit/mixins/x-user-test.js');
+      var contentBuffer = fs.readFileSync(filename);
+      var content = contentBuffer.toString();
+
+      expect(content).to.include('import XUserMixinTest from \'rocks/mixins/x-user\';');
+      expect(content).to.include('describe(\'XUserMixinTest\', function () {');
+      expect(content).to.include('var XUserMixinTestObject = Ember.Object.extend(XUserMixinTest);');
+      expect(content).to.include('var subject = XUserMixinTestObject.create();');
+      expect(content).to.include('subject.should.be.ok;');
+
+      // need to test the program should successfully shut down
+      expect(stdout).to.include('[-done:] Generate x-user-test.js');
+      expect(stdout).to.include('client/tests/unit/mixins');
+      done();
+    });
+  });
+});
 
 describe('Command `em generate` - Wrong Argument(s)', function () {
   beforeEach(function (done) {
