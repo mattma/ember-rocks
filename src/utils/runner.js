@@ -2,8 +2,9 @@
 
 var Liftoff = require('liftoff');
 var gutil = require('gulp-util');
+var cb = require('../utils/callback');
 
-function runner (cb, opts) {
+function runner (opts) {
   var G = new Liftoff({
     name:    'gulp', // has to be `gulp` because searching of `gulpfile.js`
     v8flags: ['--harmony'] // to support all flags: require('v8flags');

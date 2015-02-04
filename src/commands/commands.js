@@ -3,9 +3,8 @@
 // This is a very simple interface
 // Used to fire up gulp task in your local project
 var Promise = require('bluebird');
-var runner = require('../utils/runner');
-var cb = require('../utils/callback');
 var lookupRootPath = require('../utils/lookup-root');
+var runner = require('../utils/runner');
 
 function lookup (configFileName) {
   var currentPath = process.cwd();
@@ -68,7 +67,7 @@ function commands(options) {
       };
 
       opts = optionsBuilder(command, opts);
-      runner(cb, opts);
+      runner(opts);
     })
     .catch(function (err) {
       console.log(err);
