@@ -26,31 +26,32 @@ function lookup (configFileName) {
   });
 }
 
-function execCommand (command, opts) {
+function optionsBuilder (command, opts) {
   switch (command) {
     case 'serve':
     case 's':
-      runner(cb, 'serve', opts);
+      opts.command = 'serve';
       break;
 
     case 'build':
     case 'b':
-      runner(cb, 'release', opts);
+      opts.command = 'release';
       break;
 
     case 'test':
     case 't':
-      runner(cb, 'test', opts);
+      opts.command = 'test';
       break;
 
     case 'mobile':
     case 'm':
-      runner(cb, 'releaseMobile', opts);
+      opts.command = 'releaseMobile';
       break;
 
     default:
-      runner(cb, 'default', opts);
+      opts.command = 'default';
   }
+  return opts;
 }
 
 function commands(options) {
@@ -65,7 +66,9 @@ function commands(options) {
         cwd:        cwd,
         configPath: cwd + '/' + configFileName
       };
-      execCommand(command, opts);
+
+      opts = optionsBuilder(command, opts);
+      runner(cb, opts);
     })
     .catch(function (err) {
       console.log(err);
