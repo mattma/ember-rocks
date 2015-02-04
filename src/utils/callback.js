@@ -1,5 +1,6 @@
 'use strict';
 
+var Promise = require('bluebird');
 var tildify = require('tildify');
 var gutil = require('gulp-util');
 var semver = require('semver');
@@ -11,12 +12,9 @@ var logEvents = require('./logEvents');
 function callback (env) {
   if (!env.modulePath && !env.configPath) {
     gutil.log(
+      gutil.colors.red('[-Error:] This project may not be created by \'Ember-Rocks\'\n'),
       gutil.colors.red(
-        '[-Error:] This project may not be created by \'Ember-Rocks\'\n'
-      ),
-      gutil.colors.red(
-        '[-Error:] `em new [dirName]` does not install the NPM packages dependencies correctly'
-      )
+        '[-Error:] `em new [dirName]` does not install the NPM packages dependencies correctly')
     );
     process.exit(1);
   }
