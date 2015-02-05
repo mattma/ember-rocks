@@ -223,7 +223,9 @@ These projects comes with **Ember Rocks** v0.8.0 or prior, but moving forward, t
 
 - [psi](https://www.npmjs.com/package/psi)
 
-PageSpeed Insights with reporting. Example:
+PageSpeed Insights with reporting.
+
+Usage example:
 
 ```js
 var pagespeed = require('psi');
@@ -242,6 +244,28 @@ gulp.task('pagespeed', pagespeed.bind(null, {
   locale:   'en_US'
 }));
 ```
+
+- [gulp-uncss](https://www.npmjs.com/package/gulp-uncss)
+
+Remove unused CSS selectors. It is bit of risky to use this module in my opinion. But it is a great one to reduce the size of your style sheet.
+
+Usage example:
+
+```js
+ gulp.src(src)
+  .pipe(assets)
+  .pipe(if('*.js', uglify({preserveComments: 'some'})))
+  .pipe(if('*.css', uncss({
+     html: src,
+     ignore: [ ] // CSS Selectors for UnCSS to ignore
+  })))
+  .pipe($.if('*.css', csso()))
+  .pipe(assets.restore())
+  .pipe(useref())
+  .pipe(if('*.html', minifyHtml()))
+  .pipe(gulp.dest(dest));
+```
+
 
 ## Contributing
 Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md). 

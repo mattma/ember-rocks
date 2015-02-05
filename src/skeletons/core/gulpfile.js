@@ -261,21 +261,13 @@ gulp.task('releaseClient',
     gulp.start('imagemin');
 
     return gulp.src(src)
-      .pipe(
-      $.replace(
-        /<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g,
-        '')
-    )
+      .pipe($.replace(
+        /<script src="http:\/\/localhost:\d+\/livereload\.js\?snipver=\d+"><\/script>(\s+)?/g, ''))
       // handle file concatenation but not minification.
       // usage: <!-- build:js scripts/combined.js --><!-- endbuild -->
       .pipe(assets)
       // Concatenate And Minify JavaScript
       .pipe($.if('*.js', $.uglify({preserveComments: 'some'})))
-      // Remove Any Unused CSS, Used as needed
-      // .pipe($.if('*.css', $.uncss({
-      //   html: src,
-      //   ignore: [ ] // CSS Selectors for UnCSS to ignore
-      // })))
       // Concatenate And Minify Styles
       .pipe($.if('*.css', $.csso()))
       .pipe(assets.restore())
