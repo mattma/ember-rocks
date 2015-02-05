@@ -1,6 +1,6 @@
 'use strict';
 
-var Promise = require('bluebird');
+// var Promise = require('bluebird');
 var tildify = require('tildify');
 var gutil = require('gulp-util');
 var semver = require('semver');
