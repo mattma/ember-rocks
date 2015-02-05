@@ -113,7 +113,7 @@ gulp.task('sass', function () {
       sourceRoot:     styleDestPath
     }))
     .pipe(gulp.dest(styleDestPath))
-    .pipe($.size({title: 'compiled css'}))
+    // .pipe($.size({title: 'compiled css'}))
     .pipe($.notify({message: 'Compiled <%= file.relative %>'}));
 });
 
@@ -124,14 +124,12 @@ gulp.task('imagemin', function () {
   var imgDst = 'build/client/assets/images/';
 
   return gulp.src(imgSrc)
-    .pipe(
-    $.imagemin({
+    .pipe($.imagemin({
       progressive: true,
       interlaced:  true
-    })
-  )
-    .pipe(gulp.dest(imgDst))
-    .pipe($.size({title: '[-log:] images folder'}));
+    }))
+    .pipe(gulp.dest(imgDst));
+  // .pipe($.size({title: '[-log:] images folder'}));
 });
 
 // @describe compile es6 modules into amd modules
@@ -183,7 +181,7 @@ gulp.task('envProd', function () {
   var dest = 'client';
 
   return gulp.src(src)
-  // .pipe( $.replace(/\/vendors\/jquery\/dist\/jquery.js/,'/vendors/jquery/dist/jquery.min.js'))
+    // .pipe( $.replace(/\/vendors\/jquery\/dist\/jquery.js/,'/vendors/jquery/dist/jquery.min.js'))
     .pipe($.replace(
       /\/vendors\/handlebars\/handlebars.js/, '/vendors/handlebars/handlebars.min.js'
     ))
@@ -197,7 +195,7 @@ gulp.task('envDev', function () {
   var dest = 'client';
 
   return gulp.src(src)
-  // .pipe( $.replace(/\/vendors\/jquery\/dist\/jquery.min.js/,'/vendors/jquery/dist/jquery.js'))
+    // .pipe( $.replace(/\/vendors\/jquery\/dist\/jquery.min.js/,'/vendors/jquery/dist/jquery.js'))
     .pipe($.replace(
       /\/vendors\/handlebars\/handlebars.min.js/, '/vendors/handlebars/handlebars.js'
     ))
@@ -273,8 +271,8 @@ gulp.task('releaseClient',
       .pipe(assets.restore())
       .pipe($.useref())
       .pipe($.if('*.html', $.minifyHtml()))
-      .pipe(gulp.dest(dest))
-      .pipe($.size({title: '[-log:] client folder'}));
+      .pipe(gulp.dest(dest));
+    // .pipe($.size({title: '[-log:] client folder'}));
   });
 
 gulp.task('copyServer', function () {
@@ -284,8 +282,8 @@ gulp.task('copyServer', function () {
   var dest = 'build/server';
 
   return gulp.src(src, {base: 'server/.'})
-    .pipe(gulp.dest(dest))
-    .pipe($.size({title: '[-log:] server folder'}));
+    .pipe(gulp.dest(dest));
+  // .pipe($.size({title: '[-log:] server folder'}));
 });
 
 gulp.task('releaseServer', ['releaseClient'], function () {

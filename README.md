@@ -231,6 +231,16 @@ It may add back in the future. Or if you like to contribute, submit a PR.
 Only pass through changed files.
 It may add back in the future. Or if you like to contribute, submit a PR. 
 
+- [gulp-size](https://www.npmjs.com/package/gulp-size)
+
+Display the size of your project. Logs out the total size of files in the stream and optionally the individual file-sizes.
+
+```js
+  gulp.src(src, {base: 'server/.'})
+    .pipe(gulp.dest(dest))
+    .pipe($.size({title: '[-log:] server folder'}));
+```
+
 - [psi](https://www.npmjs.com/package/psi)
 
 PageSpeed Insights with reporting.
