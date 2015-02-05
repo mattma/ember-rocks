@@ -221,6 +221,16 @@ Running `jscs` in a hard way:
 
 These projects comes with **Ember Rocks** v0.8.0 or prior, but moving forward, those modules are going to optional installation to speed up the initial scaffolding. We recommend to use them to improve your productivity.
 
+- [gulp-cache](https://www.npmjs.com/package/gulp-cache)
+
+A cache proxy task for Gulp. A temp file based caching proxy task for Gulp. 
+It may add back in the future. Or if you like to contribute, submit a PR. 
+
+- [gulp-changed](https://www.npmjs.com/package/gulp-changed)
+
+Only pass through changed files.
+It may add back in the future. Or if you like to contribute, submit a PR. 
+
 - [psi](https://www.npmjs.com/package/psi)
 
 PageSpeed Insights with reporting.
