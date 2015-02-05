@@ -221,6 +221,10 @@ Running `jscs` in a hard way:
 
 These projects comes with **Ember Rocks** v0.8.0 or prior, but moving forward, those modules are going to optional installation to speed up the initial scaffolding. We recommend to use them to improve your productivity.
 
+- [debug](https://www.npmjs.com/package/debug)
+
+small debugging utility. tiny node.js debugging utility modelled after node core's debugging technique.
+
 - [gulp-cache](https://www.npmjs.com/package/gulp-cache)
 
 A cache proxy task for Gulp. A temp file based caching proxy task for Gulp. 
