@@ -217,6 +217,31 @@ Running `jscs` in a hard way:
   jscs *.js
 ```
 
+## Deprecated module or Use in your own project 
+
+These projects comes with **Ember Rocks** v0.8.0 or prior, but moving forward, those modules are going to optional installation to speed up the initial scaffolding. We recommend to use them to improve your productivity.
+
+- [psi](https://www.npmjs.com/package/psi)
+
+PageSpeed Insights with reporting. Example:
+
+```js
+var pagespeed = require('psi');
+
+// Run mobile and desktop performance tests via Google PageSpeed Insights
+// For a production build process, register for an API key from Google Developer Console
+// See http://goo.gl/RkN0vE for info key: 'YOUR_API_KEY'
+// More Info:  https://www.npmjs.org/package/psi
+gulp.task('pagespeed', pagespeed.bind(null, {
+  // key: key
+  nokey:    'true',
+  // Update `url` below to the public URL for your site
+  url:      'http://mattmadesign.com',
+  // default strategy: desktop. Values: mobile, desktop
+  strategy: 'mobile',
+  locale:   'en_US'
+}));
+```
 
 ## Contributing
 Anyone can help make this project better - check out the [Contributing guide](./CONTRIBUTING.md). 

@@ -6,7 +6,6 @@ var $ = require('gulp-load-plugins')();
 var to5 = require('gulp-6to5');
 var del = require('del');
 var opn = require('opn');
-var pagespeed = require('psi');
 var testem = new (require('testem'))();
 
 // https://github.com/ai/autoprefixer. Default: > 1%, last 2 versions, Firefox ESR, Opera 12.1
@@ -437,20 +436,6 @@ gulp.task('open', function () {
   var url = 'http://' + options.hostname + ':' + options.port;
   opn(url);
 });
-
-// Run mobile and desktop performance tests via Google PageSpeed Insights
-// For a production build process, register for an API key from Google Developer Console
-// See http://goo.gl/RkN0vE for info key: 'YOUR_API_KEY'
-// More Info:  https://www.npmjs.org/package/psi
-gulp.task('pagespeed', pagespeed.bind(null, {
-  // key: key
-  nokey:    'true',
-  // Update `url` below to the public URL for your site
-  url:      'http://mattmadesign.com',
-  // default strategy: desktop. Values: mobile, desktop
-  strategy: 'mobile',
-  locale:   'en_US'
-}));
 
 // Notifies livereload of changes detected by `gulp.watch()`
 function notifyLivereload (event) {
