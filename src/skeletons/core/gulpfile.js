@@ -137,11 +137,11 @@ gulp.task('buildjs', function () {
   return gulp.src(clientFolder + '/app/**/*.js')
     .pipe($.sourcemaps.init())
     .pipe(to5({
-      modules:      'amd',
-      sourceRoot:   __dirname + '/client/app',
-      moduleRoot:   'rocks',
-      amdModuleIds: true,
-      sourceMap:    true
+      modules:    'amd',
+      sourceRoot: __dirname + '/client/app',
+      moduleRoot: 'rocks',
+      moduleIds:  true,
+      sourceMap:  true
     }))
     .pipe($.concat('application.js'))
     .pipe($.sourcemaps.write())
@@ -388,10 +388,10 @@ gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function () {
   function buildTests (reminder) {
     return gulp.src(tests)
       .pipe(to5({
-        modules:      'amd',
-        sourceRoot:   __dirname + '/client/app',
-        moduleRoot:   'rocksTest',
-        amdModuleIds: true
+        modules:    'amd',
+        sourceRoot: __dirname + '/client/app',
+        moduleRoot: 'rocksTest',
+        moduleIds:  true
       }))
       .pipe($.concat('tests.js'))
       .on('end', function () {
