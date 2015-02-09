@@ -1,6 +1,6 @@
 'use strict';
 
-exports.lab = require('../helpers/test-helper').lab;
+// exports.lab = require('../helpers/test-helper').lab;
 var describe = require('../helpers/test-helper').describe;
 var it = require('../helpers/test-helper').it;
 var expect = require('../helpers/test-helper').expect;
