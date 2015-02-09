@@ -18,7 +18,7 @@
     "almond": "~0.3.0"
   },
   "devDependencies": {
-    "ember-mocha": "~0.2.1",
+    "ember-mocha": "~0.4.1",
     "should": "~4.6.5"
   }
 }
