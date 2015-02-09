@@ -41,7 +41,8 @@
     "gulp"
   ],
   "scripts": {
-    "test": "./node_modules/lab/bin/lab -cv -m 5000 ./test/**/generate.spec.js"
+    "test": "./node_modules/lab/bin/lab -cv -m 5000 ./test/**/generate.spec.js",
+    "test-all": "./node_modules/lab/bin/lab -cv -m 5000 ./test/**/generate.spec.js"
   },
   "dependencies": {
     "bluebird": "^2.9.2",
