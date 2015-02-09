@@ -180,6 +180,10 @@ GotCha: Any new/delete file won't rerun the tests or add to the current test run
   npm start  # probably running in the separated terminal tab to serve your application
 ```
 
+Warning: 
+
+For running an ios emulator, you need to install [ios-sim](https://www.npmjs.com/package/ios-sim) version 3.0.0 or higher via `npm install ios-sim -g` before you could run `cordova run --emulator`
+
 Note:  
 
 Originally, I want to have some commands in **ember-rocks** to symlink some common useful Cordova commands. For example, `em mobile --add ios` map to `cordova platform add ios`, `em mobile --run` map to `cordova run --emulator`. In this approach, it would add up lots of additional options into the `em mobile` command. Although it could provide some useful shortcuts like auto `cd`ing *cordova* folder and abstract out some `cordova` learning curve by staying in *em* magics, it does add lots of **API** options to the **ember-rocks** project. I want to have a very simple **API** for users to comsume so that I decide to leave those features out of the core of the  **ember-rocks**. 
