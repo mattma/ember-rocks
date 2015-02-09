@@ -297,9 +297,10 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### 0.9.0 (02/08/15)
+#### 0.9.1 (02/08/15)
 
 - [Major/Breakage] Update `Ember` version to `v1.10.0`, and use `HTMLBars` instead of `handlebars`
+- Update the `gulp-6to5` to v3.0.0, update the `6to5-core` the v3.0.0+
 - Major rewrites on most of internal modules, huge performance boost, and improved code readability 
 - Use Promise A plus spec internally to handle inefficient callback hell issues. Take full advantage of Async operation.
 - Removed unused *gulp-plugins* from "devDependencies" of **package.json** to speed up the initial `npm` module download time
