@@ -136,12 +136,16 @@ gulp.task('imagemin', function () {
 gulp.task('buildjs', function () {
   return gulp.src(clientFolder + '/app/**/*.js')
     .pipe($.sourcemaps.init())
+    .pipe($.esperantoRocks({
+      _evilES3SafeReExports: false,
+      strict:                true,
+      type:                  'amd',
+      moduleRoot:            'client/app/',
+      modulePrefix:          'rocks/',
+      sourceMap:             true
+    }))
     .pipe(to5({
-      modules:    'amd',
-      sourceRoot: __dirname + '/client/app',
-      moduleRoot: 'rocks',
-      moduleIds:  true,
-      sourceMap:  true
+      blacklist: ['useStrict']
     }))
     .pipe($.concat('application.js'))
     .pipe($.sourcemaps.write())
@@ -153,7 +157,7 @@ gulp.task('buildhbs', function () {
   return gulp.src(clientFolder + '/app/templates/**/*.hbs')
     .pipe($.htmlbars({
       isHTMLBars:       true,
-      templateCompiler:  require('./client/assets/vendors/ember/ember-template-compiler')
+      templateCompiler: require('./client/assets/vendors/ember/ember-template-compiler')
     }))
     .pipe($.wrapAmd({
       deps:         ['exports'],          // dependency array

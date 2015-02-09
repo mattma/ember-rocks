@@ -35,7 +35,6 @@
     <!-- endbuild -->
 </head>
 <body>
-
     <!-- build:js assets/scripts/vendor.min.js -->
     <script src='assets/vendors/almond/almond.js'></script>
     <script src="assets/vendors/jquery/dist/jquery.js"></script>
@@ -51,6 +50,6 @@
     <script src='assets/build/templates.js'></script>
     <!-- endbuild -->
 
-    <script> require('rocks/app').create(); </script>
+    <script>require('rocks/app')['default'].create();</script>
 </body>
 </html>
