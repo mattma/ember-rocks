@@ -402,8 +402,8 @@ Ember Rocks is [MIT Licensed](./LICENSE.md).
 [npm-url]: https://www.npmjs.org/package/ember-rocks
 [npm-image]: http://img.shields.io/npm/v/npm.svg
 
-[travis-image]: http://img.shields.io/travis/joyent/node/v0.6.svg
+[travis-image]: https://travis-ci.org/mattma/ember-rocks.svg?branch=master
 [travis-url]: https://travis-ci.org/mattma/ember-rocks
 
-[dependency-image]: http://img.shields.io/david/strongloop/express.svg
+[dependency-image]: https://david-dm.org/mattma/ember-rocks.svg
 [dependency-url]: https://david-dm.org/mattma/ember-rocks
