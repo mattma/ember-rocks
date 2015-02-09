@@ -192,7 +192,7 @@ gulp.task('envProd', function () {
     .pipe($.replace(
       /\/vendors\/handlebars\/handlebars.js/, '/vendors/handlebars/handlebars.min.js'
     ))
-    .pipe($.replace(/\/vendors\/ember\/ember.js/, '/vendors/ember/ember.prod.js'))
+    .pipe($.replace(/\/vendors\/ember\/ember.debug.js/, '/vendors/ember/ember.prod.js'))
     .pipe(gulp.dest(dest));
 });
 
@@ -206,7 +206,7 @@ gulp.task('envDev', function () {
     .pipe($.replace(
       /\/vendors\/handlebars\/handlebars.min.js/, '/vendors/handlebars/handlebars.js'
     ))
-    .pipe($.replace(/\/vendors\/ember\/ember.prod.js/, '/vendors/ember/ember.js'))
+    .pipe($.replace(/\/vendors\/ember\/ember.prod.js/, '/vendors/ember/ember.debug.js'))
     .pipe(gulp.dest(dest));
 });
 
