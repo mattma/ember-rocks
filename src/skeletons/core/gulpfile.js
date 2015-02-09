@@ -151,7 +151,10 @@ gulp.task('buildjs', function () {
 // @describe pre-compile handlebars templates
 gulp.task('buildhbs', function () {
   return gulp.src(clientFolder + '/app/templates/**/*.hbs')
-    .pipe($.htmlbars())
+    .pipe($.htmlbars({
+      isHTMLBars:       true,
+      templateCompiler:  require('./client/assets/vendors/ember/ember-template-compiler')
+    }))
     .pipe($.wrapAmd({
       deps:         ['exports'],          // dependency array
       params:       ['__exports__'],        // params for callback
