@@ -308,7 +308,11 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
-#### 0.9.1 (02/08/15)
+### 0.9.3 (02/14/15)
+
+- [BugFix] [Unhandled rejection TypeError](https://github.com/mattma/ember-rocks/issues/12). Alert user with failure message and warning message when necessary   
+
+#### 0.9.2 (02/08/15)
 
 - [Major/Breakage] Update `Ember` version to `v1.10.0`, and use `HTMLBars` instead of `handlebars`
 - Update the `gulp-6to5` to v3.0.0, update the `6to5-core` the v3.0.0+
