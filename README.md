@@ -221,6 +221,13 @@ Running `jscs` in a hard way:
   jscs *.js
 ```
 
+## Roadmap
+
+- Well-defined structure for each `gulp` task. User could pick `sass`, `less`, `stylus` etc when run `em new` command
+- Native support Ember Addon system
+- Koa replace express server
+
+
 ## Deprecated module or Use in your own project 
 
 These projects comes with **Ember Rocks** v0.8.0 or prior, but moving forward, those modules are going to optional installation to speed up the initial scaffolding. We recommend to use them to improve your productivity.

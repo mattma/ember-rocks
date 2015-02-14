@@ -83,8 +83,9 @@ function npmInstaller (dest) {
     process.chdir(dest);
     return exec('npm install', function (error, stdout, stderr) {
       if (error !== null) {
-        var err = stderr.toString();
-        reject(err, npmInstallationFailLogger);
+        stderr = typeof stderr === 'string' ? stderr : stderr.toString();
+        npmInstallationFailLogger();
+        reject(stderr);
       }
       resolve();
     });
@@ -99,8 +100,9 @@ function bowerInstaller (dest) {
     process.chdir(dest);
     return exec('bower install', function (error, stdout, stderr) {
       if (error !== null) {
-        var err = stderr.toString();
-        reject(err, bowerInstalltionFailLogger);
+        stderr = typeof stderr === 'string' ? stderr : stderr.toString();
+        bowerInstallationFailLogger();
+        reject(stderr);
       }
       resolve();
     });
@@ -128,8 +130,23 @@ function gitInitializer (dest) {
     process.chdir(dest);
     return exec(command, function (error, stdout, stderr) {
       if (error !== null) {
-        var err = stderr.toString();
-        reject(err, gitInitializerFailLogger);
+        stderr = typeof stderr === 'string' ? stderr : stderr.toString();
+        gitInitializerFailLogger();
+        reject(stderr);
+      }
+      resolve();
+    });
+  });
+}
+
+function isBinaryExist (bin) {
+  var command = bin + ' --help';
+  return new Promise(function (resolve, reject) {
+    return exec(command, function (error) {
+      if (error !== null) {
+        var err = '"' + bin + '" executable is not existed in your system!\n' +
+          '           [-Error:] Application scaffolding process has failed!';
+        reject(err);
       }
       resolve();
     });
@@ -152,6 +169,8 @@ function setupGitignore (dest) {
 // Flow Control: execute serial tasks: npm install, bower install, git init
 function installerTasks (newFolderName, dest) {
   var tasks = [
+    isBinaryExist('git'),
+    isBinaryExist('bower'),
     npmInstaller(dest),
     bowerInstaller(dest),
     gitInitializer(dest)
@@ -160,10 +179,12 @@ function installerTasks (newFolderName, dest) {
   Promise.all(tasks)
     .then(function () {
       successInfoLogger(newFolderName);
+      // launch warning info if missing required executable
+      warningInfoLogger();
     })
-    .catch(function (err, errFunction) {
+    .catch(function (err) {
       // output error for individual task
-      errFunction(err);
+      failureInfoLogger(err);
     });
 }
 
@@ -287,26 +308,23 @@ function appContentFetchingError (err, reject, options) {
 
 // Trigger when NPM installation fails, output error message in terminal
 function npmInstallationFailLogger (err) {
-  gutil.log(gutil.colors.red('[-Error:] ' + err));
-  gutil.log(gutil.colors.red('[-Error:] npm install failed dramatically.'));
-  gutil.log(gutil.colors.red('[-Error:] Need to manually do "npm install" and "bower install"'));
+  gutil.log(gutil.colors.red('[-Error:] "npm install" failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] Need to manually fix the ERRORS, then do "npm install"'));
   gutil.log(gutil.colors.red('[-Error:] Before the project is fully ready for development'));
 }
 
 // Trigger when Bower installation fails, output error message in terminal
-function bowerInstalltionFailLogger (err) {
-  gutil.log(gutil.colors.red('[-Error:] ' + err));
-  gutil.log(gutil.colors.red('[-Error:] bower install failed dramatically.'));
-  gutil.log(gutil.colors.red('[-Error:] Need to manually do \'bower install\''));
+function bowerInstallationFailLogger (err) {
+  gutil.log(gutil.colors.red('[-Error:] "bower install" failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] Need to manually fix the ERRORS, then do "bower install"'));
   gutil.log(gutil.colors.red('[-Error:] Before the project is fully ready for development'));
 }
 
 // Trigger when Git initialization fails, output error message in terminal
 function gitInitializerFailLogger (err) {
-  gutil.log(gutil.colors.red('[-Error:] ' + err));
-  gutil.log(gutil.colors.red('[-Error:] initialize git repository failed dramatically.'));
+  gutil.log(gutil.colors.red('[-Error:] initialize "git" repository failed dramatically.'));
   gutil.log(gutil.colors.red('[-Error:] Need to manually do'));
-  gutil.log(gutil.colors.red('[-Error:] \'git init && git add . && git commit -m\''));
+  gutil.log(gutil.colors.red('[-Error:] "git init && git add . && git commit -m"'));
 }
 
 // When `em new` command succeed and output successfully message to user
@@ -325,6 +343,24 @@ function successInfoLogger (newFolderName) {
     gutil.colors.gray(' # kick start the server, open project in favorite browser,'),
     gutil.colors.gray('auto watch file changes and rebuild the project')
   );
+}
+
+function failureInfoLogger (err) {
+  gutil.log(gutil.colors.red('[-Error:] ' + err));
+}
+
+function warningInfoLogger (err) {
+  // Currently, only "sass" is required. If more, use Promise.all instead
+  // "sass" is required, alert user if it is not existed
+  isBinaryExist('sass')
+    .catch(function (err) {
+      gutil.log(gutil.colors.red('[-Warning:] Scaffolding is completed and App is ready to ' +
+        'rock. But you may not see the page with right styles.'));
+      gutil.log(
+        gutil.colors.red('[-Warning:] "sass" executable is used to pre-compile your "css"'));
+      gutil.log(
+        gutil.colors.red('[-Warning:] use "gen install sass", more info "http://sass-lang.com/"'));
+    });
 }
 
 // When "app/" folder has been inserted into "client/" for client side development
