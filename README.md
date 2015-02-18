@@ -308,6 +308,10 @@ Anyone can help make this project better - check out the [Contributing guide](./
 
 ## Release History
 
+### 0.9.4 (02/18/15)
+
+- Replace **gulp-6to5** to **gulp-babel**. Due to project *6to5* project renamed to [*Babel*](http://babeljs.io/)
+
 ### 0.9.3 (02/14/15)
 
 - [BugFix] [Unhandled rejection TypeError](https://github.com/mattma/ember-rocks/issues/12). Alert user with failure message and warning message when necessary   
