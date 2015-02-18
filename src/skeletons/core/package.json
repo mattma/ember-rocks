@@ -26,7 +26,7 @@
     "del": "^1.1.1",
     "ember-rocks": "^0.9.3",
     "gulp": "^3.8.10",
-    "gulp-6to5": "^3.0.0",
+    "gulp-babel": "^4.0.0",
     "gulp-autoprefixer": "^2.1.0",
     "gulp-concat": "^2.4.3",
     "gulp-csso": "^1.0.0",

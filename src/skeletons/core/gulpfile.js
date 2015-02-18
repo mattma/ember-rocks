@@ -3,7 +3,7 @@
 var gulp = require('gulp');
 var gutil = require('gulp-util');
 var $ = require('gulp-load-plugins')();
-var to5 = require('gulp-6to5');
+var babel = require('gulp-babel');
 var del = require('del');
 var opn = require('opn');
 var testem = new (require('testem'))();
@@ -144,7 +144,7 @@ gulp.task('buildjs', function () {
       modulePrefix:          'rocks/',
       sourceMap:             true
     }))
-    .pipe(to5({
+    .pipe(babel({
       blacklist: ['useStrict']
     }))
     .pipe($.concat('application.js'))
@@ -394,7 +394,7 @@ gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function () {
   // Rebuild ES6 tests, generate a test file at `build/tests/tests.js`
   function buildTests (reminder) {
     return gulp.src(tests)
-      .pipe(to5({
+      .pipe(babel({
         modules:    'amd',
         sourceRoot: __dirname + '/client/app',
         moduleRoot: 'rocksTest',
