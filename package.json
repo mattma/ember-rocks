@@ -27,8 +27,10 @@
     "em": "./bin/em"
   },
   "engines": {
-    "node": ">=0.10.0"
+    "node": ">= 0.10.0",
+    "iojs": ">= 1.2.0"
   },
+  "engineStrict": true,
   "keywords": [
     "ember.js",
     "ember",
