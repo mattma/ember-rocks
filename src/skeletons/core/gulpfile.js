@@ -2,8 +2,10 @@
 
 var gulp = require('gulp');
 var gutil = require('gulp-util');
-var $ = require('gulp-load-plugins')();
-var babel = require('gulp-babel');
+var $ = require('gulp-load-plugins')({
+  pattern: ['gulp-*'],
+  scope: ['devDependencies']
+});
 var del = require('del');
 var opn = require('opn');
 var testem = new (require('testem'))();
@@ -97,13 +99,14 @@ gulp.task('injectLRScript', function () {
 gulp.task('sass', function () {
   var styleDestPath = clientFolder + '/assets/styles';
 
+  // style: nested (default), compact, compressed, or expanded.
   return $.rubySass(sassRootPath, {
     sourcemap: true,
     style:     'expanded',
     loadPath:  [sassRootPath]
   })
     .on('error', function (err) {
-      console.log('[Error]: ', err.message);
+      console.error('[Error]: ', err.message);
     })
     .pipe($.autoprefixer({
       browsers: AutoPrefixerConfig
@@ -144,7 +147,7 @@ gulp.task('buildjs', function () {
       modulePrefix:          'rocks/',
       sourceMap:             true
     }))
-    .pipe(babel({
+    .pipe($.babel({
       blacklist: ['useStrict']
     }))
     .pipe($.concat('application.js'))
@@ -394,7 +397,7 @@ gulp.task('prepareTests', ['clean', 'build', 'sass', 'express'], function () {
   // Rebuild ES6 tests, generate a test file at `build/tests/tests.js`
   function buildTests (reminder) {
     return gulp.src(tests)
-      .pipe(babel({
+      .pipe($.babel({
         modules:    'amd',
         sourceRoot: __dirname + '/client/app',
         moduleRoot: 'rocksTest',
