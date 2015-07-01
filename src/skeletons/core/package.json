@@ -10,9 +10,9 @@
   "repository": "https://github.com/mattma/ember-rocks",
   "main": "./server/index",
   "scripts": {
-    "start": "node server",
+    "start": "em serve",
     "build": "em build",
-    "serve": "em serve"
+    "test": "em test"
   },
   "dependencies": {
     "express": "^4.10.6",
